@@ -1888,78 +1888,90 @@ body.auth-locked #authGateModal {
         <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="hidden text-slate-400 hover:text-slate-700 text-xl font-bold leading-none">&times;</button>
       </div>
 
-      <!-- ==================== STEP 1: SIGN UP / SIGN IN (EMAIL, GOOGLE, APPLE) ==================== -->
+      <!-- ==================== STEP 1: SIGN UP / SIGN IN (GOOGLE OR EMAIL) ==================== -->
       <div id="authStep1Container" class="space-y-4">
-        <!-- Sign In vs Sign Up Mode Toggle -->
-        <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
-          <button id="authModeBtn-signin" type="button" onclick="switchAuthStep1Mode('signin')" class="py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition">
-            Sign In
-          </button>
-          <button id="authModeBtn-signup" type="button" onclick="switchAuthStep1Mode('signup')" class="py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition">
-            Sign Up
-          </button>
-        </div>
-
-        <!-- Social Sign Up / Sign In Buttons (Google & Apple) -->
-        <div class="grid grid-cols-2 gap-2.5">
-          <button id="continueWithGoogleBtn" type="button" onclick="openSocialAccountPicker('Google')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition shadow-2xs">
-            <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 12.3s.6 3.3 1.6 5.3l3.7-2.8z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/></svg>
-            <span>Google</span>
-          </button>
-          <button id="continueWithAppleBtn" type="button" onclick="openSocialAccountPicker('Apple')" class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-900 text-xs font-bold flex items-center justify-center gap-2 transition shadow-2xs">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
-            <span>Apple</span>
-          </button>
-        </div>
-
-        <!-- Simulated 1-Click Google / Apple Account Picker Box -->
-        <div id="socialAccountPickerBox" class="hidden p-4 rounded-xl bg-slate-50 border border-indigo-200 space-y-3">
-          <div class="flex items-center justify-between">
-            <span id="socialPickerTitle" class="text-xs font-extrabold text-indigo-900">Continue with Google</span>
-            <button type="button" onclick="closeSocialAccountPicker()" class="text-xs text-slate-400 hover:text-slate-700 font-bold">&times;</button>
+        <!-- Dedicated Passwordless Google Sign-In Screen (Shown when user clicks Continue with Google) -->
+        <div id="socialAccountPickerBox" class="hidden space-y-4">
+          <div class="text-center space-y-1.5 pt-1">
+            <div class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-slate-200 shadow-2xs mx-auto">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 12.3s.6 3.3 1.6 5.3l3.7-2.8z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/></svg>
+            </div>
+            <h4 id="socialPickerTitle" class="text-base font-extrabold text-slate-900">Sign in with Google</h4>
+            <p class="text-xs text-slate-500">Continue to <strong>CFA Level II Study Guide</strong> with your Google account (no password required)</p>
           </div>
+
+          <!-- Previously used Google accounts on this browser (1-click choose account) -->
           <div id="socialSavedAccountsList" class="space-y-1.5"></div>
-          <div class="space-y-2">
+
+          <!-- Passwordless Google Account Entry -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
             <div>
-              <label for="socialPickerNameInput" class="block text-[11px] font-bold text-slate-700 mb-0.5">Your Full Name</label>
-              <input id="socialPickerNameInput" type="text" placeholder="e.g. Alex Mensah" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
+              <label id="socialPickerEmailLabel" for="socialPickerEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Google Email Address *</label>
+              <input id="socialPickerEmailInput" type="email" placeholder="yourname@gmail.com" onkeydown="if(event.key==='Enter'){event.preventDefault();completeSocialAuthSignIn();}" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
             <div>
-              <label id="socialPickerEmailLabel" for="socialPickerEmailInput" class="block text-[11px] font-bold text-slate-700 mb-0.5">Google Email Address</label>
-              <input id="socialPickerEmailInput" type="email" placeholder="name@gmail.com" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
+              <label for="socialPickerNameInput" class="block text-xs font-bold text-slate-700 mb-1">Your Name (for your dashboard profile)</label>
+              <input id="socialPickerNameInput" type="text" placeholder="e.g. Alex Mensah" onkeydown="if(event.key==='Enter'){event.preventDefault();completeSocialAuthSignIn();}" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             </div>
-            <button id="confirmSocialAuthBtn" type="button" onclick="completeSocialAuthSignIn()" class="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition">
+            <button id="confirmSocialAuthBtn" type="button" onclick="completeSocialAuthSignIn()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
               Continue &rarr;
+            </button>
+          </div>
+
+          <div class="text-center pt-1">
+            <button type="button" onclick="closeSocialAccountPicker()" class="text-xs font-bold text-slate-500 hover:text-slate-800 underline bg-transparent p-0">
+              &larr; Back to Email &amp; Password Sign In
             </button>
           </div>
         </div>
 
-        <div class="flex items-center gap-3 text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
-          <span class="flex-1 border-t border-slate-200"></span>
-          <span>or with email</span>
-          <span class="flex-1 border-t border-slate-200"></span>
-        </div>
-
-        <!-- Email Sign Up / Sign In Form -->
-        <div class="space-y-3">
-          <div id="authNameFieldWrapper" class="hidden">
-            <label for="loginNameInput" class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
-            <input id="loginNameInput" type="text" value="" autocomplete="off" placeholder="Enter your full name" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <!-- Default Step 1 View: Google Button + Email/Password Form -->
+        <div id="authEmailSubView" class="space-y-4">
+          <!-- Sign In vs Sign Up Mode Toggle -->
+          <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
+            <button id="authModeBtn-signin" type="button" onclick="switchAuthStep1Mode('signin')" class="py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition">
+              Sign In
+            </button>
+            <button id="authModeBtn-signup" type="button" onclick="switchAuthStep1Mode('signup')" class="py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition">
+              Sign Up
+            </button>
           </div>
+
+          <!-- Full-Width Google Sign-In / Register Button (No Password Needed) -->
           <div>
-            <label for="loginEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
-            <input id="loginEmailInput" type="email" value="" autocomplete="off" placeholder="you@example.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <div>
-            <label for="loginPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
-            <input id="loginPasswordInput" type="password" value="" autocomplete="off" placeholder="Enter your password" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <button id="continueWithGoogleBtn" type="button" onclick="openSocialAccountPicker('Google')" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2.5 transition shadow-2xs">
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 12.3s.6 3.3 1.6 5.3l3.7-2.8z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/></svg>
+              <span>Continue with Google</span>
+            </button>
           </div>
 
-          <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+          <div class="flex items-center gap-3 text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+            <span class="flex-1 border-t border-slate-200"></span>
+            <span>or with email &amp; password</span>
+            <span class="flex-1 border-t border-slate-200"></span>
+          </div>
 
-          <button id="submitEmailLoginBtn" type="button" onclick="handleStep1EmailSubmit()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
-            Sign In &rarr;
-          </button>
+          <!-- Email Sign Up / Sign In Form -->
+          <div class="space-y-3">
+            <div id="authNameFieldWrapper" class="hidden">
+              <label for="loginNameInput" class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+              <input id="loginNameInput" type="text" value="" autocomplete="off" placeholder="Enter your full name" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="loginEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+              <input id="loginEmailInput" type="email" value="" autocomplete="off" placeholder="you@example.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="loginPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+              <input id="loginPasswordInput" type="password" value="" autocomplete="off" placeholder="Enter your password" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+
+            <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+
+            <button id="submitEmailLoginBtn" type="button" onclick="handleStep1EmailSubmit()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
+              Sign In &rarr;
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2123,24 +2135,39 @@ body.auth-locked #authGateModal {
             <span>&#128640; Push Email / Mail App</span>
           </button>
         </div>
-        <div class="flex items-center justify-between pt-1">
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
           <button id="adminCopyWelcomeMsgBtn" type="button" onclick="copyAdminWelcomeMessage()" class="text-xs font-bold text-slate-700 hover:text-slate-900 underline bg-transparent p-0">
             &#128203; Copy Full Welcome Email Text
           </button>
-          <button type="button" onclick="document.getElementById('adminEmailJsConfigBox').classList.toggle('hidden')" class="text-[11px] font-semibold text-indigo-600 hover:underline bg-transparent p-0">
+          <button type="button" onclick="document.getElementById('adminEmailJsConfigBox').classList.toggle('hidden')" class="text-[11px] font-extrabold text-indigo-600 hover:underline bg-transparent p-0">
             &#9881; Optional: 1-Click EmailJS API Setup
           </button>
         </div>
 
-        <!-- Optional EmailJS Direct Push Settings -->
-        <div id="adminEmailJsConfigBox" class="hidden p-3 rounded-xl bg-white border border-slate-200 space-y-2 text-xs">
-          <p class="text-[11px] text-slate-600">To push emails directly to candidates in the background without opening Gmail Web, paste your free <a href="https://www.emailjs.com/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">EmailJS</a> credentials once below:</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input id="emailJsServiceIdInput" type="text" placeholder="Service ID (service_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
-            <input id="emailJsTemplateIdInput" type="text" placeholder="Template ID (template_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
-            <input id="emailJsPublicKeyInput" type="text" placeholder="Public Key" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+        <!-- Optional 100% Automated Background Mailer Settings (Google Apps Script OR EmailJS) -->
+        <div id="adminEmailJsConfigBox" class="hidden p-3.5 rounded-xl bg-white border border-indigo-200 space-y-3 text-xs">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-extrabold text-slate-900">Option A (Recommended): Free Google Apps Script Auto-Mailer</span>
+              <button type="button" onclick="copyGoogleAppsScriptSnippet()" class="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-bold text-[11px] border border-indigo-200">&#128203; Copy 8-Line Script</button>
+            </div>
+            <p class="text-[11px] text-slate-600 leading-relaxed">
+              Sends codes <strong>100% automatically from your own Gmail</strong> whenever you click <strong>"Approve"</strong> in an access-request email (or click Push Email above):
+              1) Go to <a href="https://script.google.com/home/start" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">script.google.com</a> &rarr; <strong>New Project</strong>.
+              2) Click <strong>Copy 8-Line Script</strong> above, paste it in, and click <strong>Deploy &rarr; New deployment &rarr; Web app</strong> (Execute as: <em>Me</em>, Who has access: <em>Anyone</em>).
+              3) Paste the Web App URL below once:
+            </p>
+            <input id="gasWebhookUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-slate-50" />
           </div>
-          <button type="button" onclick="saveAdminEmailJsConfig()" class="px-3 py-1 rounded bg-slate-900 text-white text-xs font-bold">Save EmailJS Keys</button>
+          <div class="border-t border-slate-100 pt-2 space-y-1.5">
+            <span class="font-bold text-slate-700 block">Option B: EmailJS API Keys (Optional)</span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="emailJsServiceIdInput" type="text" placeholder="Service ID (service_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+              <input id="emailJsTemplateIdInput" type="text" placeholder="Template ID (template_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+              <input id="emailJsPublicKeyInput" type="text" placeholder="Public Key" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+            </div>
+          </div>
+          <button type="button" onclick="saveAdminEmailJsConfig()" class="w-full py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold">Save EmailJS Keys</button>
         </div>
 
         <div id="adminSendStatusBanner" class="hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold"></div>
@@ -2153,6 +2180,83 @@ body.auth-locked #authGateModal {
           <span class="text-[11px] text-slate-400">Works on any phone or laptop</span>
         </div>
         <div id="adminIssuedCodesList" class="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 4: 1-CLICK EMAIL APPROVAL & AUTO-DISPATCH MODAL ==================== -->
+  <div id="oneClickApproveModal" class="fixed inset-0 z-50 bg-slate-900/85 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
+      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-900">1-CLICK ACCESS APPROVAL</span>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Approve &amp; Send Candidate Access Code</h3>
+          <p class="text-xs text-slate-500">Triggered directly from your access-request email approval link.</p>
+        </div>
+        <button id="closeOneClickApproveModalBtn" type="button" onclick="closeOneClickApproveModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <!-- Candidate Details & Generated Code Card -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-slate-500 font-semibold">Candidate Name:</span>
+          <span id="approveModalCandidateName" class="font-extrabold text-slate-900">—</span>
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-slate-500 font-semibold">Candidate Email:</span>
+          <span id="approveModalCandidateEmail" class="font-extrabold text-indigo-700">—</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-amber-400 font-bold block">Approved Personal Access Code</span>
+            <span id="approveModalCodeDisplay" class="font-mono text-xl font-extrabold text-teal-300 tracking-wider">CFAL2-XXXX-XXXX</span>
+          </div>
+          <button id="copyApprovedCandidateCodeBtn" type="button" onclick="copyApprovedCandidateCode()" class="px-3 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition shrink-0">
+            &#128203; Copy Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Auto-Dispatch Status Banner -->
+      <div id="approveModalStatusBanner" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1">
+        <div id="approveModalStatusTitle" class="font-extrabold text-emerald-900">Preparing candidate welcome email...</div>
+        <p id="approveModalStatusDesc" class="text-[11px] text-emerald-800 leading-relaxed"></p>
+      </div>
+
+      <!-- Action Buttons (1-Click Send via Gmail Web or Default Mail App) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <button id="approveModalGmailBtn" type="button" onclick="sendApprovedCodeViaGmailWeb()" class="py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>&#9993; Send via Gmail Web (1-Click)</span>
+        </button>
+        <button id="approveModalMailtoBtn" type="button" onclick="sendApprovedCodeViaMailApp()" class="py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>&#128640; Send via Mail App</span>
+        </button>
+      </div>
+
+      <!-- 100% Zero-Touch Automation Setup Toggle -->
+      <div class="pt-1 border-t border-slate-100 flex items-center justify-between">
+        <button type="button" onclick="document.getElementById('approveModalAutoSetupBox').classList.toggle('hidden')" class="text-[11px] font-extrabold text-indigo-600 hover:underline bg-transparent p-0">
+          &#9889; Enable 100% Zero-Touch Background Auto-Send (60-Sec Setup)
+        </button>
+        <button type="button" onclick="closeOneClickApproveModal()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-transparent p-0">
+          Done / Close
+        </button>
+      </div>
+
+      <div id="approveModalAutoSetupBox" class="hidden p-3.5 rounded-xl bg-slate-50 border border-indigo-200 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-extrabold text-slate-900">Zero-Touch Google Apps Script Mailer</span>
+          <button type="button" onclick="copyGoogleAppsScriptSnippet()" class="px-2.5 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-500 font-bold text-[11px]">&#128203; Copy 8-Line Script</button>
+        </div>
+        <ol class="list-decimal list-inside text-[11px] text-slate-600 space-y-1 leading-relaxed">
+          <li>Open <a href="https://script.google.com/home/start" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">script.google.com</a> &rarr; click <strong>New project</strong>.</li>
+          <li>Paste the 8-line script and click <strong>Deploy &rarr; New deployment &rarr; Web app</strong> (Execute as: <em>Me</em>, Who has access: <em>Anyone</em>).</li>
+          <li>Paste your Web App URL below. Every time you click <strong>"Approve"</strong> in your email, it will email the code to the candidate automatically without opening Gmail!</li>
+        </ol>
+        <div class="flex gap-2">
+          <input id="approveModalGasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" />
+          <button id="saveGasUrlFromApproveModalBtn" type="button" onclick="saveGasUrlFromApproveModal()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0">Save &amp; Auto-Send</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2241,6 +2345,7 @@ body.auth-locked #authGateModal {
     const ACTIVE_USER_EMAIL_KEY = 'cfa_l2_study_guide_active_email_v2';
     const ISSUED_CODES_KEY = 'andy_cfa_l2_issued_codes_v1';
     const EMAILJS_CONFIG_KEY = 'cfa_l2_admin_emailjs_cfg_v1';
+    const GAS_WEBHOOK_URL_KEY = 'cfa_l2_gas_webhook_url_v1';
     // Encoded owner email so it is never displayed in public UI text
     const MASTER_OWNER_EMAIL = atob('YW5keWt3ZXNpYXNhbnRlQGdtYWlsLmNvbQ==');
     const MASTER_OWNER_NAME = 'Andy Asante';
@@ -5816,49 +5921,71 @@ body.auth-locked #authGateModal {
       document.getElementById('loginErrorMsg').classList.add('hidden');
     }
 
-    // Simulated 1-Click Google / Apple Account Picker
+    // Dedicated Passwordless Google Sign-In Flow
     function openSocialAccountPicker(providerName) {
-      activeSocialProvider = providerName || 'Google';
+      activeSocialProvider = 'Google';
+
+      // If the user already typed their email in the main Email box and clicked "Continue with Google"
+      // so they don't have to create a password, sign them in via Google immediately and go straight to Step 2!
+      const pretypedEmail = normalizeEmail((document.getElementById('loginEmailInput') || {}).value || '');
+      const pretypedName = ((document.getElementById('loginNameInput') || {}).value || '').trim();
+      if (pretypedEmail && pretypedEmail.includes('@')) {
+        document.getElementById('socialPickerEmailInput').value = pretypedEmail;
+        document.getElementById('socialPickerNameInput').value = pretypedName;
+        completeSocialAuthSignIn();
+        return;
+      }
+
       const box = document.getElementById('socialAccountPickerBox');
+      const emailSubView = document.getElementById('authEmailSubView');
       const titleEl = document.getElementById('socialPickerTitle');
       const emailLbl = document.getElementById('socialPickerEmailLabel');
       const emailInput = document.getElementById('socialPickerEmailInput');
       const nameInput = document.getElementById('socialPickerNameInput');
       const btn = document.getElementById('confirmSocialAuthBtn');
 
-      titleEl.textContent = 'Continue with ' + activeSocialProvider;
-      emailLbl.textContent = activeSocialProvider + ' Email Address';
-      emailInput.placeholder = activeSocialProvider === 'Apple' ? 'name@icloud.com' : 'name@gmail.com';
-      btn.textContent = 'Continue with ' + activeSocialProvider + ' →';
+      titleEl.textContent = 'Sign in with Google';
+      emailLbl.textContent = 'Google Email Address *';
+      emailInput.placeholder = 'yourname@gmail.com';
+      btn.textContent = 'Continue with Google →';
 
-      // Show any previously signed-up social accounts on this browser as 1-click pills (excluding any unauthenticated owner entry)
+      // Show any previously used accounts on this browser as 1-click Google account rows
       const reg = loadUsersRegistry();
       const savedSocial = Object.values(reg).filter(u => u && u.email && u.explicitlySignedIn);
       const listEl = document.getElementById('socialSavedAccountsList');
       if (savedSocial.length > 0) {
-        listEl.innerHTML = `<span class="text-[10px] font-bold uppercase text-slate-400 block">Quick 1-Click Account on This Browser:</span>` +
-          savedSocial.map(u => `
-            <button type="button" onclick="selectSavedSocialAccount('${u.email.replace(/'/g, "\'")}', '${(u.name || '').replace(/'/g, "\'")}')" class="w-full p-2 rounded-lg bg-white hover:bg-indigo-50 border border-slate-200 flex items-center justify-between text-left text-xs transition">
-              <div>
-                <strong class="text-slate-900 block">${u.name || u.email}</strong>
-                <span class="text-[11px] text-slate-500">${u.email}</span>
+        listEl.innerHTML = `<span class="text-[10px] font-bold uppercase text-slate-400 block">Choose an account on this browser:</span>` +
+          savedSocial.map(u => {
+            const init = (u.name || u.email || 'G').trim().slice(0, 1).toUpperCase();
+            return `
+            <button type="button" onclick="selectSavedSocialAccount('${u.email.replace(/'/g, "\'")}', '${(u.name || '').replace(/'/g, "\'")}')" class="w-full p-2.5 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 flex items-center justify-between text-left text-xs transition shadow-2xs">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-extrabold text-xs flex items-center justify-center shrink-0">${init}</span>
+                <div class="min-w-0">
+                  <strong class="text-slate-900 block truncate">${u.name || u.email}</strong>
+                  <span class="text-[11px] text-slate-500 block truncate">${u.email}</span>
+                </div>
               </div>
-              <span class="text-[11px] font-bold text-indigo-600">Select &rarr;</span>
+              <span class="text-[11px] font-extrabold text-indigo-600 shrink-0">Continue &rarr;</span>
             </button>
-          `).join('');
+          `;
+          }).join('');
       } else {
         listEl.innerHTML = '';
       }
 
       nameInput.value = '';
       emailInput.value = '';
+      if (emailSubView) emailSubView.classList.add('hidden');
       box.classList.remove('hidden');
       emailInput.focus();
     }
 
     function closeSocialAccountPicker() {
       const box = document.getElementById('socialAccountPickerBox');
+      const emailSubView = document.getElementById('authEmailSubView');
       if (box) box.classList.add('hidden');
+      if (emailSubView) emailSubView.classList.remove('hidden');
     }
 
     function selectSavedSocialAccount(email, name) {
@@ -6037,12 +6164,46 @@ body.auth-locked #authGateModal {
     }
 
     // Background Push for Access Requests (Candidate -> Admin Email via FormSubmit AJAX)
+    function buildWelcomeEmailTextForCandidate(email, name, code) {
+      const cleanEmail = normalizeEmail(email);
+      const cleanName = (name || '').trim() || 'CFA Candidate';
+      const cleanCode = code || generateAccessCodeForEmail(cleanEmail);
+      const appUrl = 'https://cfastudyplan.vercel.app/';
+      const subject = `Your CFA Level II Study Guide Access Code — ${cleanCode}`;
+      const body = [
+        `Hi ${cleanName},`,
+        ``,
+        `Your request has been approved! Welcome to the CFA Level II Study Guide. Here is your personal access code to unlock your study workspace:`,
+        ``,
+        `• Study Guide Link: ${appUrl}`,
+        `• Account Email: ${cleanEmail}`,
+        `• Personal Access Code: ${cleanCode}`,
+        ``,
+        `How to get started:`,
+        `1. Open ${appUrl} and sign in with your Google account or email (${cleanEmail}).`,
+        `2. Enter your access code (${cleanCode}) to unlock your dashboard.`,
+        `3. Set your preferred Core Reading Start/End Dates and Weekday/Weekend study hours in the pop-up so your schedule is tailored to your availability.`,
+        ``,
+        `Best of luck with your CFA Level II prep!`
+      ].join('\n');
+      return { email: cleanEmail, name: cleanName, code: cleanCode, subject, body, appUrl };
+    }
+
     function buildAccessRequestMessagePayload() {
       const name = pendingAuthUser.name || 'CFA Candidate';
       const email = pendingAuthUser.email || normalizeEmail(document.getElementById('loginEmailInput').value);
       const provider = pendingAuthUser.provider || 'Email';
       const pregeneratedCode = generateAccessCodeForEmail(email);
-      const subject = `CFA Level II Study Guide — Access Code Request (${name} - ${email})`;
+
+      const baseAppUrl = (window.location.origin && window.location.origin.startsWith('http'))
+        ? (window.location.origin + window.location.pathname)
+        : 'https://cfastudyplan.vercel.app/';
+
+      const oneClickApproveUrl = `${baseAppUrl}?approve_email=${encodeURIComponent(email)}&approve_name=${encodeURIComponent(name)}&approve_code=${encodeURIComponent(pregeneratedCode)}`;
+      const welcome = buildWelcomeEmailTextForCandidate(email, name, pregeneratedCode);
+      const directGmailToCandidateUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${encodeURIComponent(welcome.subject)}&body=${encodeURIComponent(welcome.body)}`;
+
+      const subject = `CFA Level II Study Guide — Access Request (${name} - ${email})`;
       const body = [
         `New Access Code Request for CFA Level II Study Guide:`,
         ``,
@@ -6051,9 +6212,13 @@ body.auth-locked #authGateModal {
         `• Sign-Up Method: ${provider}`,
         `• Pre-Calculated Access Code for ${email}: ${pregeneratedCode}`,
         ``,
-        `Reply to ${email} with their access code (${pregeneratedCode}) or use your Admin Code Generator in the dashboard.`
+        `1-CLICK APPROVE & AUTO-SEND CODE:`,
+        `${oneClickApproveUrl}`,
+        ``,
+        `Or click here to open a pre-filled Gmail message to ${name}:`,
+        `${directGmailToCandidateUrl}`
       ].join('\n');
-      return { name, email, provider, pregeneratedCode, subject, body };
+      return { name, email, provider, pregeneratedCode, oneClickApproveUrl, directGmailToCandidateUrl, subject, body };
     }
 
     async function pushAccessRequestToAdmin() {
@@ -6068,7 +6233,7 @@ body.auth-locked #authGateModal {
       btn.innerHTML = 'Sending Access Request...';
       btn.disabled = true;
 
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(MASTER_OWNER_EMAIL)}&su=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent('Hi,\n\nPlease grant me access to the CFA Level II Study Guide.\n\nName: ' + payload.name + '\nEmail: ' + payload.email)}`;
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(MASTER_OWNER_EMAIL)}&su=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent('Hi,\n\nPlease grant me access to the CFA Level II Study Guide.\n\nName: ' + payload.name + '\nEmail: ' + payload.email + '\n\n1-Click Approve Link:\n' + payload.oneClickApproveUrl)}`;
       const gmailLinkEl = document.getElementById('reqGmailWebLink');
       if (gmailLinkEl) gmailLinkEl.href = gmailUrl;
 
@@ -6085,8 +6250,9 @@ body.auth-locked #authGateModal {
             Candidate_Name: payload.name,
             Candidate_Email: payload.email,
             Auth_Provider: payload.provider,
-            Ready_To_Send_Access_Code: payload.pregeneratedCode,
-            Message: `Please send access code ${payload.pregeneratedCode} to ${payload.email}.`,
+            Personal_Access_Code: payload.pregeneratedCode,
+            CLICK_TO_APPROVE_AND_SEND_CODE: payload.oneClickApproveUrl,
+            BACKUP_1_CLICK_GMAIL_COMPOSE: payload.directGmailToCandidateUrl,
             _template: 'table'
           })
         });
@@ -6213,25 +6379,7 @@ body.auth-locked #authGateModal {
       const email = normalizeEmail(document.getElementById('adminRequesterEmailInput').value);
       const name = (document.getElementById('adminRequesterNameInput').value || '').trim() || 'CFA Candidate';
       const code = generateAccessCodeForEmail(email);
-      const appUrl = 'https://cfastudyplan.vercel.app/';
-      const subject = `Your CFA Level II Study Guide Access Code — ${code}`;
-      const body = [
-        `Hi ${name},`,
-        ``,
-        `Welcome to the CFA Level II Study Guide! Here is your personal access code to unlock your study workspace:`,
-        ``,
-        `• Study Guide Link: ${appUrl}`,
-        `• Account Email: ${email}`,
-        `• Personal Access Code: ${code}`,
-        ``,
-        `How to get started:`,
-        `1. Open ${appUrl} and sign in with your email (${email}), Google, or Apple.`,
-        `2. Enter your access code (${code}) to unlock your dashboard.`,
-        `3. Set your preferred Core Reading Start/End Dates and Weekday/Weekend study hours in the pop-up so your schedule is tailored to your availability.`,
-        ``,
-        `Best of luck with your CFA Level II prep!`
-      ].join('\n');
-      return { email, name, code, subject, body };
+      return buildWelcomeEmailTextForCandidate(email, name, code);
     }
 
     function copyAdminWelcomeMessage() {
@@ -6267,8 +6415,33 @@ body.auth-locked #authGateModal {
       showToast('Opened Gmail Web with pre-filled code ' + p.code + ' for ' + p.email);
     }
 
+    function copyGoogleAppsScriptSnippet() {
+      const snippet = [
+        `function doPost(e) {`,
+        `  var data = JSON.parse(e.postData.contents);`,
+        `  MailApp.sendEmail({ to: data.to, subject: data.subject, body: data.body });`,
+        `  return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);`,
+        `}`,
+        `function doGet(e) {`,
+        `  if (e.parameter && e.parameter.to) {`,
+        `    MailApp.sendEmail({ to: e.parameter.to, subject: e.parameter.subject, body: e.parameter.body });`,
+        `  }`,
+        `  return ContentService.createTextOutput("Approved & Sent Access Code!");`,
+        `}`
+      ].join('\n');
+      try {
+        navigator.clipboard.writeText(snippet);
+        showToast('Copied 8-line Google Apps Script to clipboard!');
+      } catch (e) {
+        showToast('Script ready to copy!');
+      }
+    }
+
     function loadAdminEmailJsConfigInputs() {
       try {
+        const gasUrl = localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '';
+        const gasInput = document.getElementById('gasWebhookUrlInput');
+        if (gasInput) gasInput.value = gasUrl;
         const raw = localStorage.getItem(EMAILJS_CONFIG_KEY);
         if (!raw) return;
         const cfg = JSON.parse(raw);
@@ -6279,25 +6452,45 @@ body.auth-locked #authGateModal {
     }
 
     function saveAdminEmailJsConfig() {
-      const serviceId = (document.getElementById('emailJsServiceIdInput').value || '').trim();
-      const templateId = (document.getElementById('emailJsTemplateIdInput').value || '').trim();
-      const publicKey = (document.getElementById('emailJsPublicKeyInput').value || '').trim();
+      const gasUrl = ((document.getElementById('gasWebhookUrlInput') || {}).value || '').trim();
+      if (gasUrl) {
+        localStorage.setItem(GAS_WEBHOOK_URL_KEY, gasUrl);
+      } else {
+        localStorage.removeItem(GAS_WEBHOOK_URL_KEY);
+      }
+      const serviceId = ((document.getElementById('emailJsServiceIdInput') || {}).value || '').trim();
+      const templateId = ((document.getElementById('emailJsTemplateIdInput') || {}).value || '').trim();
+      const publicKey = ((document.getElementById('emailJsPublicKeyInput') || {}).value || '').trim();
       localStorage.setItem(EMAILJS_CONFIG_KEY, JSON.stringify({ serviceId, templateId, publicKey }));
       document.getElementById('adminEmailJsConfigBox').classList.add('hidden');
-      showToast('Saved EmailJS background push credentials!');
+      showToast('Saved automated mailer settings!');
     }
 
-    async function pushAdminCodeEmailBackground() {
-      const p = buildAdminWelcomeEmailPayload();
-      if (!p.email || !p.email.includes('@')) {
-        showToast('Please enter the candidate’s email address first.');
-        return;
+    // Shared background email dispatcher (Google Apps Script Web App OR EmailJS)
+    async function tryAutomatedBackgroundEmailDispatch(p) {
+      // 1. Check Google Apps Script Auto-Mailer Webhook URL first
+      try {
+        const gasUrl = (localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '').trim();
+        if (gasUrl && gasUrl.startsWith('https://script.google.com/')) {
+          await fetch(gasUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              to: p.email,
+              name: p.name,
+              code: p.code,
+              subject: p.subject,
+              body: p.body
+            })
+          });
+          return { sent: true, method: 'Google Apps Script (Your Gmail)' };
+        }
+      } catch (err) {
+        console.warn('Google Apps Script webhook error:', err);
       }
-      recordAdminIssuedCode(p.email, p.name, p.code);
 
-      const statusBanner = document.getElementById('adminSendStatusBanner');
-
-      // 1. If EmailJS credentials are configured, send directly via EmailJS REST API
+      // 2. Check EmailJS credentials
       try {
         const rawCfg = localStorage.getItem(EMAILJS_CONFIG_KEY);
         const cfg = rawCfg ? JSON.parse(rawCfg) : {};
@@ -6319,31 +6512,155 @@ body.auth-locked #authGateModal {
             })
           });
           if (ejResp.ok) {
-            if (statusBanner) {
-              statusBanner.textContent = `✓ Pushed access code ${p.code} directly to ${p.email} via EmailJS!`;
-              statusBanner.classList.remove('hidden');
-            }
-            showToast('Pushed access code directly to ' + p.email + '!');
-            return;
+            return { sent: true, method: 'EmailJS' };
           }
         }
       } catch (e) {}
 
-      // 2. Otherwise copy welcome message to clipboard and open mailto + offer Gmail Web
+      return { sent: false, method: null };
+    }
+
+    async function pushAdminCodeEmailBackground() {
+      const p = buildAdminWelcomeEmailPayload();
+      if (!p.email || !p.email.includes('@')) {
+        showToast('Please enter the candidate’s email address first.');
+        return;
+      }
+      recordAdminIssuedCode(p.email, p.name, p.code);
+
+      const statusBanner = document.getElementById('adminSendStatusBanner');
+      const autoResult = await tryAutomatedBackgroundEmailDispatch(p);
+
+      if (autoResult.sent) {
+        if (statusBanner) {
+          statusBanner.textContent = `✓ Automatically emailed access code ${p.code} to ${p.email} via ${autoResult.method}!`;
+          statusBanner.classList.remove('hidden');
+        }
+        showToast('Automatically emailed access code to ' + p.email + '!');
+        return;
+      }
+
+      // Otherwise copy welcome message to clipboard and open mailto + offer Gmail Web
       try {
         navigator.clipboard.writeText(p.body);
       } catch (e) {}
       const mailto = `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent(p.subject)}&body=${encodeURIComponent(p.body)}`;
       window.location.href = mailto;
       if (statusBanner) {
-        statusBanner.innerHTML = `Copied welcome email &amp; opened default mail app for <strong>${p.email}</strong>. (Tip: If your computer doesn't use a desktop mail app, click <strong>"Send via Gmail Web (1-Click)"</strong> above!)`;
+        statusBanner.innerHTML = `Copied welcome email &amp; opened default mail app for <strong>${p.email}</strong>. (Tip: Click <strong>"Send via Gmail Web (1-Click)"</strong> or set up the 8-line Google Script above for zero-click sending!)`;
         statusBanner.classList.remove('hidden');
       }
       showToast('Opened mail app & copied welcome note for ' + p.email);
     }
 
+    // ==================== 14. 1-CLICK EMAIL APPROVAL LINK AUTOMATION ====================
+    let pendingApprovedCandidate = null;
+
+    async function checkUrlApproveActionOnLoad() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const approveEmail = normalizeEmail(params.get('approve_email') || '');
+        if (!approveEmail || !approveEmail.includes('@')) return false;
+
+        const approveName = (params.get('approve_name') || '').trim() || approveEmail.split('@')[0];
+        const calculatedCode = generateAccessCodeForEmail(approveEmail);
+        const welcomePayload = buildWelcomeEmailTextForCandidate(approveEmail, approveName, calculatedCode);
+        pendingApprovedCandidate = welcomePayload;
+
+        // Record in issued codes history
+        recordAdminIssuedCode(approveEmail, approveName, calculatedCode);
+
+        // Populate #oneClickApproveModal
+        document.getElementById('approveModalCandidateName').textContent = approveName;
+        document.getElementById('approveModalCandidateEmail').textContent = approveEmail;
+        document.getElementById('approveModalCodeDisplay').textContent = calculatedCode;
+        const gasInput = document.getElementById('approveModalGasUrlInput');
+        if (gasInput) gasInput.value = localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '';
+
+        const modal = document.getElementById('oneClickApproveModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        // Clean query params from address bar so refreshing doesn't re-trigger
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Attempt 100% automatic background send first (Google Apps Script or EmailJS)
+        const titleEl = document.getElementById('approveModalStatusTitle');
+        const descEl = document.getElementById('approveModalStatusDesc');
+        const autoRes = await tryAutomatedBackgroundEmailDispatch(welcomePayload);
+
+        if (autoRes.sent) {
+          titleEl.innerHTML = `&#10003; Approved &amp; Automatically Emailed to ${approveEmail}!`;
+          descEl.textContent = `Access code ${calculatedCode} was dispatched automatically in the background via ${autoRes.method}. No further clicks needed!`;
+          showToast(`Approved & auto-emailed ${calculatedCode} to ${approveEmail}!`);
+        } else {
+          // Copy welcome email to clipboard and ready 1-click Gmail/Mail compose
+          try { navigator.clipboard.writeText(welcomePayload.body); } catch (e) {}
+          titleEl.innerHTML = `&#10003; Code ${calculatedCode} Approved &amp; Ready to Send!`;
+          descEl.innerHTML = `Click <strong>"Send via Gmail Web (1-Click)"</strong> or <strong>"Send via Mail App"</strong> below to deliver the pre-filled welcome email to <strong>${approveEmail}</strong> (or connect the 60-second Google Apps Script below for 100% hands-free sending).`;
+        }
+        return true;
+      } catch (err) {
+        console.warn('Error handling 1-click approve URL:', err);
+        return false;
+      }
+    }
+
+    function closeOneClickApproveModal() {
+      const modal = document.getElementById('oneClickApproveModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function copyApprovedCandidateCode() {
+      if (!pendingApprovedCandidate) return;
+      try {
+        navigator.clipboard.writeText(pendingApprovedCandidate.code);
+        showToast('Copied access code ' + pendingApprovedCandidate.code);
+      } catch (e) {}
+    }
+
+    function sendApprovedCodeViaGmailWeb() {
+      if (!pendingApprovedCandidate) return;
+      const p = pendingApprovedCandidate;
+      const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(p.email)}&su=${encodeURIComponent(p.subject)}&body=${encodeURIComponent(p.body)}`;
+      window.open(gmailComposeUrl, '_blank', 'noopener,noreferrer');
+      document.getElementById('approveModalStatusTitle').innerHTML = `&#10003; Opened Pre-Filled Gmail Tab for ${p.email}`;
+      document.getElementById('approveModalStatusDesc').textContent = `Just click "Send" in the Gmail tab to deliver code ${p.code}.`;
+    }
+
+    function sendApprovedCodeViaMailApp() {
+      if (!pendingApprovedCandidate) return;
+      const p = pendingApprovedCandidate;
+      const mailto = `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent(p.subject)}&body=${encodeURIComponent(p.body)}`;
+      window.location.href = mailto;
+    }
+
+    async function saveGasUrlFromApproveModal() {
+      const url = ((document.getElementById('approveModalGasUrlInput') || {}).value || '').trim();
+      if (!url || !url.startsWith('https://script.google.com/')) {
+        showToast('Please paste a valid https://script.google.com/.../exec Web App URL.');
+        return;
+      }
+      localStorage.setItem(GAS_WEBHOOK_URL_KEY, url);
+      document.getElementById('approveModalAutoSetupBox').classList.add('hidden');
+      if (pendingApprovedCandidate) {
+        const res = await tryAutomatedBackgroundEmailDispatch(pendingApprovedCandidate);
+        if (res.sent) {
+          document.getElementById('approveModalStatusTitle').innerHTML = `&#10003; Approved &amp; Automatically Emailed to ${pendingApprovedCandidate.email}!`;
+          document.getElementById('approveModalStatusDesc').textContent = `Access code ${pendingApprovedCandidate.code} was sent automatically via your Google Apps Script! Future approvals will send immediately on click.`;
+          showToast('Auto-sent code to ' + pendingApprovedCandidate.email + '!');
+        }
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       checkUrlHashSyncOnLoad();
+      checkUrlApproveActionOnLoad();
 
       if (isCurrentSessionUnlocked()) {
         // Returning unlocked user on this device
