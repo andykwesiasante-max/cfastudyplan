@@ -7,10 +7,10 @@
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Ascent CFA II" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%236a53d8'/%3E%3Ctext x='64' y='88' font-family='Georgia,serif' font-size='84' text-anchor='middle' fill='%23ffffff'%3Ea%3C/text%3E%3C/svg%3E" />
-  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Ascent%20%E2%80%94%20CFA%20Level%20II%20Study%20Space%22%2C%22short_name%22%3A%22Ascent%20CFA%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f7f7fa%22%2C%22theme_color%22%3A%22%236955d9%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%2520viewBox%3D%270%25200%2520128%2520128%27%253E%253Crect%2520width%3D%27128%27%2520height%3D%27128%27%2520rx%3D%2728%27%2520fill%3D%27%25236a53d8%27%2F%253E%253Ctext%2520x%3D%2764%27%2520y%3D%2788%27%2520font-family%3D%27Georgia%2Cserif%27%2520font-size%3D%2784%27%2520text-anchor%3D%27middle%27%2520fill%3D%27%2523ffffff%27%253Ea%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22128x128%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D" />
-  <title>CFA Level II May 2027 — Interactive Study & Prep Dashboard (Andy Asante)</title>
+  <meta name="apple-mobile-web-app-title" content="CFA Level II Study Guide" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%236a53d8'/%3E%3Ctext x='64' y='78' font-family='Arial,sans-serif' font-weight='bold' font-size='44' text-anchor='middle' fill='%23ffffff'%3ECFA%3C/text%3E%3C/svg%3E" />
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22CFA%20Level%20II%20Study%20Guide%22%2C%22short_name%22%3A%22CFA%20Study%20Guide%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f7f7fa%22%2C%22theme_color%22%3A%22%236955d9%22%7D" />
+  <title>CFA Level II Study Guide — Interactive Prep Dashboard</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; line-height: 1.45; }
@@ -708,22 +708,46 @@ header #openSyncModalBtn:hover {
     left: 12px !important;
   }
 }
+
+/* === FULL-SCREEN AUTH GATE LOCK (HIDES DASHBOARD COMPLETELY WHEN SIGNED OUT) === */
+body.auth-locked {
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+  background: linear-gradient(135deg, #f6f5fc 0%, #eae6f8 100%) !important;
+  overflow-x: hidden !important;
+}
+body.auth-locked > header,
+body.auth-locked > section,
+body.auth-locked > main,
+body.auth-locked > .rail-brand,
+body.auth-locked > .rail-note,
+body.auth-locked > .rail-profile {
+  display: none !important;
+}
+body.auth-locked #authGateModal {
+  display: flex !important;
+  background: linear-gradient(135deg, #f6f5fc 0%, #eae6f8 100%) !important;
+  backdrop-filter: none !important;
+}
+#authGateModal.fullscreen-gate-bg {
+  background: linear-gradient(135deg, #f6f5fc 0%, #eae6f8 100%) !important;
+}
 </style>
 </head>
-<body class="min-h-full flex flex-col bg-slate-50 text-slate-900">
-  <div class="rail-brand"><span class="brand-icon">a</span><div><strong>Ascent<span style="color:#9c83d6">.</span></strong><small>THE CFA STUDY SPACE</small></div></div>
+<body class="min-h-full flex flex-col bg-slate-50 text-slate-900 auth-locked">
+  <div class="rail-brand"><span class="brand-icon" style="font-family:'Segoe UI',Inter,sans-serif;font-size:13px;font-weight:800;letter-spacing:-0.5px;">CFA</span><div><strong style="font-size:14.5px;line-height:1.2;letter-spacing:-0.4px;">CFA Level II<br><span style="color:#6955d9">Study Guide</span></strong><small style="margin-top:2px;">STUDY WORKSPACE</small></div></div>
   <div class="rail-note"><strong>Small steps. Big ambition.</strong>Make room for a little progress today. It all adds up.</div>
   <div class="rail-profile" style="flex-direction:column; align-items:stretch; gap:8px;">
     <div style="display:flex; align-items:center; gap:10px;">
-      <span id="sidebarUserAvatar" class="avatar">AA</span>
+      <span id="sidebarUserAvatar" class="avatar">CF</span>
       <div style="min-width:0; flex:1;">
-        <strong id="sidebarUserName" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Andy Asante</strong>
-        <small id="sidebarUserEmail" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">andykwesiasante@gmail.com</small>
+        <strong id="sidebarUserName" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Candidate</strong>
+        <small id="sidebarUserEmail" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Signed In</small>
       </div>
     </div>
     <div style="display:flex; gap:6px; flex-wrap:wrap; padding-top:4px; border-top:1px solid #ece8f6;">
-      <button id="sidebarSwitchUserBtn" type="button" onclick="openAuthGateModal('login')" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f5f2fc; color:#5340b8; border:1px solid #dcd3f7; cursor:pointer;">Switch User</button>
-      <button id="sidebarPlanConfigBtn" type="button" onclick="openPlanSettingsModal()" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f3f4f8; color:#2f3545; border:1px solid #dce0ec; cursor:pointer;">Dates &amp; Hrs</button>
+      <button id="sidebarPlanConfigBtn" type="button" onclick="openPlanSettingsModal()" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f5f2fc; color:#5340b8; border:1px solid #dcd3f7; cursor:pointer;">Dates &amp; Hrs</button>
+      <button id="sidebarSwitchUserBtn" type="button" onclick="logoutCurrentUser()" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f3f4f8; color:#2f3545; border:1px solid #dce0ec; cursor:pointer;">Sign Out</button>
     </div>
   </div>
 
@@ -744,7 +768,7 @@ header #openSyncModalBtn:hover {
         </div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">CFA Level II / Your study workspace</h1>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">CFA Level II Study Guide</h1>
             <span id="headerPlanStatsBadge" class="text-xs px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 font-medium">LES Verified • 148 Days / 296 Hrs</span>
           </div>
           <p id="headerPlanDatesSub" class="text-xs text-slate-400">Core Reading: 1 Nov 2026 – 28 Mar 2027 • Q-Bank &amp; Mocks: 29 Mar – May 2027 Exam</p>
@@ -778,8 +802,8 @@ header #openSyncModalBtn:hover {
         <!-- Plan Dates, Sync, Admin & User Profile Actions -->
         <div class="flex items-center gap-1.5 flex-wrap">
           <button id="openPlanSettingsBtn" type="button" onclick="openPlanSettingsModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition" title="Adjust study start/end dates and daily weekday/weekend study hours">&#9881; Plan Dates &amp; Hours</button>
-          <button id="openAdminGeneratorBtn" type="button" onclick="openAdminCodeModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition" title="Admin Access Code Generator (Andy Asante)">&#128273; Admin Codes</button>
-          <button id="openAuthModalBtn" type="button" onclick="openAuthGateModal('login')" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold transition" title="Switch User or Request Access">&#128100; <span id="headerUserBadgeText">Andy Asante</span></button>
+          <button id="openAdminGeneratorBtn" type="button" onclick="openAdminCodeModal()" class="hidden text-xs px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition" title="Admin Access Code Generator">&#128273; Admin Codes</button>
+          <button id="openAuthModalBtn" type="button" onclick="logoutCurrentUser()" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold transition" title="Account / Sign Out">&#128100; <span id="headerUserBadgeText">Account</span> (Sign Out)</button>
           <button id="openSyncModalBtn" onclick="openSyncModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold transition" title="Sync study progress between your Laptop and Android Phone">&#8644; Sync Phone / Laptop</button>
           <button id="exportDataBtn" onclick="exportBackupJson()" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition">Export Backup</button>
           <label for="importFileInput" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition cursor-pointer">Import</label>
@@ -811,7 +835,7 @@ header #openSyncModalBtn:hover {
         <div>
           <span class="eyebrow">YOUR PERSONAL STUDY SPACE</span>
           <h2>A little closer, every day.</h2>
-          <p id="heroWelcomeText">Welcome back, Andy. Let's make this session count.</p>
+          <p id="heroWelcomeText">Welcome back. Let's make this session count.</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
           <span id="heroExamTag" class="exam-tag">MAY 2027 &nbsp; · &nbsp; LEVEL II</span>
@@ -1852,149 +1876,158 @@ header #openSyncModalBtn:hover {
   </div>
 
 
-  <!-- ==================== MODAL 1: EMAIL LOGIN, MULTI-USER SWITCHER & REQUEST ACCESS ==================== -->
-  <div id="authGateModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
-      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-extrabold text-lg shadow-xs">a.</div>
-          <div>
-            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">ASCENT • MULTI-USER CFA WORKSPACE</span>
-            <h3 class="text-lg font-extrabold text-slate-900 mt-0.5">Sign In or Request Personal Access</h3>
-          </div>
+  <!-- ==================== MODAL 1: FULL-SCREEN SIGN IN / SIGN UP & ACCESS REQUEST GATE ==================== -->
+  <div id="authGateModal" class="fullscreen-gate-bg fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 my-8">
+      <!-- Clean Header: Only "Sign In or Request Personal Access" (No Ascent/Multi-User badge or icon) -->
+      <div class="flex items-start justify-between border-b border-slate-100 pb-3.5">
+        <div>
+          <h3 id="authGateMainHeading" class="text-lg sm:text-xl font-extrabold text-slate-900">Sign In or Request Personal Access</h3>
+          <p id="authGateSubHeading" class="text-xs text-slate-500 mt-0.5">CFA Level II Study Guide</p>
         </div>
-        <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold leading-none">&times;</button>
+        <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="hidden text-slate-400 hover:text-slate-700 text-xl font-bold leading-none">&times;</button>
       </div>
 
-      <!-- Mode Switch Tabs -->
-      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
-        <button id="authTabBtn-login" type="button" onclick="switchAuthModalTab('login')" class="py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition">
-          &#128274; Sign In with Email
-        </button>
-        <button id="authTabBtn-request" type="button" onclick="switchAuthModalTab('request')" class="py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition">
-          &#9993; Request Access Code
-        </button>
-      </div>
-
-      <!-- TAB A: SIGN IN WITH EMAIL & ACCESS CODE -->
-      <div id="authPanel-login" class="space-y-4">
-        <!-- Quick Master Login for Andy Asante -->
-        <div class="p-3.5 rounded-xl bg-indigo-50/90 border border-indigo-200 flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">OWNER / ADMIN MASTER ACCOUNT</span>
-            <span class="text-xs font-bold text-slate-900">Andy Asante (<span class="font-mono">andykwesiasante@gmail.com</span>)</span>
-          </div>
-          <button id="quickOwnerLoginBtn" type="button" onclick="loginAsMasterOwner()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition shadow-2xs">
-            One-Click Owner Sign-In &rarr;
+      <!-- ==================== STEP 1: SIGN UP / SIGN IN (EMAIL, GOOGLE, APPLE) ==================== -->
+      <div id="authStep1Container" class="space-y-4">
+        <!-- Sign In vs Sign Up Mode Toggle -->
+        <div class="grid grid-cols-2 gap-1.5 bg-slate-100 p-1 rounded-xl">
+          <button id="authModeBtn-signin" type="button" onclick="switchAuthStep1Mode('signin')" class="py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition">
+            Sign In
+          </button>
+          <button id="authModeBtn-signup" type="button" onclick="switchAuthStep1Mode('signup')" class="py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition">
+            Sign Up
           </button>
         </div>
 
-        <div class="space-y-3">
-          <div>
-            <label for="loginEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Your Email Address</label>
-            <input id="loginEmailInput" type="email" placeholder="e.g. candidate@business.edu" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <!-- Social Sign Up / Sign In Buttons (Google & Apple) -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <button id="continueWithGoogleBtn" type="button" onclick="openSocialAccountPicker('Google')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-bold flex items-center justify-center gap-2 transition shadow-2xs">
+            <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.8C6.2 7.2 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.6l3.7 2.9c2.2-2 3.7-5 3.7-8.7z"/><path fill="#FBBC05" d="M5.3 14.8c-.2-.8-.4-1.6-.4-2.5s.2-1.7.4-2.5L1.6 7C.6 9 0 11.2 0 12.3s.6 3.3 1.6 5.3l3.7-2.8z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5l-3.7 2.8C3.5 19.9 7.4 23 12 23z"/></svg>
+            <span>Google</span>
+          </button>
+          <button id="continueWithAppleBtn" type="button" onclick="openSocialAccountPicker('Apple')" class="py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-900 text-xs font-bold flex items-center justify-center gap-2 transition shadow-2xs">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+            <span>Apple</span>
+          </button>
+        </div>
+
+        <!-- Simulated 1-Click Google / Apple Account Picker Box -->
+        <div id="socialAccountPickerBox" class="hidden p-4 rounded-xl bg-slate-50 border border-indigo-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <span id="socialPickerTitle" class="text-xs font-extrabold text-indigo-900">Continue with Google</span>
+            <button type="button" onclick="closeSocialAccountPicker()" class="text-xs text-slate-400 hover:text-slate-700 font-bold">&times;</button>
           </div>
-          <div>
-            <label for="loginNameInput" class="block text-xs font-bold text-slate-700 mb-1">Full Name (Displayed on Your Dashboard)</label>
-            <input id="loginNameInput" type="text" placeholder="e.g. Alex Mensah" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <label for="loginAccessCodeInput" class="block text-xs font-bold text-slate-700">Personal Access Code</label>
-              <button id="needCodeSwitchLinkBtn" type="button" onclick="switchAuthModalTab('request')" class="text-[11px] font-bold text-indigo-600 hover:underline">Need an access code? Request one &rarr;</button>
+          <div id="socialSavedAccountsList" class="space-y-1.5"></div>
+          <div class="space-y-2">
+            <div>
+              <label for="socialPickerNameInput" class="block text-[11px] font-bold text-slate-700 mb-0.5">Your Full Name</label>
+              <input id="socialPickerNameInput" type="text" placeholder="e.g. Alex Mensah" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
             </div>
-            <input id="loginAccessCodeInput" type="text" placeholder="ASCENT-XXXX-XXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-          </div>
-          <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
-          <button id="submitEmailLoginBtn" type="button" onclick="handleEmailSignIn()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
-            Sign In &amp; Open My Personal Dashboard
-          </button>
-        </div>
-
-        <!-- Existing Profiles on This Device -->
-        <div class="pt-3 border-t border-slate-200">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-2">Saved User Dashboards on This Device</span>
-          <div id="savedUsersListContainer" class="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
-        </div>
-      </div>
-
-      <!-- TAB B: REQUEST ACCESS & CUSTOMIZE STUDY PLAN -->
-      <div id="authPanel-request" class="hidden space-y-3.5">
-        <div class="p-3 rounded-xl bg-teal-50 border border-teal-200 text-xs text-teal-900">
-          <strong>How Access Works:</strong> Fill in your study timeline and daily available hours below. Your request is sent directly to <strong>Andy Asante (<span class="font-mono">andykwesiasante@gmail.com</span>)</strong>, who will reply with your personal <strong><span class="font-mono">ASCENT-XXXX-XXXX</span></strong> access code. Your custom schedule preferences are saved automatically so you can start the moment your code arrives!
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label for="reqNameInput" class="block text-xs font-bold text-slate-700 mb-1">Your Full Name *</label>
-            <input id="reqNameInput" type="text" placeholder="e.g. Sarah Osei" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
-          </div>
-          <div>
-            <label for="reqEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Your Email Address *</label>
-            <input id="reqEmailInput" type="email" placeholder="e.g. sarah@example.com" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
-          </div>
-          <div>
-            <label for="reqStartDateInput" class="block text-xs font-bold text-slate-700 mb-1">Core Reading Start Date</label>
-            <input id="reqStartDateInput" type="date" value="2026-11-01" onchange="updateRequestPlanPreview()" class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm" />
-          </div>
-          <div>
-            <label for="reqEndDateInput" class="block text-xs font-bold text-slate-700 mb-1">Core Reading End Date</label>
-            <input id="reqEndDateInput" type="date" value="2027-03-28" onchange="updateRequestPlanPreview()" class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm" />
-          </div>
-          <div>
-            <label for="reqWeekdayHrsInput" class="block text-xs font-bold text-slate-700 mb-1">Weekday Study Hours / Day (Mon–Fri)</label>
-            <input id="reqWeekdayHrsInput" type="number" step="0.25" min="0" max="12" value="2.0" oninput="updateRequestPlanPreview()" class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-bold" />
-          </div>
-          <div>
-            <label for="reqWeekendHrsInput" class="block text-xs font-bold text-slate-700 mb-1">Weekend Study Hours / Day (Sat–Sun)</label>
-            <input id="reqWeekendHrsInput" type="number" step="0.25" min="0" max="14" value="2.0" oninput="updateRequestPlanPreview()" class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-bold" />
-          </div>
-          <div>
-            <label for="reqExamDateInput" class="block text-xs font-bold text-slate-700 mb-1">Target CFA Level II Exam Date</label>
-            <input id="reqExamDateInput" type="date" value="2027-05-22" onchange="updateRequestPlanPreview()" class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm" />
-          </div>
-          <div class="flex items-end">
-            <button id="reqAutoCalcEndBtn" type="button" onclick="autoCalculateEndDateFromHours('req')" class="w-full py-2 px-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold transition">
-              &#9889; Auto-Fit End Date from Hours
+            <div>
+              <label id="socialPickerEmailLabel" for="socialPickerEmailInput" class="block text-[11px] font-bold text-slate-700 mb-0.5">Google Email Address</label>
+              <input id="socialPickerEmailInput" type="email" placeholder="name@gmail.com" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
+            </div>
+            <button id="confirmSocialAuthBtn" type="button" onclick="completeSocialAuthSignIn()" class="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition">
+              Continue &rarr;
             </button>
           </div>
         </div>
 
-        <div id="reqPlanPreviewBanner" class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium">
-          Proportional Plan Preview: <strong>148 days</strong> (21 weeks) • <strong>296.0 total hours</strong> • ~4.4 lessons/weekday
+        <div class="flex items-center gap-3 text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+          <span class="flex-1 border-t border-slate-200"></span>
+          <span>or with email</span>
+          <span class="flex-1 border-t border-slate-200"></span>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 pt-1">
-          <button id="submitAccessRequestBtn" type="button" onclick="submitAccessRequestToAndy()" class="flex-1 py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
-            &#9993; Send Access Request to Andy
-          </button>
-          <button id="copyAccessRequestBtn" type="button" onclick="copyAccessRequestDetails()" class="py-2.5 px-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
-            &#128203; Copy Request Text
-          </button>
-        </div>
-
-        <div id="reqConfirmationBox" class="hidden p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2 text-xs text-emerald-950">
-          <div class="font-extrabold">Request Prepared for andykwesiasante@gmail.com!</div>
-          <p>If your email app didn't open automatically, click <strong>Open in Gmail Web</strong> or copy the message below and email it to <strong>andykwesiasante@gmail.com</strong>. Once Andy replies with your access code, switch to the <strong>Sign In</strong> tab to unlock your dashboard.</p>
-          <div class="flex items-center gap-2">
-            <a id="reqGmailWebLink" href="https://mail.google.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs">Open in Gmail Web &#8599;</a>
-            <button id="reqSwitchToLoginBtn" type="button" onclick="switchAuthModalTab('login')" class="px-3 py-1.5 rounded-lg bg-white text-slate-800 border border-slate-300 font-bold text-xs">I Have My Code &rarr; Sign In</button>
+        <!-- Email Sign Up / Sign In Form -->
+        <div class="space-y-3">
+          <div id="authNameFieldWrapper" class="hidden">
+            <label for="loginNameInput" class="block text-xs font-bold text-slate-700 mb-1">Full Name</label>
+            <input id="loginNameInput" type="text" value="" autocomplete="off" placeholder="Enter your full name" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
+          <div>
+            <label for="loginEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+            <input id="loginEmailInput" type="email" value="" autocomplete="off" placeholder="you@example.com" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+          <div>
+            <label for="loginPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">Password</label>
+            <input id="loginPasswordInput" type="password" value="" autocomplete="off" placeholder="Enter your password" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+
+          <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+
+          <button id="submitEmailLoginBtn" type="button" onclick="handleStep1EmailSubmit()" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
+            Sign In &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- ==================== STEP 2: REQUEST ACCESS CODE OR ENTER CODE TO UNLOCK ==================== -->
+      <div id="authStep2Container" class="hidden space-y-4">
+        <!-- Signed-in Account Pill -->
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-700 block" id="step2ProviderBadge">SIGNED IN ACCOUNT</span>
+            <strong id="step2AccountName" class="text-xs font-extrabold text-slate-900 block truncate">Candidate</strong>
+            <span id="step2AccountEmail" class="text-[11px] text-slate-500 block truncate">you@example.com</span>
+          </div>
+          <button id="step2BackToStep1Btn" type="button" onclick="backToAuthStep1()" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[11px] font-bold shrink-0">
+            Switch Account
+          </button>
+        </div>
+
+        <!-- Option A: Click to Request Access Code (Pushes to Admin Email) -->
+        <div class="p-4 rounded-xl bg-teal-50/90 border border-teal-200 space-y-2.5">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 block">STEP 1 • NEED AN ACCESS CODE?</span>
+            <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">Request Your Personal Access Code</h4>
+            <p class="text-xs text-slate-600 mt-0.5">Click below to push your access request. Your personal access code will be sent to your email.</p>
+          </div>
+          <button id="pushAccessRequestBtn" type="button" onclick="pushAccessRequestToAdmin()" class="w-full py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
+            &#9993; Request Access Code
+          </button>
+          <div id="reqConfirmationBox" class="hidden p-3 rounded-xl bg-white border border-emerald-300 space-y-1.5 text-xs text-emerald-950">
+            <div id="reqConfirmationTitle" class="font-extrabold text-emerald-800">&#10003; Access Request Sent!</div>
+            <p id="reqConfirmationDesc" class="text-[11px] text-slate-600">We've pushed your request to the administrator. As soon as your access code arrives in your email, enter it below to unlock your study guide.</p>
+            <div class="flex items-center gap-2 pt-1">
+              <a id="reqGmailWebLink" href="https://mail.google.com" target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-indigo-700 hover:underline">Backup: Send via Gmail Web &#8599;</a>
+              <span class="text-slate-300">|</span>
+              <button type="button" onclick="copyAccessRequestDetails()" class="text-[11px] font-bold text-slate-600 hover:underline bg-transparent p-0">Copy Request Text</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Option B: Enter Access Code to Unlock & Configure Dates/Hours -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div>
+            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">STEP 2 • HAVE YOUR ACCESS CODE?</span>
+            <label for="step2AccessCodeInput" class="block text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">Enter Access Code to Unlock</label>
+          </div>
+          <input id="step2AccessCodeInput" type="text" value="" placeholder="CFAL2-XXXX-XXXX" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm font-mono uppercase bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <p id="step2ErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+          <button id="verifyStep2CodeBtn" type="button" onclick="handleStep2UnlockCode()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
+            Unlock &amp; Set Up My Study Dates &rarr;
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== MODAL 2: PROPORTIONAL SCHEDULE & STUDY HOURS CUSTOMIZER ==================== -->
+  <!-- ==================== MODAL 2: PROPORTIONAL SCHEDULE & STUDY HOURS CUSTOMIZER (POPS UP ON FIRST UNLOCK) ==================== -->
   <div id="planSettingsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
       <div class="flex items-start justify-between border-b border-slate-100 pb-3">
         <div>
-          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-800">PROPORTIONAL SCHEDULE ENGINE</span>
-          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Customize Study Dates &amp; Daily Available Hours</h3>
-          <p class="text-xs text-slate-500">Proportionally compresses or expands all 461 main lessons and 86 Ethics items across your timeline and daily study capacity—without losing your completed checkmarks.</p>
+          <span id="planModalEyebrowBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-800">PERSONALIZE YOUR STUDY PLAN</span>
+          <h3 id="planModalHeadingText" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Set Your Preferred Study Dates &amp; Daily Hours</h3>
+          <p class="text-xs text-slate-500">Indicate your preferred reading start/end dates and available weekday/weekend hours so your entire CFA Level II Study Guide is built around your schedule.</p>
         </div>
         <button id="closePlanSettingsModalBtn" type="button" onclick="closePlanSettingsModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <div id="planOnboardingWelcomeBanner" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium">
+        <strong>&#127881; Access Unlocked!</strong> Choose your preferred Core Reading dates and how many hours you can study on Weekdays (Mon–Fri) and Weekends (Sat–Sun). You can also tweak these anytime later.
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -2040,56 +2073,77 @@ header #openSyncModalBtn:hover {
 
       <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
         <button id="resetDefaultPlanBtn" type="button" onclick="resetPlanToDefaultMay2027()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-300">
-          Reset to Official Default (1 Nov – 28 Mar, 2h/day)
+          Reset to Default (1 Nov – 28 Mar, 2h/day)
         </button>
         <div class="flex items-center gap-2">
-          <button id="cancelPlanSettingsBtn" type="button" onclick="closePlanSettingsModal()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
-          <button id="savePlanSettingsBtn" type="button" onclick="saveAndApplyPlanSettings()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs">Apply &amp; Rebuild Schedule</button>
+          <button id="cancelPlanSettingsBtn" type="button" onclick="closePlanSettingsModal()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Skip / Keep Current</button>
+          <button id="savePlanSettingsBtn" type="button" onclick="saveAndApplyPlanSettings()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs">Save &amp; Build My Dashboard</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== MODAL 3: ADMIN ACCESS CODE GENERATOR (ANDY ASANTE) ==================== -->
+  <!-- ==================== MODAL 3: ADMIN ACCESS CODE GENERATOR (OWNER ONLY) ==================== -->
   <div id="adminCodeModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
       <div class="flex items-start justify-between border-b border-slate-100 pb-3">
         <div>
-          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-amber-100 text-amber-900">OWNER ADMIN CONSOLE • ANDY ASANTE</span>
-          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Candidate Access Code Generator</h3>
-          <p class="text-xs text-slate-500">When someone emails an access request to <strong>andykwesiasante@gmail.com</strong>, enter their email here to generate their personal unlock code.</p>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-amber-100 text-amber-900">ADMIN ACCESS CODE GENERATOR</span>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Generate &amp; Send Candidate Access Codes</h3>
+          <p class="text-xs text-slate-500">Enter a candidate's email address to generate their personal unlock code and send it straight to their inbox.</p>
         </div>
         <button id="closeAdminCodeModalBtn" type="button" onclick="closeAdminCodeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
       </div>
 
       <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
         <div>
-          <label for="adminRequesterEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Requester's Email Address *</label>
-          <input id="adminRequesterEmailInput" type="email" oninput="generateAdminCodeLive()" placeholder="e.g. sarah@example.com" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm bg-white" />
+          <label for="adminRequesterEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Candidate's Email Address *</label>
+          <input id="adminRequesterEmailInput" type="email" oninput="generateAdminCodeLive()" placeholder="e.g. candidate@example.com" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm bg-white" />
         </div>
         <div>
-          <label for="adminRequesterNameInput" class="block text-xs font-bold text-slate-700 mb-1">Requester's Name (Optional — for Welcome Email)</label>
+          <label for="adminRequesterNameInput" class="block text-xs font-bold text-slate-700 mb-1">Candidate's Name (Optional)</label>
           <input id="adminRequesterNameInput" type="text" oninput="generateAdminCodeLive()" placeholder="e.g. Sarah Osei" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm bg-white" />
         </div>
 
         <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between gap-3">
           <div>
             <span class="text-[10px] uppercase tracking-wider text-amber-400 font-bold block">Personal Access Code for This Email</span>
-            <span id="adminGeneratedCodeDisplay" class="font-mono text-xl font-extrabold text-teal-300 tracking-wider">ASCENT-XXXX-XXXX</span>
+            <span id="adminGeneratedCodeDisplay" class="font-mono text-xl font-extrabold text-teal-300 tracking-wider">CFAL2-XXXX-XXXX</span>
           </div>
           <button id="adminCopyCodeBtn" type="button" onclick="copyAdminGeneratedCode()" class="px-3 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition shrink-0">
             &#128203; Copy Code
           </button>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 pt-1">
-          <button id="adminSendEmailBtn" type="button" onclick="sendAdminCodeViaEmail()" class="flex-1 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition">
-            &#9993; Email Code to Candidate
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+          <button id="adminSendGmailWebBtn" type="button" onclick="sendAdminCodeViaGmailWeb()" class="py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+            <span>&#9993; Send via Gmail Web (1-Click)</span>
           </button>
-          <button id="adminCopyWelcomeMsgBtn" type="button" onclick="copyAdminWelcomeMessage()" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
-            Copy Welcome Note
+          <button id="adminPushEmailBtn" type="button" onclick="pushAdminCodeEmailBackground()" class="py-2.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+            <span>&#128640; Push Email / Mail App</span>
           </button>
         </div>
+        <div class="flex items-center justify-between pt-1">
+          <button id="adminCopyWelcomeMsgBtn" type="button" onclick="copyAdminWelcomeMessage()" class="text-xs font-bold text-slate-700 hover:text-slate-900 underline bg-transparent p-0">
+            &#128203; Copy Full Welcome Email Text
+          </button>
+          <button type="button" onclick="document.getElementById('adminEmailJsConfigBox').classList.toggle('hidden')" class="text-[11px] font-semibold text-indigo-600 hover:underline bg-transparent p-0">
+            &#9881; Optional: 1-Click EmailJS API Setup
+          </button>
+        </div>
+
+        <!-- Optional EmailJS Direct Push Settings -->
+        <div id="adminEmailJsConfigBox" class="hidden p-3 rounded-xl bg-white border border-slate-200 space-y-2 text-xs">
+          <p class="text-[11px] text-slate-600">To push emails directly to candidates in the background without opening Gmail Web, paste your free <a href="https://www.emailjs.com/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">EmailJS</a> credentials once below:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <input id="emailJsServiceIdInput" type="text" placeholder="Service ID (service_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+            <input id="emailJsTemplateIdInput" type="text" placeholder="Template ID (template_xxx)" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+            <input id="emailJsPublicKeyInput" type="text" placeholder="Public Key" class="rounded border border-slate-300 px-2 py-1 text-xs" />
+          </div>
+          <button type="button" onclick="saveAdminEmailJsConfig()" class="px-3 py-1 rounded bg-slate-900 text-white text-xs font-bold">Save EmailJS Keys</button>
+        </div>
+
+        <div id="adminSendStatusBanner" class="hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold"></div>
       </div>
 
       <!-- History of Issued Codes -->
@@ -2183,10 +2237,12 @@ header #openSyncModalBtn:hover {
     })(COMPACT_DATA);
 
     const LEGACY_STORAGE_KEY = 'andy_cfa_l2_may2027_state_v1';
-    const USERS_REGISTRY_KEY = 'andy_cfa_l2_users_registry_v1';
-    const ACTIVE_USER_EMAIL_KEY = 'andy_cfa_l2_active_user_email_v1';
+    const USERS_REGISTRY_KEY = 'cfa_l2_study_guide_users_v2';
+    const ACTIVE_USER_EMAIL_KEY = 'cfa_l2_study_guide_active_email_v2';
     const ISSUED_CODES_KEY = 'andy_cfa_l2_issued_codes_v1';
-    const MASTER_OWNER_EMAIL = 'andykwesiasante@gmail.com';
+    const EMAILJS_CONFIG_KEY = 'cfa_l2_admin_emailjs_cfg_v1';
+    // Encoded owner email so it is never displayed in public UI text
+    const MASTER_OWNER_EMAIL = atob('YW5keWt3ZXNpYXNhbnRlQGdtYWlsLmNvbQ==');
     const MASTER_OWNER_NAME = 'Andy Asante';
 
     // Preserve immutable baseline schedule & ordered lessons from COMPACT_DATA for proportional rebuilding
@@ -2224,9 +2280,9 @@ header #openSyncModalBtn:hover {
     }
 
     // Deterministic cryptographic-style Access Code generator (works across all devices with zero backend cost)
-    function generateAccessCodeForEmail(email) {
+    function generateCodePartsForEmail(email) {
       const clean = normalizeEmail(email);
-      if (!clean) return 'ASCENT-0000-0000';
+      if (!clean) return '0000-0000';
       const payload = clean + '::ASCENT_CFA_L2_ANDY_ASANTE_2027_SALT_V1';
       let h1 = 0x811c9dc5;
       let h2 = 0x1505;
@@ -2247,24 +2303,32 @@ header #openSyncModalBtn:hover {
         part2 += alphabet[Math.abs(v2) % alphabet.length];
         v2 = (Math.floor(v2 / alphabet.length) ^ (h1 >>> (i * 2))) >>> 0;
       }
-      return 'ASCENT-' + part1 + '-' + part2;
+      return part1 + '-' + part2;
+    }
+
+    function generateAccessCodeForEmail(email) {
+      return 'CFAL2-' + generateCodePartsForEmail(email);
     }
 
     function isValidAccessCode(email, codeInput) {
       const cleanEmail = normalizeEmail(email);
       const cleanCode = String(codeInput || '').trim().toUpperCase();
+      if (!cleanCode) return false;
       if (cleanEmail === MASTER_OWNER_EMAIL) return true;
-      if (cleanCode === 'ASCENT-ADMIN' || cleanCode === 'ASCENT-MASTER') return true;
-      return cleanCode === generateAccessCodeForEmail(cleanEmail);
+      if (cleanCode === 'CFAL2-ADMIN' || cleanCode === 'ASCENT-ADMIN' || cleanCode === 'ASCENT-MASTER') return true;
+      const suffix = generateCodePartsForEmail(cleanEmail);
+      return cleanCode === ('CFAL2-' + suffix) || cleanCode === ('ASCENT-' + suffix);
     }
 
     function getDefaultAppState(userEmail, userName) {
+      const cleanEmail = normalizeEmail(userEmail || '');
       return {
         userProfile: {
-          name: userName || MASTER_OWNER_NAME,
-          email: normalizeEmail(userEmail || MASTER_OWNER_EMAIL),
-          role: normalizeEmail(userEmail || MASTER_OWNER_EMAIL) === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
+          name: userName || 'CFA Candidate',
+          email: cleanEmail,
+          role: cleanEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
         },
+        hasCompletedPlanSetup: cleanEmail === MASTER_OWNER_EMAIL,
         planConfig: {
           startDate: '2026-11-01',
           endDate: '2027-03-28',
@@ -2315,37 +2379,23 @@ header #openSyncModalBtn:hover {
       };
     }
 
-    let currentActiveUserEmail = MASTER_OWNER_EMAIL;
-    let appState = getDefaultAppState(MASTER_OWNER_EMAIL, MASTER_OWNER_NAME);
+    let currentActiveUserEmail = '';
+    let appState = getDefaultAppState('', 'Candidate');
 
     function getUserStorageKey(email) {
-      const clean = normalizeEmail(email || currentActiveUserEmail || MASTER_OWNER_EMAIL);
+      const clean = normalizeEmail(email || currentActiveUserEmail || 'guest');
       return 'andy_cfa_l2_user_state_' + clean.replace(/[^a-z0-9@._-]/g, '_');
     }
 
     function loadUsersRegistry() {
       try {
+        // Purge old v1 keys that pre-populated owner email on public browsers
+        localStorage.removeItem('andy_cfa_l2_users_registry_v1');
+        localStorage.removeItem('andy_cfa_l2_active_user_email_v1');
         const raw = localStorage.getItem(USERS_REGISTRY_KEY);
-        const reg = raw ? JSON.parse(raw) : {};
-        if (!reg[MASTER_OWNER_EMAIL]) {
-          reg[MASTER_OWNER_EMAIL] = {
-            email: MASTER_OWNER_EMAIL,
-            name: MASTER_OWNER_NAME,
-            role: 'Owner & Admin',
-            unlocked: true,
-            lastActive: new Date().toISOString()
-          };
-        }
-        return reg;
+        return raw ? JSON.parse(raw) : {};
       } catch (e) {
-        return {
-          [MASTER_OWNER_EMAIL]: {
-            email: MASTER_OWNER_EMAIL,
-            name: MASTER_OWNER_NAME,
-            role: 'Owner & Admin',
-            unlocked: true
-          }
-        };
+        return {};
       }
     }
 
@@ -2355,18 +2405,25 @@ header #openSyncModalBtn:hover {
       } catch (e) {}
     }
 
+    function isCurrentSessionUnlocked() {
+      const savedEmail = normalizeEmail(localStorage.getItem(ACTIVE_USER_EMAIL_KEY) || '');
+      if (!savedEmail) return false;
+      const reg = loadUsersRegistry();
+      return Boolean(reg[savedEmail] && reg[savedEmail].unlocked && reg[savedEmail].explicitlySignedIn);
+    }
+
     function loadState(targetEmailOverride) {
       try {
         const reg = loadUsersRegistry();
-        const savedEmail = normalizeEmail(targetEmailOverride || localStorage.getItem(ACTIVE_USER_EMAIL_KEY) || MASTER_OWNER_EMAIL);
-        currentActiveUserEmail = savedEmail || MASTER_OWNER_EMAIL;
-        localStorage.setItem(ACTIVE_USER_EMAIL_KEY, currentActiveUserEmail);
+        const savedEmail = normalizeEmail(targetEmailOverride || localStorage.getItem(ACTIVE_USER_EMAIL_KEY) || '');
+        if (!savedEmail || !reg[savedEmail]) {
+          currentActiveUserEmail = '';
+          appState = getDefaultAppState('', 'Candidate');
+          return;
+        }
+        currentActiveUserEmail = savedEmail;
 
-        const userInfo = reg[currentActiveUserEmail] || {
-          email: currentActiveUserEmail,
-          name: currentActiveUserEmail === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : currentActiveUserEmail.split('@')[0]
-        };
-
+        const userInfo = reg[currentActiveUserEmail];
         const defaultForUser = getDefaultAppState(currentActiveUserEmail, userInfo.name);
         const userKey = getUserStorageKey(currentActiveUserEmail);
         let raw = localStorage.getItem(userKey);
@@ -2381,7 +2438,7 @@ header #openSyncModalBtn:hover {
           appState = Object.assign({}, defaultForUser, parsed);
           appState.userProfile = Object.assign({}, defaultForUser.userProfile, parsed.userProfile || {}, {
             email: currentActiveUserEmail,
-            name: (parsed.userProfile && parsed.userProfile.name) || userInfo.name
+            name: userInfo.name || (parsed.userProfile && parsed.userProfile.name) || 'Candidate'
           });
           appState.planConfig = Object.assign({}, defaultForUser.planConfig, parsed.planConfig || {});
           appState.pomoSettings = Object.assign({}, defaultForUser.pomoSettings, parsed.pomoSettings || {});
@@ -2398,6 +2455,7 @@ header #openSyncModalBtn:hover {
 
     function saveState() {
       try {
+        if (!currentActiveUserEmail) return;
         // Sync completedCodes & confidenceByCode so schedule date changes never lose lesson progress
         if (!appState.completedCodes) appState.completedCodes = {};
         if (!appState.confidenceByCode) appState.confidenceByCode = {};
@@ -2421,15 +2479,6 @@ header #openSyncModalBtn:hover {
         if (currentActiveUserEmail === MASTER_OWNER_EMAIL) {
           localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(appState));
         }
-        const reg = loadUsersRegistry();
-        reg[currentActiveUserEmail] = Object.assign({}, reg[currentActiveUserEmail] || {}, {
-          email: currentActiveUserEmail,
-          name: (appState.userProfile && appState.userProfile.name) || MASTER_OWNER_NAME,
-          role: currentActiveUserEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate',
-          unlocked: true,
-          lastActive: new Date().toISOString()
-        });
-        saveUsersRegistry(reg);
       } catch (e) {
         console.warn('localStorage save fallback:', e);
       }
@@ -5099,7 +5148,7 @@ header #openSyncModalBtn:hover {
       const url = base + '#sync=' + encodeSyncPayload();
       if (navigator.share) {
         navigator.share({
-          title: 'Ascent CFA Level II Progress Sync',
+          title: 'CFA Level II Study Guide Progress Sync',
           text: 'Open this link or paste the sync code to load my latest CFA Level II study progress:',
           url: url
         }).catch(() => {});
@@ -5563,9 +5612,9 @@ header #openSyncModalBtn:hover {
     }
 
     function updateDynamicUserAndPlanBanners() {
-      const profile = (appState && appState.userProfile) || { name: MASTER_OWNER_NAME, email: MASTER_OWNER_EMAIL };
+      const profile = (appState && appState.userProfile) || { name: 'Candidate', email: '' };
       const cfg = (appState && appState.planConfig) || { startDate: '2026-11-01', endDate: '2027-03-28', examDate: '2027-05-22', weekdayHours: 2.0, weekendHours: 2.0 };
-      const fullName = profile.name || MASTER_OWNER_NAME;
+      const fullName = profile.name || 'Candidate';
       const firstName = fullName.trim().split(/\s+/)[0] || 'Candidate';
       const initials = fullName.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'CA';
 
@@ -5615,13 +5664,18 @@ header #openSyncModalBtn:hover {
     }
 
     // ==================== 11. PLAN DATES & DAILY HOURS MODAL HANDLERS ====================
-    function openPlanSettingsModal() {
+    function openPlanSettingsModal(isFirstTimeOnboarding) {
       const cfg = (appState && appState.planConfig) || { startDate: '2026-11-01', endDate: '2027-03-28', examDate: '2027-05-22', weekdayHours: 2.0, weekendHours: 2.0 };
       document.getElementById('planStartDateInput').value = cfg.startDate || '2026-11-01';
       document.getElementById('planEndDateInput').value = cfg.endDate || '2027-03-28';
       document.getElementById('planExamDateModalInput').value = cfg.examDate || appState.examDate || '2027-05-22';
       document.getElementById('planWeekdayHoursInput').value = cfg.weekdayHours ?? 2.0;
       document.getElementById('planWeekendHoursInput').value = cfg.weekendHours ?? 2.0;
+
+      const welcomeBanner = document.getElementById('planOnboardingWelcomeBanner');
+      if (welcomeBanner) {
+        welcomeBanner.classList.toggle('hidden', !isFirstTimeOnboarding);
+      }
       updateModalPlanPreview();
       const modal = document.getElementById('planSettingsModal');
       modal.classList.remove('hidden');
@@ -5632,6 +5686,10 @@ header #openSyncModalBtn:hover {
       const modal = document.getElementById('planSettingsModal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
+      if (appState) {
+        appState.hasCompletedPlanSetup = true;
+        saveState();
+      }
     }
 
     function updateModalPlanPreview() {
@@ -5682,58 +5740,170 @@ header #openSyncModalBtn:hover {
         weekendHours: weH
       };
       appState.examDate = xIso;
+      appState.hasCompletedPlanSetup = true;
       rebuildScheduleForUserPlan();
       saveState();
       closePlanSettingsModal();
       refreshAllViews();
-      showToast(`Rebuilt schedule: ${m.totalDays} days (${m.weeksCount} weeks • ${m.totalHours.toFixed(0)} planned hrs)!`);
+      showToast(`Built your study schedule: ${m.totalDays} days (${m.weeksCount} weeks • ${m.totalHours.toFixed(0)} planned hrs)!`);
     }
 
-    // ==================== 12. EMAIL LOGIN, MULTI-USER SWITCHER & REQUEST ACCESS ====================
-    function openAuthGateModal(defaultTab) {
-      switchAuthModalTab(defaultTab || 'login');
-      const profile = (appState && appState.userProfile) || {};
-      const emailEl = document.getElementById('loginEmailInput');
-      const nameEl = document.getElementById('loginNameInput');
-      if (emailEl && !emailEl.value) emailEl.value = profile.email || '';
-      if (nameEl && !nameEl.value) nameEl.value = profile.name || '';
-      renderSavedUsersList();
-      updateRequestPlanPreview();
+    // ==================== 12. 2-STEP SIGN UP / SIGN IN (EMAIL, GOOGLE, APPLE) & ACCESS REQUEST GATE ====================
+    let currentAuthStep1Mode = 'signin'; // 'signin' | 'signup'
+    let pendingAuthUser = { email: '', name: '', provider: 'Email' };
+    let activeSocialProvider = 'Google';
+
+    function openAuthGateModal(initialMode) {
+      const unlocked = isCurrentSessionUnlocked();
+      const closeBtn = document.getElementById('closeAuthGateModalBtn');
+      if (closeBtn) closeBtn.classList.toggle('hidden', !unlocked);
+
+      // Always keep inputs blank so no personal details are exposed publicly
+      document.getElementById('loginEmailInput').value = '';
+      document.getElementById('loginNameInput').value = '';
+      document.getElementById('loginPasswordInput').value = '';
+      document.getElementById('step2AccessCodeInput').value = '';
+      document.getElementById('loginErrorMsg').classList.add('hidden');
+      document.getElementById('step2ErrorMsg').classList.add('hidden');
+      document.getElementById('reqConfirmationBox').classList.add('hidden');
+      closeSocialAccountPicker();
+
+      document.getElementById('authStep1Container').classList.remove('hidden');
+      document.getElementById('authStep2Container').classList.add('hidden');
+      switchAuthStep1Mode(initialMode === 'signup' ? 'signup' : 'signin');
+
       const modal = document.getElementById('authGateModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
     }
 
     function closeAuthGateModal() {
+      if (!isCurrentSessionUnlocked()) {
+        showToast('Please sign in and unlock access first.');
+        return;
+      }
       const modal = document.getElementById('authGateModal');
       modal.classList.add('hidden');
       modal.classList.remove('flex');
     }
 
-    function switchAuthModalTab(tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('authPanel-login').classList.toggle('hidden', !isLogin);
-      document.getElementById('authPanel-request').classList.toggle('hidden', isLogin);
-      document.getElementById('authTabBtn-login').className = isLogin
-        ? 'py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition'
-        : 'py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition';
-      document.getElementById('authTabBtn-request').className = !isLogin
-        ? 'py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition'
-        : 'py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition';
-      const errEl = document.getElementById('loginErrorMsg');
-      if (errEl) errEl.classList.add('hidden');
+    function logoutCurrentUser() {
+      try {
+        localStorage.removeItem(ACTIVE_USER_EMAIL_KEY);
+      } catch (e) {}
+      currentActiveUserEmail = '';
+      document.body.classList.add('auth-locked');
+      openAuthGateModal('signin');
+      showToast('Signed out. Sign in or switch accounts below.');
     }
 
-    function loginAsMasterOwner() {
-      switchToUserAccount(MASTER_OWNER_EMAIL, MASTER_OWNER_NAME);
-      closeAuthGateModal();
-      showToast('Signed in as Andy Asante (Owner & Admin)');
+    function switchAuthStep1Mode(mode) {
+      currentAuthStep1Mode = (mode === 'signup') ? 'signup' : 'signin';
+      const isSignUp = currentAuthStep1Mode === 'signup';
+      document.getElementById('authNameFieldWrapper').classList.toggle('hidden', !isSignUp);
+
+      document.getElementById('authModeBtn-signin').className = !isSignUp
+        ? 'py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition'
+        : 'py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition';
+      document.getElementById('authModeBtn-signup').className = isSignUp
+        ? 'py-2 px-3 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition'
+        : 'py-2 px-3 rounded-lg text-xs font-extrabold text-slate-600 hover:text-slate-900 transition';
+
+      const submitBtn = document.getElementById('submitEmailLoginBtn');
+      if (submitBtn) {
+        submitBtn.innerHTML = isSignUp ? 'Create Account &amp; Continue &rarr;' : 'Sign In &rarr;';
+      }
+      document.getElementById('loginErrorMsg').classList.add('hidden');
     }
 
-    function handleEmailSignIn() {
+    // Simulated 1-Click Google / Apple Account Picker
+    function openSocialAccountPicker(providerName) {
+      activeSocialProvider = providerName || 'Google';
+      const box = document.getElementById('socialAccountPickerBox');
+      const titleEl = document.getElementById('socialPickerTitle');
+      const emailLbl = document.getElementById('socialPickerEmailLabel');
+      const emailInput = document.getElementById('socialPickerEmailInput');
+      const nameInput = document.getElementById('socialPickerNameInput');
+      const btn = document.getElementById('confirmSocialAuthBtn');
+
+      titleEl.textContent = 'Continue with ' + activeSocialProvider;
+      emailLbl.textContent = activeSocialProvider + ' Email Address';
+      emailInput.placeholder = activeSocialProvider === 'Apple' ? 'name@icloud.com' : 'name@gmail.com';
+      btn.textContent = 'Continue with ' + activeSocialProvider + ' →';
+
+      // Show any previously signed-up social accounts on this browser as 1-click pills (excluding any unauthenticated owner entry)
+      const reg = loadUsersRegistry();
+      const savedSocial = Object.values(reg).filter(u => u && u.email && u.explicitlySignedIn);
+      const listEl = document.getElementById('socialSavedAccountsList');
+      if (savedSocial.length > 0) {
+        listEl.innerHTML = `<span class="text-[10px] font-bold uppercase text-slate-400 block">Quick 1-Click Account on This Browser:</span>` +
+          savedSocial.map(u => `
+            <button type="button" onclick="selectSavedSocialAccount('${u.email.replace(/'/g, "\'")}', '${(u.name || '').replace(/'/g, "\'")}')" class="w-full p-2 rounded-lg bg-white hover:bg-indigo-50 border border-slate-200 flex items-center justify-between text-left text-xs transition">
+              <div>
+                <strong class="text-slate-900 block">${u.name || u.email}</strong>
+                <span class="text-[11px] text-slate-500">${u.email}</span>
+              </div>
+              <span class="text-[11px] font-bold text-indigo-600">Select &rarr;</span>
+            </button>
+          `).join('');
+      } else {
+        listEl.innerHTML = '';
+      }
+
+      nameInput.value = '';
+      emailInput.value = '';
+      box.classList.remove('hidden');
+      emailInput.focus();
+    }
+
+    function closeSocialAccountPicker() {
+      const box = document.getElementById('socialAccountPickerBox');
+      if (box) box.classList.add('hidden');
+    }
+
+    function selectSavedSocialAccount(email, name) {
+      document.getElementById('socialPickerEmailInput').value = email;
+      document.getElementById('socialPickerNameInput').value = name;
+      completeSocialAuthSignIn();
+    }
+
+    function completeSocialAuthSignIn() {
+      const rawEmail = document.getElementById('socialPickerEmailInput').value;
+      const rawName = document.getElementById('socialPickerNameInput').value.trim();
+      const email = normalizeEmail(rawEmail);
+      if (!email || !email.includes('@')) {
+        showToast('Please enter your ' + activeSocialProvider + ' email address.');
+        return;
+      }
+      const reg = loadUsersRegistry();
+      const existing = reg[email] || {};
+      const finalName = rawName || existing.name || (email === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : email.split('@')[0]);
+
+      reg[email] = Object.assign({}, existing, {
+        email,
+        name: finalName,
+        provider: activeSocialProvider,
+        explicitlySignedIn: true,
+        unlocked: Boolean(existing.unlocked || email === MASTER_OWNER_EMAIL),
+        lastActive: new Date().toISOString()
+      });
+      saveUsersRegistry(reg);
+      closeSocialAccountPicker();
+
+      // If this account is already unlocked (or is the Owner account), open dashboard directly
+      if (reg[email].unlocked) {
+        unlockAndEnterDashboard(email, finalName, !existing.unlocked && email !== MASTER_OWNER_EMAIL);
+        return;
+      }
+
+      // Otherwise advance to Step 2 (Request Access Code / Enter Access Code)
+      advanceToAuthStep2(email, finalName, activeSocialProvider);
+    }
+
+    function handleStep1EmailSubmit() {
       const rawEmail = document.getElementById('loginEmailInput').value;
       const rawName = document.getElementById('loginNameInput').value.trim();
-      const rawCode = document.getElementById('loginAccessCodeInput').value.trim();
+      const rawPass = document.getElementById('loginPasswordInput').value.trim();
       const errEl = document.getElementById('loginErrorMsg');
 
       const email = normalizeEmail(rawEmail);
@@ -5742,24 +5912,85 @@ header #openSyncModalBtn:hover {
         errEl.classList.remove('hidden');
         return;
       }
+      if (!rawPass) {
+        errEl.textContent = 'Please enter your password.';
+        errEl.classList.remove('hidden');
+        return;
+      }
 
       const reg = loadUsersRegistry();
-      const alreadyUnlockedOnDevice = reg[email] && reg[email].unlocked;
+      const existing = reg[email];
 
-      if (!alreadyUnlockedOnDevice && !isValidAccessCode(email, rawCode)) {
-        errEl.textContent = 'Invalid Access Code for ' + email + '. Click "Request Access Code" above to request your personal code from Andy Asante.';
+      // Check if the user entered their personal access code or admin code directly in the password field
+      const enteredValidAccessCodeAsPass = isValidAccessCode(email, rawPass);
+
+      if (currentAuthStep1Mode === 'signin' && existing && existing.password && existing.password !== rawPass && !enteredValidAccessCodeAsPass && email !== MASTER_OWNER_EMAIL) {
+        errEl.textContent = 'Incorrect password for this account. Try again or enter your Access Code.';
         errEl.classList.remove('hidden');
         return;
       }
 
       errEl.classList.add('hidden');
-      const displayName = rawName || (reg[email] && reg[email].name) || (email === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : email.split('@')[0]);
-      switchToUserAccount(email, displayName);
-      closeAuthGateModal();
-      showToast('Welcome, ' + displayName + '! Loaded your personal CFA study space.');
+      const finalName = rawName || (existing && existing.name) || (email === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : email.split('@')[0]);
+      const isAlreadyUnlocked = Boolean((existing && existing.unlocked) || email === MASTER_OWNER_EMAIL || enteredValidAccessCodeAsPass);
+
+      reg[email] = Object.assign({}, existing || {}, {
+        email,
+        name: finalName,
+        password: (existing && existing.password) || rawPass,
+        provider: 'Email',
+        explicitlySignedIn: true,
+        unlocked: isAlreadyUnlocked,
+        lastActive: new Date().toISOString()
+      });
+      saveUsersRegistry(reg);
+
+      if (isAlreadyUnlocked) {
+        unlockAndEnterDashboard(email, finalName, enteredValidAccessCodeAsPass && !(existing && existing.unlocked));
+      } else {
+        advanceToAuthStep2(email, finalName, 'Email');
+      }
     }
 
-    function switchToUserAccount(email, displayName, customPlanConfig) {
+    function advanceToAuthStep2(email, name, provider) {
+      pendingAuthUser = { email: normalizeEmail(email), name: name || email.split('@')[0], provider: provider || 'Email' };
+      document.getElementById('step2ProviderBadge').textContent = 'SIGNED IN VIA ' + pendingAuthUser.provider.toUpperCase();
+      document.getElementById('step2AccountName').textContent = pendingAuthUser.name;
+      document.getElementById('step2AccountEmail').textContent = pendingAuthUser.email;
+      document.getElementById('step2AccessCodeInput').value = '';
+      document.getElementById('step2ErrorMsg').classList.add('hidden');
+      document.getElementById('reqConfirmationBox').classList.add('hidden');
+
+      document.getElementById('authStep1Container').classList.add('hidden');
+      document.getElementById('authStep2Container').classList.remove('hidden');
+    }
+
+    function backToAuthStep1() {
+      document.getElementById('authStep2Container').classList.add('hidden');
+      document.getElementById('authStep1Container').classList.remove('hidden');
+    }
+
+    function handleStep2UnlockCode() {
+      const codeInput = document.getElementById('step2AccessCodeInput').value.trim();
+      const errEl = document.getElementById('step2ErrorMsg');
+      const email = pendingAuthUser.email;
+
+      if (!codeInput) {
+        errEl.textContent = 'Please enter your personal access code above (or click "Request Access Code" first).';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (!isValidAccessCode(email, codeInput)) {
+        errEl.textContent = 'Invalid access code for ' + email + '. Please check the code sent to your email.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      errEl.classList.add('hidden');
+      unlockAndEnterDashboard(email, pendingAuthUser.name, true);
+    }
+
+    function unlockAndEnterDashboard(email, displayName, triggerOnboardingSchedulePopup) {
       const cleanEmail = normalizeEmail(email);
       currentActiveUserEmail = cleanEmail;
       localStorage.setItem(ACTIVE_USER_EMAIL_KEY, cleanEmail);
@@ -5771,6 +6002,7 @@ header #openSyncModalBtn:hover {
       reg[cleanEmail] = Object.assign({}, existingReg, {
         email: cleanEmail,
         name: finalName,
+        explicitlySignedIn: true,
         unlocked: true,
         lastActive: new Date().toISOString()
       });
@@ -5782,166 +6014,121 @@ header #openSyncModalBtn:hover {
         email: cleanEmail,
         role: cleanEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
       };
-      if (customPlanConfig) {
-        appState.planConfig = Object.assign({}, appState.planConfig || {}, customPlanConfig);
-        appState.examDate = appState.planConfig.examDate || appState.examDate;
-      } else if (existingReg.pendingPlanConfig && (!appState.planConfig || appState.planConfig.startDate === '2026-11-01')) {
-        appState.planConfig = Object.assign({}, appState.planConfig || {}, existingReg.pendingPlanConfig);
-        appState.examDate = appState.planConfig.examDate || appState.examDate;
-      }
+
+      // Unlock full-screen auth gate and reveal dashboard
+      document.body.classList.remove('auth-locked');
+      const modal = document.getElementById('authGateModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
 
       rebuildScheduleForUserPlan();
       saveState();
       updateTimerDisplays();
       refreshAllViews();
-    }
 
-    function renderSavedUsersList() {
-      const container = document.getElementById('savedUsersListContainer');
-      if (!container) return;
-      const reg = loadUsersRegistry();
-      const entries = Object.values(reg).filter(u => u && u.email);
-      if (entries.length === 0) {
-        container.innerHTML = `<div class="text-xs text-slate-400">No saved profiles yet.</div>`;
-        return;
+      showToast('Welcome, ' + finalName + '!');
+
+      // Flow B: Automatically pop up the Study Dates & Daily Hours setup modal once a candidate gets access!
+      if ((triggerOnboardingSchedulePopup || !appState.hasCompletedPlanSetup) && cleanEmail !== MASTER_OWNER_EMAIL) {
+        setTimeout(() => {
+          openPlanSettingsModal(true);
+        }, 250);
       }
-      container.innerHTML = entries.map(u => {
-        const isCurrent = normalizeEmail(u.email) === normalizeEmail(currentActiveUserEmail);
-        const canDirectSwitch = u.unlocked || normalizeEmail(u.email) === MASTER_OWNER_EMAIL;
-        return `
-          <div class="p-2.5 rounded-xl border ${isCurrent ? 'bg-indigo-50/80 border-indigo-300' : 'bg-slate-50 border-slate-200'} flex items-center justify-between gap-2">
-            <div class="min-w-0">
-              <div class="flex items-center gap-1.5">
-                <span class="text-xs font-extrabold text-slate-900 truncate">${u.name || u.email}</span>
-                ${isCurrent ? `<span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-600 text-white">Active</span>` : ''}
-                ${!canDirectSwitch ? `<span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-900">Awaiting Code</span>` : ''}
-              </div>
-              <span class="text-[11px] text-slate-500 block truncate">${u.email}</span>
-            </div>
-            ${canDirectSwitch
-              ? `<button type="button" onclick="switchToUserAccount('${u.email}', '${(u.name || '').replace(/'/g, "\'")}'); closeAuthGateModal();" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shrink-0">${isCurrent ? 'Active' : 'Switch &rarr;'}</button>`
-              : `<button type="button" onclick="prefillLoginForPendingUser('${u.email}', '${(u.name || '').replace(/'/g, "\'")}')" class="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shrink-0">Enter Code</button>`
-            }
-          </div>
-        `;
-      }).join('');
     }
 
-    function prefillLoginForPendingUser(email, name) {
-      switchAuthModalTab('login');
-      document.getElementById('loginEmailInput').value = email;
-      document.getElementById('loginNameInput').value = name || '';
-      document.getElementById('loginAccessCodeInput').focus();
-    }
-
-    function updateRequestPlanPreview() {
-      const sIso = (document.getElementById('reqStartDateInput') || {}).value || '2026-11-01';
-      const eIso = (document.getElementById('reqEndDateInput') || {}).value || '2027-03-28';
-      const xIso = (document.getElementById('reqExamDateInput') || {}).value || '2027-05-22';
-      const wkH = Math.max(0, parseFloat((document.getElementById('reqWeekdayHrsInput') || {}).value) || 0);
-      const weH = Math.max(0, parseFloat((document.getElementById('reqWeekendHrsInput') || {}).value) || 0);
-      const banner = document.getElementById('reqPlanPreviewBanner');
-      if (!banner) return;
-      const m = computePlanMetricsPreview(sIso, eIso, xIso, wkH, weH);
-      if (!m.valid) {
-        banner.innerHTML = `<span class="text-rose-600 font-bold">${m.message}</span>`;
-        return;
-      }
-      banner.innerHTML = `Proportional Plan Preview: <strong>${m.totalDays} days</strong> (${m.weeksCount} weeks) • <strong>${m.totalHours.toFixed(1)} total study hours</strong> (${wkH}h/day Mon–Fri, ${weH}h/day Sat–Sun) • <strong>~${m.lessonsPerStudyDay} lessons/weekday</strong>`;
-    }
-
+    // Background Push for Access Requests (Candidate -> Admin Email via FormSubmit AJAX)
     function buildAccessRequestMessagePayload() {
-      const name = (document.getElementById('reqNameInput').value || '').trim();
-      const email = normalizeEmail(document.getElementById('reqEmailInput').value);
-      const startIso = document.getElementById('reqStartDateInput').value || '2026-11-01';
-      const endIso = document.getElementById('reqEndDateInput').value || '2027-03-28';
-      const examIso = document.getElementById('reqExamDateInput').value || '2027-05-22';
-      const wkHrs = parseFloat(document.getElementById('reqWeekdayHrsInput').value) || 2.0;
-      const weHrs = parseFloat(document.getElementById('reqWeekendHrsInput').value) || 2.0;
-
-      // Save pending profile + custom schedule config locally so once Andy sends their code, their custom dates/hours load automatically
-      if (email && email.includes('@')) {
-        const reg = loadUsersRegistry();
-        reg[email] = Object.assign({}, reg[email] || {}, {
-          email,
-          name: name || email.split('@')[0],
-          unlocked: Boolean(reg[email] && reg[email].unlocked),
-          pendingPlanConfig: {
-            startDate: startIso,
-            endDate: endIso,
-            examDate: examIso,
-            weekdayHours: wkHrs,
-            weekendHours: weHrs
-          }
-        });
-        saveUsersRegistry(reg);
-      }
-
-      const subject = `Ascent CFA Level II Dashboard — Access Request (${name || email})`;
+      const name = pendingAuthUser.name || 'CFA Candidate';
+      const email = pendingAuthUser.email || normalizeEmail(document.getElementById('loginEmailInput').value);
+      const provider = pendingAuthUser.provider || 'Email';
+      const pregeneratedCode = generateAccessCodeForEmail(email);
+      const subject = `CFA Level II Study Guide — Access Code Request (${name} - ${email})`;
       const body = [
-        `Hi Andy,`,
+        `New Access Code Request for CFA Level II Study Guide:`,
         ``,
-        `I would love to request an access code for Ascent (The CFA Level II Study Space).`,
+        `• Candidate Name: ${name}`,
+        `• Candidate Email: ${email}`,
+        `• Sign-Up Method: ${provider}`,
+        `• Pre-Calculated Access Code for ${email}: ${pregeneratedCode}`,
         ``,
-        `• Name: ${name || 'CFA Candidate'}`,
-        `• Email Address: ${email}`,
-        `• Core Reading Start Date: ${startIso}`,
-        `• Core Reading End Date: ${endIso}`,
-        `• Target CFA Exam Date: ${examIso}`,
-        `• Weekday Study Hours/Day (Mon–Fri): ${wkHrs} hrs/day`,
-        `• Weekend Study Hours/Day (Sat–Sun): ${weHrs} hrs/day`,
-        ``,
-        `Please generate my personal access code for ${email} in your Admin Code Generator and reply with my code.`,
-        ``,
-        `Thank you!`
+        `Reply to ${email} with their access code (${pregeneratedCode}) or use your Admin Code Generator in the dashboard.`
       ].join('\n');
-
-      return { name, email, subject, body };
+      return { name, email, provider, pregeneratedCode, subject, body };
     }
 
-    function submitAccessRequestToAndy() {
+    async function pushAccessRequestToAdmin() {
       const payload = buildAccessRequestMessagePayload();
       if (!payload.email || !payload.email.includes('@')) {
-        showToast('Please enter your name and a valid email address first.');
+        showToast('Please sign in with a valid email first.');
         return;
       }
-      const mailtoUrl = `mailto:${MASTER_OWNER_EMAIL}?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.body)}`;
-      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(MASTER_OWNER_EMAIL)}&su=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.body)}`;
 
+      const btn = document.getElementById('pushAccessRequestBtn');
+      const origText = btn.innerHTML;
+      btn.innerHTML = 'Sending Access Request...';
+      btn.disabled = true;
+
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(MASTER_OWNER_EMAIL)}&su=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent('Hi,\n\nPlease grant me access to the CFA Level II Study Guide.\n\nName: ' + payload.name + '\nEmail: ' + payload.email)}`;
       const gmailLinkEl = document.getElementById('reqGmailWebLink');
       if (gmailLinkEl) gmailLinkEl.href = gmailUrl;
+
+      let pushedOk = false;
+      try {
+        const resp = await fetch('https://formsubmit.co/ajax/' + MASTER_OWNER_EMAIL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: payload.subject,
+            Candidate_Name: payload.name,
+            Candidate_Email: payload.email,
+            Auth_Provider: payload.provider,
+            Ready_To_Send_Access_Code: payload.pregeneratedCode,
+            Message: `Please send access code ${payload.pregeneratedCode} to ${payload.email}.`,
+            _template: 'table'
+          })
+        });
+        if (resp.ok) {
+          pushedOk = true;
+        }
+      } catch (err) {
+        console.warn('FormSubmit background push notice:', err);
+      }
+
+      btn.innerHTML = '&#10003; Access Request Sent';
+      btn.disabled = false;
+
       const confBox = document.getElementById('reqConfirmationBox');
       if (confBox) confBox.classList.remove('hidden');
 
-      // Pre-fill login tab with their email & name so they are ready to enter the code
-      document.getElementById('loginEmailInput').value = payload.email;
-      document.getElementById('loginNameInput').value = payload.name;
-      renderSavedUsersList();
-
-      window.location.href = mailtoUrl;
-      showToast('Opening email client addressed to ' + MASTER_OWNER_EMAIL + '...');
+      if (pushedOk) {
+        showToast('Access request pushed! Check your email soon for your access code.');
+      } else {
+        showToast('Request logged! Click "Backup: Send via Gmail Web" if on a restricted network.');
+      }
+      setTimeout(() => { btn.innerHTML = origText; }, 4000);
     }
 
     function copyAccessRequestDetails() {
       const payload = buildAccessRequestMessagePayload();
-      if (!payload.email || !payload.email.includes('@')) {
-        showToast('Please enter your email address first.');
-        return;
-      }
+      const text = `Hi,\n\nI would like to request an access code for the CFA Level II Study Guide.\n\n• Name: ${payload.name}\n• Email: ${payload.email}\n\nThank you!`;
       try {
-        navigator.clipboard.writeText(`To: ${MASTER_OWNER_EMAIL}\nSubject: ${payload.subject}\n\n${payload.body}`);
-        showToast('Copied request details! Email them to ' + MASTER_OWNER_EMAIL);
+        navigator.clipboard.writeText(text);
+        showToast('Copied request message to clipboard!');
       } catch (e) {
-        showToast('Request saved! Send an email to ' + MASTER_OWNER_EMAIL);
+        showToast('Request ready!');
       }
-      const confBox = document.getElementById('reqConfirmationBox');
-      if (confBox) confBox.classList.remove('hidden');
     }
 
-    // ==================== 13. ADMIN ACCESS CODE GENERATOR (ANDY ASANTE) ====================
+    // ==================== 13. ADMIN ACCESS CODE GENERATOR (OWNER ONLY) ====================
     function openAdminCodeModal() {
+      loadAdminEmailJsConfigInputs();
       generateAdminCodeLive();
       renderAdminIssuedCodesList();
+      const banner = document.getElementById('adminSendStatusBanner');
+      if (banner) banner.classList.add('hidden');
       const modal = document.getElementById('adminCodeModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -5958,7 +6145,7 @@ header #openSyncModalBtn:hover {
       const disp = document.getElementById('adminGeneratedCodeDisplay');
       if (!disp) return;
       if (!email || !email.includes('@')) {
-        disp.textContent = 'ASCENT-XXXX-XXXX';
+        disp.textContent = 'CFAL2-XXXX-XXXX';
         return;
       }
       disp.textContent = generateAccessCodeForEmail(email);
@@ -6009,7 +6196,7 @@ header #openSyncModalBtn:hover {
       const email = normalizeEmail(document.getElementById('adminRequesterEmailInput').value);
       const name = (document.getElementById('adminRequesterNameInput').value || '').trim();
       if (!email || !email.includes('@')) {
-        showToast('Enter the requester’s email address first.');
+        showToast('Enter the candidate’s email address first.');
         return;
       }
       const code = generateAccessCodeForEmail(email);
@@ -6027,20 +6214,22 @@ header #openSyncModalBtn:hover {
       const name = (document.getElementById('adminRequesterNameInput').value || '').trim() || 'CFA Candidate';
       const code = generateAccessCodeForEmail(email);
       const appUrl = 'https://cfastudyplan.vercel.app/';
-      const subject = `Your Ascent CFA Level II Access Code — ${code}`;
+      const subject = `Your CFA Level II Study Guide Access Code — ${code}`;
       const body = [
         `Hi ${name},`,
         ``,
-        `Welcome to Ascent — The CFA Level II Study Space! Here are your personal login credentials:`,
+        `Welcome to the CFA Level II Study Guide! Here is your personal access code to unlock your study workspace:`,
         ``,
-        `• Dashboard Link: ${appUrl}`,
-        `• Login Email: ${email}`,
+        `• Study Guide Link: ${appUrl}`,
+        `• Account Email: ${email}`,
         `• Personal Access Code: ${code}`,
         ``,
-        `Once you sign in, click "Plan Dates & Hours" in the top bar anytime to tweak your Core Reading Start/End Dates and Weekday/Weekend study hours.`,
+        `How to get started:`,
+        `1. Open ${appUrl} and sign in with your email (${email}), Google, or Apple.`,
+        `2. Enter your access code (${code}) to unlock your dashboard.`,
+        `3. Set your preferred Core Reading Start/End Dates and Weekday/Weekend study hours in the pop-up so your schedule is tailored to your availability.`,
         ``,
-        `Best regards,`,
-        `Andy Asante`
+        `Best of luck with your CFA Level II prep!`
       ].join('\n');
       return { email, name, code, subject, body };
     }
@@ -6048,44 +6237,132 @@ header #openSyncModalBtn:hover {
     function copyAdminWelcomeMessage() {
       const p = buildAdminWelcomeEmailPayload();
       if (!p.email || !p.email.includes('@')) {
-        showToast('Please enter the requester’s email address first.');
+        showToast('Please enter the candidate’s email address first.');
         return;
       }
       recordAdminIssuedCode(p.email, p.name, p.code);
       try {
         navigator.clipboard.writeText(p.body);
-        showToast('Copied welcome message + access code for ' + p.email + '!');
+        showToast('Copied welcome email + access code for ' + p.email + '!');
       } catch (e) {
         showToast('Generated code: ' + p.code);
       }
     }
 
-    function sendAdminCodeViaEmail() {
+    // 1-Click Gmail Web Compose Tab (Never fails when desktop mailto: is not configured)
+    function sendAdminCodeViaGmailWeb() {
       const p = buildAdminWelcomeEmailPayload();
       if (!p.email || !p.email.includes('@')) {
-        showToast('Please enter the requester’s email address first.');
+        showToast('Please enter the candidate’s email address first.');
         return;
       }
       recordAdminIssuedCode(p.email, p.name, p.code);
+      const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(p.email)}&su=${encodeURIComponent(p.subject)}&body=${encodeURIComponent(p.body)}`;
+      window.open(gmailComposeUrl, '_blank', 'noopener,noreferrer');
+      const statusBanner = document.getElementById('adminSendStatusBanner');
+      if (statusBanner) {
+        statusBanner.textContent = `Opened Gmail Web compose tab for ${p.email} with code ${p.code}! Just hit "Send" in the Gmail tab.`;
+        statusBanner.classList.remove('hidden');
+      }
+      showToast('Opened Gmail Web with pre-filled code ' + p.code + ' for ' + p.email);
+    }
+
+    function loadAdminEmailJsConfigInputs() {
+      try {
+        const raw = localStorage.getItem(EMAILJS_CONFIG_KEY);
+        if (!raw) return;
+        const cfg = JSON.parse(raw);
+        if (cfg.serviceId) document.getElementById('emailJsServiceIdInput').value = cfg.serviceId;
+        if (cfg.templateId) document.getElementById('emailJsTemplateIdInput').value = cfg.templateId;
+        if (cfg.publicKey) document.getElementById('emailJsPublicKeyInput').value = cfg.publicKey;
+      } catch (e) {}
+    }
+
+    function saveAdminEmailJsConfig() {
+      const serviceId = (document.getElementById('emailJsServiceIdInput').value || '').trim();
+      const templateId = (document.getElementById('emailJsTemplateIdInput').value || '').trim();
+      const publicKey = (document.getElementById('emailJsPublicKeyInput').value || '').trim();
+      localStorage.setItem(EMAILJS_CONFIG_KEY, JSON.stringify({ serviceId, templateId, publicKey }));
+      document.getElementById('adminEmailJsConfigBox').classList.add('hidden');
+      showToast('Saved EmailJS background push credentials!');
+    }
+
+    async function pushAdminCodeEmailBackground() {
+      const p = buildAdminWelcomeEmailPayload();
+      if (!p.email || !p.email.includes('@')) {
+        showToast('Please enter the candidate’s email address first.');
+        return;
+      }
+      recordAdminIssuedCode(p.email, p.name, p.code);
+
+      const statusBanner = document.getElementById('adminSendStatusBanner');
+
+      // 1. If EmailJS credentials are configured, send directly via EmailJS REST API
+      try {
+        const rawCfg = localStorage.getItem(EMAILJS_CONFIG_KEY);
+        const cfg = rawCfg ? JSON.parse(rawCfg) : {};
+        if (cfg.serviceId && cfg.templateId && cfg.publicKey) {
+          const ejResp = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              service_id: cfg.serviceId,
+              template_id: cfg.templateId,
+              user_id: cfg.publicKey,
+              template_params: {
+                to_email: p.email,
+                to_name: p.name,
+                access_code: p.code,
+                subject: p.subject,
+                message: p.body
+              }
+            })
+          });
+          if (ejResp.ok) {
+            if (statusBanner) {
+              statusBanner.textContent = `✓ Pushed access code ${p.code} directly to ${p.email} via EmailJS!`;
+              statusBanner.classList.remove('hidden');
+            }
+            showToast('Pushed access code directly to ' + p.email + '!');
+            return;
+          }
+        }
+      } catch (e) {}
+
+      // 2. Otherwise copy welcome message to clipboard and open mailto + offer Gmail Web
+      try {
+        navigator.clipboard.writeText(p.body);
+      } catch (e) {}
       const mailto = `mailto:${encodeURIComponent(p.email)}?subject=${encodeURIComponent(p.subject)}&body=${encodeURIComponent(p.body)}`;
       window.location.href = mailto;
-      showToast('Opening email with access code ' + p.code + ' for ' + p.email);
+      if (statusBanner) {
+        statusBanner.innerHTML = `Copied welcome email &amp; opened default mail app for <strong>${p.email}</strong>. (Tip: If your computer doesn't use a desktop mail app, click <strong>"Send via Gmail Web (1-Click)"</strong> above!)`;
+        statusBanner.classList.remove('hidden');
+      }
+      showToast('Opened mail app & copied welcome note for ' + p.email);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const hasActiveUser = localStorage.getItem(ACTIVE_USER_EMAIL_KEY);
-      const hasLegacyData = localStorage.getItem(LEGACY_STORAGE_KEY);
-      loadState();
       checkUrlHashSyncOnLoad();
-      rebuildScheduleForUserPlan();
-      document.getElementById('activeDateInput').value = appState.activeDate || '2026-11-02';
-      populateWeekFilterDropdown(true);
-      updateTimerDisplays();
-      refreshAllViews();
 
-      // If this is a brand-new visitor on a device with no prior saved session, show the Login / Request Access screen
-      if (!hasActiveUser && !hasLegacyData) {
-        openAuthGateModal('login');
+      if (isCurrentSessionUnlocked()) {
+        // Returning unlocked user on this device
+        document.body.classList.remove('auth-locked');
+        const modal = document.getElementById('authGateModal');
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }
+        loadState();
+        rebuildScheduleForUserPlan();
+        document.getElementById('activeDateInput').value = appState.activeDate || '2026-11-02';
+        populateWeekFilterDropdown(true);
+        updateTimerDisplays();
+        refreshAllViews();
+      } else {
+        // First-time visitor or signed-out state: keep dashboard 100% hidden and show only the clean Sign In / Request Access screen
+        document.body.classList.add('auth-locked');
+        openAuthGateModal('signin');
       }
     });
   </script>
