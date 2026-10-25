@@ -225,6 +225,71 @@
     .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .col-span-2 { grid-column: span 2 / span 2; }
     table { border-collapse: collapse; width: 100%; }
+
+    /* Modal & Admin Tracker Utility Classes */
+    .max-w-md { max-width: 28rem; }
+    .max-w-xl { max-width: 36rem; }
+    .max-w-2xl { max-width: 42rem; }
+    .max-w-3xl { max-width: 48rem; }
+    .max-w-4xl { max-width: 56rem; }
+    .max-w-5xl { max-width: 64rem; }
+    .max-h-52 { max-height: 13rem; }
+    .max-h-60 { max-height: 15rem; }
+    .max-h-72 { max-height: 18rem; }
+    .space-y-5 > * + * { margin-top: 1.25rem; }
+    .divide-slate-100 > * + * { border-top: 1px solid #f1f5f9; }
+    .gap-3\.5 { gap: 0.875rem; }
+    .pb-3\.5 { padding-bottom: 0.875rem; }
+    .pt-1 { padding-top: 0.25rem; }
+    .text-\[10px\] { font-size: 10px; }
+    .text-\[11px\] { font-size: 11px; }
+    .font-normal { font-weight: 400; }
+    .leading-none { line-height: 1; }
+    .leading-relaxed { line-height: 1.625; }
+    .list-decimal { list-style-type: decimal; }
+    .list-inside { list-style-position: inside; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.28); }
+    .shadow-2xs { box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05); }
+    .bg-slate-900\/70 { background-color: rgba(15, 23, 42, 0.70); }
+    .bg-slate-900\/75 { background-color: rgba(15, 23, 42, 0.75); }
+    .bg-slate-900\/85 { background-color: rgba(15, 23, 42, 0.85); }
+    .backdrop-blur-xs, .backdrop-blur-sm { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    .bg-indigo-50 { background-color: #eef2ff; }
+    .bg-indigo-50\/60, .bg-indigo-50\/70, .bg-indigo-50\/90 { background-color: rgba(238, 242, 255, 0.75); }
+    .bg-emerald-50\/70 { background-color: rgba(236, 253, 245, 0.75); }
+    .bg-amber-50, .bg-amber-50\/70 { background-color: rgba(255, 251, 235, 0.80); }
+    .bg-teal-50\/90 { background-color: rgba(240, 253, 250, 0.90); }
+    .bg-teal-200 { background-color: #99f6e4; }
+    .bg-rose-50 { background-color: #fff1f2; }
+    .border-indigo-100 { border-color: #e0e7ff; }
+    .border-indigo-200 { border-color: #c7d2fe; }
+    .border-indigo-500 { border-color: #6366f1; }
+    .border-2 { border-width: 2px; border-style: solid; }
+    .text-amber-400 { color: #fbbf24; }
+    .text-amber-700 { color: #b45309; }
+    .text-emerald-900, .text-emerald-950 { color: #064e3b; }
+    .text-teal-950 { color: #042f2e; }
+    .hover\:bg-indigo-100:hover { background-color: #e0e7ff; }
+    .hover\:bg-indigo-200:hover { background-color: #c7d2fe; }
+    .hover\:bg-indigo-500:hover { background-color: #6366f1; }
+    .hover\:bg-indigo-600:hover { background-color: #4f46e5; }
+    .hover\:bg-slate-100:hover { background-color: #f1f5f9; }
+    .hover\:bg-slate-200:hover { background-color: #e2e8f0; }
+    .hover\:bg-slate-700:hover { background-color: #334155; }
+    .hover\:bg-slate-800:hover { background-color: #1e293b; }
+    .hover\:bg-teal-500:hover { background-color: #14b8a6; }
+    .hover\:bg-amber-600:hover { background-color: #d97706; }
+    .hover\:text-white:hover { color: #ffffff; }
+    .hover\:text-slate-700:hover { color: #334155; }
+    .hover\:text-slate-800:hover { color: #1e293b; }
+    .hover\:text-indigo-800:hover { color: #3730a3; }
+    .hover\:underline:hover { text-decoration: underline; }
+    @media (min-width: 640px) {
+      .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sm\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .sm\:p-7 { padding: 1.75rem; }
+    }
+
     button, input, select, textarea, a { font-family: inherit; }
     button { border: none; cursor: pointer; }
     a { text-decoration: none; }
@@ -1908,6 +1973,9 @@ body.auth-locked #authGateModal {
             Save Profile &amp; Update Dashboard
           </button>
         </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          <strong>Note:</strong> Visitors who use the platform without entering an email are automatically tracked as <strong>Instant-Open (No Email)</strong> users. Entering your admin email unlocks the <strong>&#128202; Active Users &amp; Admin</strong> tracker without overwriting existing anonymous visitor sessions.
+        </p>
       </div>
 
       <!-- Switch or Create Separate User Profiles on This Device -->
@@ -2005,46 +2073,68 @@ body.auth-locked #authGateModal {
 
   <!-- ==================== MODAL 3: ADMIN ACTIVE USERS & PLATFORM TRACKER (OWNER ONLY) ==================== -->
   <div id="adminCodeModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-8">
+    <div class="bg-white rounded-2xl max-w-5xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-8">
       <div class="flex items-start justify-between border-b border-slate-100 pb-3">
         <div>
           <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-amber-100 text-amber-900">ADMIN ACTIVE USERS &amp; PLATFORM TELEMETRY</span>
-          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Active Platform Users &amp; Study Progress Tracker</h3>
-          <p class="text-xs text-slate-500">Monitor active candidates, their study schedules, completed lessons, and last-active timestamps across the platform.</p>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Active Platform Users &amp; Study Progress Tracker (Instant-Open &amp; Email Users)</h3>
+          <p class="text-xs text-slate-500">Automatically tracks every user who logs on and uses the platform — including anonymous <strong>Instant-Open (No Email)</strong> visitors, username-only visitors, and email-linked candidates.</p>
         </div>
         <button id="closeAdminCodeModalBtn" type="button" onclick="closeAdminCodeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
       </div>
 
-      <!-- Active Users Summary KPI Strip -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+      <!-- Active Users Summary KPI Strip (5 Cards including Instant-Open No-Email Users) -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block">Total Tracked Users</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">Total Tracked Users</span>
           <strong id="adminMetricTotalUsers" class="text-xl font-extrabold text-slate-900">1</strong>
-          <span class="text-[11px] text-slate-500 block">Unique profiles</span>
+          <span class="text-[11px] text-slate-500 block">All platform visitors</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">&#9889; Instant-Open (No Email)</span>
+          <strong id="adminMetricAnonymousUsers" class="text-xl font-extrabold text-amber-900">0</strong>
+          <span class="text-[11px] text-amber-800 block">Logged on without email</span>
+        </div>
+        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">&#9993; Email / Registered</span>
+          <strong id="adminMetricEmailUsers" class="text-xl font-extrabold text-indigo-900">1</strong>
+          <span class="text-[11px] text-indigo-700 block">Provided email address</span>
         </div>
         <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
           <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Active (Last 7 Days)</span>
           <strong id="adminMetricActive7d" class="text-xl font-extrabold text-emerald-900">1</strong>
-          <span class="text-[11px] text-emerald-700 block">Recent study sessions</span>
+          <span id="adminMetricOnlineSub" class="text-[11px] text-emerald-700 block">Recent study sessions</span>
         </div>
-        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-200">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">Total Lessons Done</span>
-          <strong id="adminMetricTotalLessons" class="text-xl font-extrabold text-indigo-900">0</strong>
-          <span class="text-[11px] text-indigo-700 block">Across tracked users</span>
-        </div>
-        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
-          <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">Live Cloud Sync</span>
-          <strong id="adminMetricCloudStatus" class="text-sm font-extrabold text-amber-900 block mt-1">Email + Local</strong>
-          <span class="text-[11px] text-amber-700 block">Click setup below for Sheet</span>
+        <div class="p-3 rounded-xl bg-teal-50/90 border border-teal-200 col-span-2 sm:col-span-1">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 block">Total Study Activity</span>
+          <strong id="adminMetricTotalLessons" class="text-xl font-extrabold text-teal-900">0</strong>
+          <span id="adminMetricCloudStatus" class="text-[11px] text-teal-700 block">Lessons &amp; sessions tracked</span>
         </div>
       </div>
 
-      <!-- Active Users Directory Table -->
-      <div class="space-y-2">
+      <!-- Active Users Directory Filter Bar & Actions -->
+      <div class="space-y-2.5">
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-700">Tracked Active Users &amp; Study Progress</span>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="fetchCloudActiveUsersForAdmin()" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mr-1">Filter Users:</span>
+            <button id="adminFilterBtn-ALL" type="button" onclick="setAdminUserFilter('ALL')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-extrabold transition">
+              All Users (<span id="adminCountAll">0</span>)
+            </button>
+            <button id="adminFilterBtn-NO_EMAIL" type="button" onclick="setAdminUserFilter('NO_EMAIL')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-extrabold transition">
+              &#9889; Instant-Open / No Email (<span id="adminCountNoEmail">0</span>)
+            </button>
+            <button id="adminFilterBtn-WITH_EMAIL" type="button" onclick="setAdminUserFilter('WITH_EMAIL')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              &#9993; With Email (<span id="adminCountWithEmail">0</span>)
+            </button>
+            <button id="adminFilterBtn-ACTIVE_TODAY" type="button" onclick="setAdminUserFilter('ACTIVE_TODAY')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              &#128994; Active Today (<span id="adminCountToday">0</span>)
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" onclick="createAndSwitchToAnonymousVisitor()" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold transition" title="Open a fresh Instant-Open (No Email) visitor session to see how anonymous users are tracked">
+              + Test New Instant-Open Visitor
+            </button>
+            <button type="button" onclick="fetchCloudActiveUsersForAdmin(true)" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition">
               &#8635; Refresh Live Users
             </button>
             <button type="button" onclick="exportActiveUsersCsv()" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
@@ -2052,14 +2142,16 @@ body.auth-locked #authGateModal {
             </button>
           </div>
         </div>
-        <div class="overflow-x-auto rounded-xl border border-slate-200 max-h-60 overflow-y-auto custom-scrollbar">
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 max-h-80 overflow-y-auto custom-scrollbar">
           <table class="w-full text-left border-collapse text-xs">
-            <thead class="bg-slate-100 text-slate-600 uppercase text-[10px] font-extrabold sticky top-0">
+            <thead class="bg-slate-100 text-slate-600 uppercase text-[10px] font-extrabold sticky top-0 z-10">
               <tr>
-                <th class="py-2 px-3">Candidate</th>
-                <th class="py-2 px-3">Study Window &amp; Pace</th>
-                <th class="py-2 px-3">Progress</th>
-                <th class="py-2 px-3">Last Active</th>
+                <th class="py-2.5 px-3">Candidate / Access Type</th>
+                <th class="py-2.5 px-3">Device &amp; Timezone</th>
+                <th class="py-2.5 px-3">Study Window &amp; Pace</th>
+                <th class="py-2.5 px-3">Live Progress &amp; Last Action</th>
+                <th class="py-2.5 px-3">Visits &amp; Last Active</th>
               </tr>
             </thead>
             <tbody id="adminActiveUsersTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
@@ -2067,26 +2159,23 @@ body.auth-locked #authGateModal {
         </div>
       </div>
 
-      <!-- How Cross-Device Active User Tracking Works + 1-Click Google Sheet Live Tracker Setup -->
+      <!-- How Automatic Anonymous + Cross-Device Tracking Works -->
       <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <span class="font-extrabold text-slate-900 block">&#128225; Cross-Device Active User Tracking (3 Built-In Channels)</span>
-            <span class="text-[11px] text-slate-500">1) Automatic email alerts when new users set up their plan • 2) Optional Live Google Sheet webhook • 3) Vercel Web Analytics</span>
+            <span class="font-extrabold text-slate-900 block">&#128225; Automatic Instant-Open &amp; Cross-Device Visitor Telemetry (Active)</span>
+            <span class="text-[11px] text-slate-600">Every visitor who opens the platform—even if they click <em>"Skip / Keep Current"</em> and never enter an email or username—is automatically assigned a persistent <strong>Guest ID (USR-XXXX-XXXX)</strong>, fingerprinted by device/browser/timezone, and synced on every lesson check, timer session, tab view, and 60-second heartbeat.</span>
           </div>
           <button type="button" onclick="copyGoogleAppsScriptSnippet()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-2xs shrink-0">
             &#128203; Copy 12-Line Google Sheet Tracker Script
           </button>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 pt-1">
-          <input id="gasWebhookUrlInput" type="url" placeholder="Optional: Paste Google Apps Script Web App URL (https://script.google.com/macros/s/.../exec) for live cross-device table" class="flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
+          <input id="gasWebhookUrlInput" type="url" placeholder="Optional: Paste Google Apps Script Web App URL (https://script.google.com/macros/s/.../exec) to also mirror all visitors to Google Sheets" class="flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
           <button type="button" onclick="saveAdminEmailJsConfig()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0">
-            Save Tracker URL
+            Save Sheet Mirror URL
           </button>
         </div>
-        <p class="text-[11px] text-slate-500 leading-relaxed">
-          <strong>Tip for Vercel Dashboard Analytics:</strong> In your <a href="https://vercel.com/dashboard" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">Vercel Project Dashboard</a>, click the <strong>Analytics</strong> tab &rarr; <strong>Enable</strong> (free). This app already includes the Vercel Analytics beacon so you can see real-time visitors, countries, and active devices.
-        </p>
       </div>
 
       <!-- Optional Legacy Invite / Welcome Email Sender (Collapsible) -->
@@ -2442,6 +2531,8 @@ body.auth-locked #authGateModal {
     }
 
     const ACTIVE_USERS_TELEMETRY_KEY = 'cfa_l2_active_users_telemetry_v1';
+    const ADMIN_UNLOCKED_DEVICE_KEY = 'cfa_l2_admin_unlocked_device_v1';
+    const CLOUD_TELEMETRY_BUCKET_URL = 'https://kvdb.io/A6Xy9mPq2vR8kLw4nJt7bC/cfa_l2_active_users_v2';
 
     function generateVisitorId() {
       const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -2453,14 +2544,117 @@ body.auth-locked #authGateModal {
       return 'USR-' + p1 + '-' + p2;
     }
 
+    function detectVisitorDeviceAndTimezone() {
+      const ua = navigator.userAgent || '';
+      let os = 'Desktop';
+      if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS';
+      else if (/Android/i.test(ua)) os = 'Android';
+      else if (/Windows/i.test(ua)) os = 'Windows';
+      else if (/Mac OS X|Macintosh/i.test(ua)) os = 'Mac';
+      else if (/Linux/i.test(ua)) os = 'Linux';
+
+      let browser = 'Browser';
+      if (/Edg\//i.test(ua)) browser = 'Edge';
+      else if (/Chrome\//i.test(ua) && !/Edg\//i.test(ua)) browser = 'Chrome';
+      else if (/Safari\//i.test(ua) && !/Chrome\//i.test(ua)) browser = 'Safari';
+      else if (/Firefox\//i.test(ua)) browser = 'Firefox';
+
+      const isMobile = /Mobi|Android|iPhone|iPad/i.test(ua);
+      const devType = isMobile ? 'Mobile' : 'Desktop';
+      let tz = 'Local Time';
+      try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local Time';
+      } catch (e) {}
+      return {
+        deviceSummary: `${os} • ${browser} (${devType})`,
+        timezone: tz
+      };
+    }
+
+    function getDefaultGuestNameFromVisitorId(visitorId) {
+      const shortCode = String(visitorId || 'USR-0001').split('-')[1] || '0001';
+      return 'Guest Candidate #' + shortCode;
+    }
+
+    // Recover any anonymous profile (`candidate_usr...`) that was previously overwritten when the Admin entered MASTER_OWNER_EMAIL
+    function recoverOverwrittenAnonymousProfiles() {
+      try {
+        const reg = loadUsersRegistry();
+        const dir = getLocalTrackedUsersDirectory();
+        let modified = false;
+
+        Object.keys(reg).forEach(key => {
+          const u = reg[key];
+          if (!u) return;
+          const isAnonKey = key.startsWith('candidate_usr');
+          const wasOverwrittenByOwner = isAnonKey && normalizeEmail(u.displayEmail) === MASTER_OWNER_EMAIL;
+          if (wasOverwrittenByOwner) {
+            // Preserve Admin unlock flag on this device
+            localStorage.setItem(ADMIN_UNLOCKED_DEVICE_KEY, 'true');
+
+            // Ensure Admin has a dedicated separate profile key so the anonymous visitor profile is not lost
+            if (!reg[MASTER_OWNER_EMAIL]) {
+              reg[MASTER_OWNER_EMAIL] = {
+                email: MASTER_OWNER_EMAIL,
+                displayEmail: MASTER_OWNER_EMAIL,
+                name: MASTER_OWNER_NAME,
+                visitorId: 'USR-ADMIN-0001',
+                provider: 'AdminOwner',
+                accessType: 'email_registered',
+                explicitlySignedIn: true,
+                unlocked: true,
+                createdAt: u.createdAt || new Date().toISOString(),
+                lastActive: new Date().toISOString()
+              };
+            }
+
+            // Restore the original `candidate_usr...` profile back to an Instant-Open (No Email) visitor
+            const guestName = getDefaultGuestNameFromVisitorId(u.visitorId);
+            u.displayEmail = '';
+            u.name = (u.name && u.name !== MASTER_OWNER_NAME && u.name !== 'Candidate') ? u.name : guestName;
+            u.accessType = (u.name && !u.name.startsWith('Guest Candidate')) ? 'username_only' : 'instant_anonymous';
+            reg[key] = u;
+
+            // Also restore their telemetry directory entry under their original visitorId
+            if (u.visitorId) {
+              const meta = detectVisitorDeviceAndTimezone();
+              dir[u.visitorId] = Object.assign({}, dir[u.visitorId] || {}, {
+                visitorId: u.visitorId,
+                profileKey: key,
+                name: u.name,
+                email: '—',
+                accessType: u.accessType,
+                deviceInfo: meta.deviceSummary,
+                timezone: meta.timezone,
+                lastAction: (dir[u.visitorId] && dir[u.visitorId].lastAction) || 'Opened Dashboard (Instant Use)',
+                lastActive: u.lastActive || new Date().toISOString()
+              });
+            }
+            modified = true;
+          }
+        });
+
+        if (modified) {
+          saveUsersRegistry(reg);
+          saveLocalTrackedUsersDirectory(dir);
+        }
+      } catch (e) {}
+    }
+
     function ensureInstantDefaultProfile() {
+      recoverOverwrittenAnonymousProfiles();
       const reg = loadUsersRegistry();
       let activeKey = normalizeEmail(localStorage.getItem(ACTIVE_USER_EMAIL_KEY) || '');
       if (activeKey && reg[activeKey]) {
         if (!reg[activeKey].visitorId) {
           reg[activeKey].visitorId = generateVisitorId();
-          saveUsersRegistry(reg);
         }
+        if (!reg[activeKey].name || reg[activeKey].name === 'Candidate') {
+          if (!reg[activeKey].displayEmail) {
+            reg[activeKey].name = getDefaultGuestNameFromVisitorId(reg[activeKey].visitorId);
+          }
+        }
+        saveUsersRegistry(reg);
         return activeKey;
       }
       // Check if any profile already exists on this device
@@ -2468,22 +2662,32 @@ body.auth-locked #authGateModal {
       if (existingKeys.length > 0) {
         activeKey = existingKeys[0];
         if (!reg[activeKey].visitorId) reg[activeKey].visitorId = generateVisitorId();
+        if (!reg[activeKey].name || reg[activeKey].name === 'Candidate') {
+          if (!reg[activeKey].displayEmail) {
+            reg[activeKey].name = getDefaultGuestNameFromVisitorId(reg[activeKey].visitorId);
+          }
+        }
         reg[activeKey].unlocked = true;
         reg[activeKey].explicitlySignedIn = true;
         saveUsersRegistry(reg);
         localStorage.setItem(ACTIVE_USER_EMAIL_KEY, activeKey);
         return activeKey;
       }
-      // Check if legacy state exists on this browser
+      // Brand-new Instant-Open visitor (Zero login screen, no email required)
       const hasLegacy = Boolean(localStorage.getItem(LEGACY_STORAGE_KEY));
       const newVisitorId = generateVisitorId();
+      const guestLabel = getDefaultGuestNameFromVisitorId(newVisitorId);
       activeKey = 'candidate_' + newVisitorId.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const meta = detectVisitorDeviceAndTimezone();
       reg[activeKey] = {
         email: activeKey,
         displayEmail: '',
-        name: 'Candidate',
+        name: guestLabel,
         visitorId: newVisitorId,
         provider: 'InstantOpen',
+        accessType: 'instant_anonymous',
+        deviceInfo: meta.deviceSummary,
+        timezone: meta.timezone,
         explicitlySignedIn: true,
         unlocked: true,
         createdAt: new Date().toISOString(),
@@ -2497,10 +2701,6 @@ body.auth-locked #authGateModal {
         } catch (e) {}
       }
       return activeKey;
-    }
-
-    function isCurrentSessionUnlocked() {
-      return true; // Open to everyone (instant load without login screen)
     }
 
     function loadState(targetEmailOverride) {
@@ -2672,13 +2872,19 @@ body.auth-locked #authGateModal {
     }
 
     function toggleItemComplete(itemId) {
+      const it = allItemsById[itemId];
+      const codeLabel = it && it.code ? it.code : itemId;
+      let actionDesc = '';
       if (appState.completedItems[itemId]) {
         delete appState.completedItems[itemId];
+        actionDesc = 'Unchecked ' + codeLabel;
       } else {
         appState.completedItems[itemId] = true;
+        actionDesc = 'Completed ' + codeLabel;
       }
       saveState();
-      recordCurrentUserIntoTelemetryDirectory('lesson_progress');
+      recordCurrentUserIntoTelemetryDirectory(actionDesc);
+      sendActiveUserTelemetryPing(actionDesc, false);
       refreshAllViews();
     }
 
@@ -2748,6 +2954,8 @@ body.auth-locked #authGateModal {
         });
       }
       saveState();
+      recordCurrentUserIntoTelemetryDirectory((doneState ? 'Completed all items for ' : 'Cleared items for ') + d.dateShort);
+      sendActiveUserTelemetryPing('day_progress_' + d.date, false);
       showToast(doneState ? 'Marked all items for ' + d.dateShort + ' complete!' : 'Cleared items for ' + d.dateShort);
       refreshAllViews();
     }
@@ -3101,6 +3309,11 @@ body.auth-locked #authGateModal {
     function saveDailyNote(val) {
       appState.dailyNotes[appState.activeDate] = val;
       saveState();
+      clearTimeout(window._dailyNoteTelemetryTimer);
+      window._dailyNoteTelemetryTimer = setTimeout(() => {
+        recordCurrentUserIntoTelemetryDirectory('Wrote Study Notes (' + appState.activeDate + ')');
+        sendActiveUserTelemetryPing('daily_note_saved', false);
+      }, 1500);
     }
 
         function hardLessonsCount() {
@@ -3524,8 +3737,11 @@ body.auth-locked #authGateModal {
         flagged: document.getElementById('modalFlagSecondPass').checked
       };
       saveState();
+      const loggedMod = currentEditingModule;
+      recordCurrentUserIntoTelemetryDirectory('Logged Practice Qs (' + loggedMod + ': ' + cor + '/' + att + ')');
+      sendActiveUserTelemetryPing('module_practice_' + loggedMod, false);
       closeModuleModal();
-      showToast('Updated module log for ' + currentEditingModule);
+      showToast('Updated module log for ' + loggedMod);
       refreshAllViews();
     }
 
@@ -3625,6 +3841,8 @@ body.auth-locked #authGateModal {
         savedAt: new Date().toISOString()
       };
       saveState();
+      recordCurrentUserIntoTelemetryDirectory('Saved Week ' + w + ' Sunday Check-In');
+      sendActiveUserTelemetryPing('weekly_checkin_W' + w, false);
       showToast('Saved Week ' + w + ' Sunday Check-In!');
       renderWeeklyForms();
     }
@@ -3783,6 +4001,8 @@ body.auth-locked #authGateModal {
         weakTopics
       });
       saveState();
+      recordCurrentUserIntoTelemetryDirectory('Logged Mock Exam: ' + name);
+      sendActiveUserTelemetryPing('mock_logged', false);
       document.getElementById('addMockFormBox').classList.add('hidden');
       showToast('Logged ' + name);
       renderMocksAndPhase2();
@@ -3814,6 +4034,8 @@ body.auth-locked #authGateModal {
         notes
       });
       saveState();
+      recordCurrentUserIntoTelemetryDirectory('Logged ' + attempted + ' Q-Bank Qs (' + topic + ')');
+      sendActiveUserTelemetryPing('qbank_drill_logged', false);
       document.getElementById('addDrillFormBox').classList.add('hidden');
       showToast('Logged ' + attempted + ' practice questions (' + topic + ')');
       refreshAllViews();
@@ -4071,6 +4293,8 @@ body.auth-locked #authGateModal {
         date: appState.activeDate
       });
       saveState();
+      recordCurrentUserIntoTelemetryDirectory('Logged ' + minsToLog + 'm Timer (' + activeSubj + ')');
+      sendActiveUserTelemetryPing('timer_logged_' + minsToLog + 'm', false);
       showToast('Logged ' + minsToLog + ' min (' + p.label + ' • ' + activeSubj + ') to study hours!');
       renderTimerHistory();
       renderKPIs();
@@ -4295,6 +4519,10 @@ body.auth-locked #authGateModal {
       if (tabId === 'weekly') renderWeeklyForms();
       if (tabId === 'mocks') renderMocksAndPhase2();
       if (tabId === 'timer') renderTimerHistory();
+      if (typeof recordCurrentUserIntoTelemetryDirectory === 'function') {
+        const tabLabels = { daily: 'Daily Workspace', schedule: 'Study Roadmap', modules: 'Modules & Formula Vault', weekly: 'Weekly Reflection', mocks: 'Mocks & Practice', timer: 'Focus Studio' };
+        recordCurrentUserIntoTelemetryDirectory('Viewing ' + (tabLabels[tabId] || tabId));
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -4388,8 +4616,11 @@ body.auth-locked #authGateModal {
         appState.lessonConfidence[itemId] = next;
       }
       saveState();
+      const codeStr = allItemsById[itemId] ? allItemsById[itemId].code : 'Lesson';
       const labels = ['Unrated', '★ Hard (Added to Revision Queue)', '★★ Medium Confidence', '★★★ Mastered'];
-      showToast((allItemsById[itemId] ? allItemsById[itemId].code : 'Lesson') + ' → ' + labels[next]);
+      recordCurrentUserIntoTelemetryDirectory('Rated ' + codeStr + ' (' + labels[next].split(' ')[0] + ')');
+      sendActiveUserTelemetryPing('confidence_rated', false);
+      showToast(codeStr + ' → ' + labels[next]);
       refreshAllViews();
     }
 
@@ -5717,10 +5948,12 @@ body.auth-locked #authGateModal {
       const heroWel = document.getElementById('heroWelcomeText');
       if (heroWel) heroWel.textContent = `Welcome back, ${firstName}. Let's make this session count.`;
 
-      // Show/hide Admin Code Generator button (always visible for Andy Asante)
+      // Show/hide Admin button (visible whenever Owner email is active OR Owner has unlocked Admin on this browser)
       const adminBtn = document.getElementById('openAdminGeneratorBtn');
       if (adminBtn) {
-        const isOwner = normalizeEmail(profile.email) === MASTER_OWNER_EMAIL || normalizeEmail(cleanDisplayEmail) === MASTER_OWNER_EMAIL;
+        const isOwner = normalizeEmail(profile.email) === MASTER_OWNER_EMAIL ||
+                        normalizeEmail(cleanDisplayEmail) === MASTER_OWNER_EMAIL ||
+                        localStorage.getItem(ADMIN_UNLOCKED_DEVICE_KEY) === 'true';
         adminBtn.classList.toggle('hidden', !isOwner);
       }
 
@@ -5766,9 +5999,9 @@ body.auth-locked #authGateModal {
 
       const reg = loadUsersRegistry();
       const curReg = reg[currentActiveUserEmail] || {};
-      const curName = (appState.userProfile && appState.userProfile.name && appState.userProfile.name !== 'Candidate' && appState.userProfile.name !== 'CFA Candidate')
-        ? appState.userProfile.name
-        : '';
+      const rawName = (appState.userProfile && appState.userProfile.name) || curReg.name || '';
+      const isGenericGuestName = !rawName || rawName === 'Candidate' || rawName === 'CFA Candidate' || rawName.startsWith('Guest Candidate #');
+      const curName = isGenericGuestName ? '' : rawName;
       const curEmail = curReg.displayEmail || (currentActiveUserEmail && !currentActiveUserEmail.startsWith('candidate_usr') ? currentActiveUserEmail : '');
 
       const nameInp = document.getElementById('planCandidateNameInput');
@@ -5791,8 +6024,12 @@ body.auth-locked #authGateModal {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
       if (appState) {
+        const wasFirstSetup = !appState.hasCompletedPlanSetup;
         appState.hasCompletedPlanSetup = true;
         saveState();
+        // Track visitors who click "Skip / Keep Current" or "X" and just use the platform without setting an email/plan!
+        recordCurrentUserIntoTelemetryDirectory(wasFirstSetup ? 'Skipped Setup — Using Default Plan' : 'Closed Plan Settings');
+        sendActiveUserTelemetryPing('instant_open_active', wasFirstSetup);
       }
     }
 
@@ -5840,8 +6077,19 @@ body.auth-locked #authGateModal {
       const xIso = document.getElementById('planExamDateModalInput').value || eIso || '2027-05-22';
       const wkRaw = document.getElementById('planWeekdayHoursInput').value;
       const weRaw = document.getElementById('planWeekendHoursInput').value;
+      const rawName = ((document.getElementById('planCandidateNameInput') || {}).value || '').trim();
+      const rawEmail = normalizeEmail(((document.getElementById('planCandidateEmailInput') || {}).value || ''));
+
+      // If user only typed Username/Email without dates, save their profile & keep current schedule!
+      if (!sIso && !eIso && wkRaw === '' && weRaw === '' && (rawName || rawEmail)) {
+        applyProfileUpdatePreservingAnonymous(rawName, rawEmail, 'Updated Profile from Plan Modal');
+        closePlanSettingsModal();
+        refreshAllViews();
+        return;
+      }
+
       if (!sIso || !eIso) {
-        showToast('Please select your Core Reading Start Date and Finish Date.');
+        showToast('Please select your Core Reading Start Date and Finish Date (or click Skip / Keep Current).');
         return;
       }
       if (wkRaw === '' && weRaw === '') {
@@ -5856,32 +6104,15 @@ body.auth-locked #authGateModal {
         return;
       }
 
-      const rawName = ((document.getElementById('planCandidateNameInput') || {}).value || '').trim();
-      const rawEmail = normalizeEmail(((document.getElementById('planCandidateEmailInput') || {}).value || ''));
+      applyProfileUpdatePreservingAnonymous(rawName, rawEmail, 'Configured Custom Study Schedule');
 
-      const reg = loadUsersRegistry();
-      const curReg = reg[currentActiveUserEmail] || {};
-      const finalName = rawName || curReg.name || (rawEmail === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : 'Candidate');
-      const finalDisplayEmail = rawEmail || curReg.displayEmail || '';
-
-      curReg.name = finalName;
-      curReg.displayEmail = finalDisplayEmail;
-      curReg.lastActive = new Date().toISOString();
-      if (!curReg.visitorId) curReg.visitorId = generateVisitorId();
-      reg[currentActiveUserEmail] = curReg;
-      saveUsersRegistry(reg);
-
-      appState.userProfile = {
-        name: finalName,
-        email: finalDisplayEmail || currentActiveUserEmail,
-        role: finalDisplayEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
-      };
       appState.planConfig = {
         startDate: sIso,
         endDate: eIso,
         examDate: xIso,
         weekdayHours: wkH,
-        weekendHours: weH
+        weekendHours: weH,
+        isCustomPlan: true
       };
       appState.examDate = xIso;
       appState.hasCompletedPlanSetup = true;
@@ -5890,17 +6121,96 @@ body.auth-locked #authGateModal {
       closePlanSettingsModal();
       refreshAllViews();
 
-      // Send non-blocking Active User Telemetry Ping so Admin can track active platform users
+      recordCurrentUserIntoTelemetryDirectory(`Configured Schedule (${sIso} to ${eIso})`);
       sendActiveUserTelemetryPing('plan_saved', true);
 
-      showToast(`Welcome, ${finalName}! Built your ${m.totalDays}-day schedule (${m.totalHours.toFixed(0)} planned hrs).`);
+      const displayUser = (appState.userProfile && appState.userProfile.name) || 'Candidate';
+      showToast(`Welcome, ${displayUser}! Built your ${m.totalDays}-day schedule (${m.totalHours.toFixed(0)} planned hrs).`);
+    }
+
+    // Helper: Updates profile or switches to Admin/Email profile WITHOUT overwriting an existing anonymous Instant-Open visitor
+    function applyProfileUpdatePreservingAnonymous(rawName, rawEmail, actionLabel) {
+      const reg = loadUsersRegistry();
+      const cur = reg[currentActiveUserEmail] || {};
+      const cleanEmail = normalizeEmail(rawEmail);
+
+      if (cleanEmail === MASTER_OWNER_EMAIL) {
+        localStorage.setItem(ADMIN_UNLOCKED_DEVICE_KEY, 'true');
+      }
+
+      // If the current profile is an anonymous Instant-Open visitor (no email) and someone enters the Admin email (or another user's email),
+      // DO NOT overwrite the anonymous visitor's profile! Save the anonymous visitor as-is and switch to a separate profile for that email!
+      const isCurrentAnonymous = currentActiveUserEmail.startsWith('candidate_usr') && !cur.displayEmail;
+      if (isCurrentAnonymous && cleanEmail) {
+        // 1. Ensure current anonymous visitor is recorded in telemetry before switching
+        recordCurrentUserIntoTelemetryDirectory(cur.lastAction || 'Browsing Dashboard (Instant Open)');
+
+        // 2. Create or switch to the email-based profile
+        const targetKey = cleanEmail;
+        const existingTarget = reg[targetKey] || {};
+        const targetVisitorId = existingTarget.visitorId || (cleanEmail === MASTER_OWNER_EMAIL ? 'USR-ADMIN-0001' : generateVisitorId());
+        const targetName = rawName || existingTarget.name || (cleanEmail === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : cleanEmail.split('@')[0]);
+        const meta = detectVisitorDeviceAndTimezone();
+
+        reg[targetKey] = Object.assign({}, existingTarget, {
+          email: targetKey,
+          displayEmail: cleanEmail,
+          name: targetName,
+          visitorId: targetVisitorId,
+          provider: 'EmailProfile',
+          accessType: 'email_registered',
+          deviceInfo: meta.deviceSummary,
+          timezone: meta.timezone,
+          explicitlySignedIn: true,
+          unlocked: true,
+          createdAt: existingTarget.createdAt || new Date().toISOString(),
+          lastActive: new Date().toISOString()
+        });
+        saveUsersRegistry(reg);
+        localStorage.setItem(ACTIVE_USER_EMAIL_KEY, targetKey);
+        currentActiveUserEmail = targetKey;
+        loadState(targetKey);
+        appState.userProfile = {
+          name: targetName,
+          email: cleanEmail,
+          role: cleanEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
+        };
+        saveState();
+        recordCurrentUserIntoTelemetryDirectory(actionLabel || 'Signed In with Email');
+        return;
+      }
+
+      // Otherwise update current profile in place
+      const defaultGuest = getDefaultGuestNameFromVisitorId(cur.visitorId);
+      const finalName = rawName || (cleanEmail === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : (cur.name || defaultGuest));
+      const finalEmail = cleanEmail || cur.displayEmail || '';
+      const accessType = finalEmail
+        ? 'email_registered'
+        : (finalName && !finalName.startsWith('Guest Candidate #') && finalName !== 'Candidate' ? 'username_only' : 'instant_anonymous');
+
+      cur.name = finalName;
+      cur.displayEmail = finalEmail;
+      cur.accessType = accessType;
+      cur.lastActive = new Date().toISOString();
+      if (!cur.visitorId) cur.visitorId = generateVisitorId();
+      reg[currentActiveUserEmail] = cur;
+      saveUsersRegistry(reg);
+
+      appState.userProfile = {
+        name: finalName,
+        email: finalEmail || currentActiveUserEmail,
+        role: finalEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
+      };
+      saveState();
+      recordCurrentUserIntoTelemetryDirectory(actionLabel || 'Updated Profile');
     }
 
     // ==================== 12. CANDIDATE PROFILE & MULTI-USER SWITCHER (NO LOGIN SCREEN) ====================
     function openAuthGateModal() {
       const reg = loadUsersRegistry();
       const cur = reg[currentActiveUserEmail] || {};
-      const cleanName = (appState.userProfile && appState.userProfile.name) || cur.name || 'Candidate';
+      const rawName = (appState.userProfile && appState.userProfile.name) || cur.name || '';
+      const isGenericGuest = !rawName || rawName === 'Candidate' || rawName.startsWith('Guest Candidate #');
       const cleanEmail = cur.displayEmail !== undefined
         ? cur.displayEmail
         : (currentActiveUserEmail && !currentActiveUserEmail.startsWith('candidate_usr') ? currentActiveUserEmail : '');
@@ -5910,7 +6220,7 @@ body.auth-locked #authGateModal {
       const badgeEl = document.getElementById('profileModalVisitorIdBadge');
       const errEl = document.getElementById('loginErrorMsg');
 
-      if (nameInp) nameInp.value = cleanName === 'Candidate' ? '' : cleanName;
+      if (nameInp) nameInp.value = isGenericGuest ? '' : rawName;
       if (emailInp) emailInp.value = cleanEmail;
       if (badgeEl) badgeEl.textContent = 'ID: ' + (cur.visitorId || 'USR-0001');
       if (errEl) errEl.classList.add('hidden');
@@ -5939,36 +6249,23 @@ body.auth-locked #authGateModal {
     function saveActiveProfileDetails() {
       const rawName = ((document.getElementById('loginNameInput') || {}).value || '').trim();
       const rawEmail = normalizeEmail(((document.getElementById('loginEmailInput') || {}).value || ''));
-      const reg = loadUsersRegistry();
-      const cur = reg[currentActiveUserEmail] || {};
 
-      const finalName = rawName || (rawEmail === MASTER_OWNER_EMAIL ? MASTER_OWNER_NAME : (cur.name || 'Candidate'));
-      cur.name = finalName;
-      cur.displayEmail = rawEmail;
-      cur.lastActive = new Date().toISOString();
-      if (!cur.visitorId) cur.visitorId = generateVisitorId();
-      reg[currentActiveUserEmail] = cur;
-      saveUsersRegistry(reg);
-
-      appState.userProfile = {
-        name: finalName,
-        email: rawEmail || currentActiveUserEmail,
-        role: rawEmail === MASTER_OWNER_EMAIL ? 'Owner & Admin' : 'Level II Candidate'
-      };
-      saveState();
+      applyProfileUpdatePreservingAnonymous(rawName, rawEmail, 'Updated Candidate Profile');
+      rebuildScheduleForUserPlan();
       updateDynamicUserAndPlanBanners();
       renderDeviceProfilesList();
       closeAuthGateModal();
+      refreshAllViews();
 
-      // Send telemetry update so Admin Active User Tracker stays current
       sendActiveUserTelemetryPing('profile_updated', true);
-      showToast(`Profile updated: ${finalName}`);
+      const shownName = (appState.userProfile && appState.userProfile.name) || 'Candidate';
+      showToast(`Profile updated: ${shownName}`);
     }
 
     function getProfileProgressSummary(profileKey) {
       try {
         const raw = localStorage.getItem(getUserStorageKey(profileKey));
-        if (!raw) return { lessonsDone: 0, questionsAttempted: 0, studyHours: 0, startDate: '2026-11-01', endDate: '2027-03-28', weekdayHours: 2.0, weekendHours: 2.0 };
+        if (!raw) return { lessonsDone: 0, questionsAttempted: 0, studyHours: 0, activeMinutes: 1, isCustomPlan: false, startDate: '2026-11-01', endDate: '2027-03-28', weekdayHours: 2.0, weekendHours: 2.0 };
         const st = JSON.parse(raw);
         const completedCodesCount = st.completedCodes ? Object.keys(st.completedCodes).length : 0;
         const completedItemsCount = st.completedItems ? Object.keys(st.completedItems).filter(k => st.completedItems[k]).length : 0;
@@ -5978,7 +6275,7 @@ body.auth-locked #authGateModal {
           Object.values(st.moduleLogs).forEach(l => { questionsAttempted += (Number(l.attempted) || 0); });
         }
         if (Array.isArray(st.qbankDrills)) {
-          st.qbankDrills.forEach(d => { questionsAttempted += (Number(d.questions) || 0); });
+          st.qbankDrills.forEach(d => { questionsAttempted += (Number(d.attempted || d.questions) || 0); });
         }
         let timerMins = 0;
         if (Array.isArray(st.timerSessions)) {
@@ -5989,13 +6286,15 @@ body.auth-locked #authGateModal {
           lessonsDone,
           questionsAttempted,
           studyHours: Math.round((timerMins / 60) * 10) / 10,
+          activeMinutes: Math.max(1, Number(st.activeMinutesSpent) || 1),
+          isCustomPlan: Boolean(cfg.isCustomPlan),
           startDate: cfg.startDate || '2026-11-01',
           endDate: cfg.endDate || '2027-03-28',
           weekdayHours: cfg.weekdayHours ?? 2.0,
           weekendHours: cfg.weekendHours ?? 2.0
         };
       } catch (e) {
-        return { lessonsDone: 0, questionsAttempted: 0, studyHours: 0, startDate: '2026-11-01', endDate: '2027-03-28', weekdayHours: 2.0, weekendHours: 2.0 };
+        return { lessonsDone: 0, questionsAttempted: 0, studyHours: 0, activeMinutes: 1, isCustomPlan: false, startDate: '2026-11-01', endDate: '2027-03-28', weekdayHours: 2.0, weekendHours: 2.0 };
       }
     }
 
@@ -6014,16 +6313,20 @@ body.auth-locked #authGateModal {
         const cleanEmail = u.displayEmail || (!u.email.startsWith('candidate_usr') ? u.email : '');
         const lastSeen = u.lastActive ? u.lastActive.slice(0, 10) : 'Today';
         const safeKey = u.email.replace(/'/g, "\'");
+        const modeBadge = cleanEmail
+          ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800">&#9993; Email</span>`
+          : `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-900">&#9889; Instant Open (No Email)</span>`;
         return `
           <div class="p-3 rounded-xl ${isCurrent ? 'bg-indigo-50/90 border-2 border-indigo-500' : 'bg-slate-50 border border-slate-200'} flex items-center justify-between gap-2 text-xs">
             <div class="min-w-0">
               <div class="flex items-center gap-1.5 flex-wrap">
-                <strong class="font-extrabold text-slate-900 truncate">${u.name || 'Candidate'}</strong>
+                <strong class="font-extrabold text-slate-900 truncate">${u.name || getDefaultGuestNameFromVisitorId(u.visitorId)}</strong>
                 ${isCurrent ? '<span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-indigo-600 text-white">Active</span>' : ''}
+                ${modeBadge}
                 <span class="text-[10px] font-mono text-slate-500">${u.visitorId || ''}</span>
               </div>
               <div class="text-[11px] text-slate-500 truncate mt-0.5">
-                ${cleanEmail ? (cleanEmail + ' • ') : ''}${prog.lessonsDone} items done • ${prog.questionsAttempted} Qs • Last active: ${lastSeen}
+                ${cleanEmail ? (cleanEmail + ' • ') : 'No email • '}${prog.lessonsDone} items done • ${prog.questionsAttempted} Qs • Last active: ${lastSeen}
               </div>
             </div>
             <div class="shrink-0">
@@ -6050,6 +6353,7 @@ body.auth-locked #authGateModal {
       performDailyLoginProgressUpdate();
       rebuildScheduleForUserPlan();
       saveState();
+      recordCurrentUserIntoTelemetryDirectory('Switched Active Workspace');
       updateTimerDisplays();
       refreshAllViews();
       closeAuthGateModal();
@@ -6060,8 +6364,8 @@ body.auth-locked #authGateModal {
       const reg = loadUsersRegistry();
       const newVisitorId = generateVisitorId();
       const newKey = 'candidate_' + newVisitorId.toLowerCase().replace(/[^a-z0-9]/g, '');
-      const profileNumber = Object.keys(reg).length + 1;
-      const defaultName = 'Candidate ' + profileNumber;
+      const defaultName = getDefaultGuestNameFromVisitorId(newVisitorId);
+      const meta = detectVisitorDeviceAndTimezone();
 
       reg[newKey] = {
         email: newKey,
@@ -6069,6 +6373,9 @@ body.auth-locked #authGateModal {
         name: defaultName,
         visitorId: newVisitorId,
         provider: 'InstantOpen',
+        accessType: 'instant_anonymous',
+        deviceInfo: meta.deviceSummary,
+        timezone: meta.timezone,
         explicitlySignedIn: true,
         unlocked: true,
         createdAt: new Date().toISOString(),
@@ -6079,17 +6386,63 @@ body.auth-locked #authGateModal {
       currentActiveUserEmail = newKey;
 
       loadState(newKey);
+      appState.userProfile = { name: defaultName, email: newKey, role: 'Level II Candidate' };
       appState.hasCompletedPlanSetup = false;
       rebuildScheduleForUserPlan();
       saveState();
+
+      // Immediately log the new Instant-Open profile into telemetry so it is tracked even before setup!
+      recordCurrentUserIntoTelemetryDirectory('Opened New Instant-Open Session');
+      sendActiveUserTelemetryPing('instant_session_created', true);
+
       updateTimerDisplays();
       refreshAllViews();
       closeAuthGateModal();
 
-      showToast(`Created new workspace (${defaultName}). Set your study dates & name!`);
+      showToast(`Created new Instant-Open workspace (${defaultName}).`);
       setTimeout(() => {
         openPlanSettingsModal(true);
       }, 200);
+    }
+
+    function createAndSwitchToAnonymousVisitor() {
+      closeAdminCodeModal();
+      const reg = loadUsersRegistry();
+      const newVisitorId = generateVisitorId();
+      const newKey = 'candidate_' + newVisitorId.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const defaultName = getDefaultGuestNameFromVisitorId(newVisitorId);
+      const meta = detectVisitorDeviceAndTimezone();
+
+      reg[newKey] = {
+        email: newKey,
+        displayEmail: '',
+        name: defaultName,
+        visitorId: newVisitorId,
+        provider: 'InstantOpen',
+        accessType: 'instant_anonymous',
+        deviceInfo: meta.deviceSummary,
+        timezone: meta.timezone,
+        explicitlySignedIn: true,
+        unlocked: true,
+        createdAt: new Date().toISOString(),
+        lastActive: new Date().toISOString()
+      };
+      saveUsersRegistry(reg);
+      localStorage.setItem(ACTIVE_USER_EMAIL_KEY, newKey);
+      currentActiveUserEmail = newKey;
+
+      loadState(newKey);
+      appState.userProfile = { name: defaultName, email: newKey, role: 'Level II Candidate' };
+      appState.hasCompletedPlanSetup = true;
+      rebuildScheduleForUserPlan();
+      saveState();
+
+      recordCurrentUserIntoTelemetryDirectory('Just Logged On (Instant Open • No Email)');
+      sendActiveUserTelemetryPing('instant_visitor_active', true);
+
+      updateTimerDisplays();
+      refreshAllViews();
+      showToast(`Now browsing as ${defaultName} (Instant-Open, No Email). Click lessons or timers, then open Admin to see live tracking!`);
     }
 
     // ==================== 13. AUTOMATIC DAILY PROGRESS UPDATER & ACTIVE USER TELEMETRY ====================
@@ -6097,6 +6450,7 @@ body.auth-locked #authGateModal {
       if (!appState) return;
       const todayIso = new Date().toISOString().slice(0, 10);
       if (!appState.dailyLoginHistory) appState.dailyLoginHistory = [];
+      if (!appState.activeMinutesSpent) appState.activeMinutesSpent = 1;
       const isNewDayVisit = (appState.lastDailyUpdateDate !== todayIso);
 
       if (isNewDayVisit) {
@@ -6104,7 +6458,6 @@ body.auth-locked #authGateModal {
         if (!appState.dailyLoginHistory.includes(todayIso)) {
           appState.dailyLoginHistory.push(todayIso);
         }
-        // If today's real-world date falls inside the user's configured study schedule, automatically advance activeDate to today
         if (daysByDate && daysByDate[todayIso]) {
           appState.activeDate = todayIso;
         }
@@ -6127,21 +6480,53 @@ body.auth-locked #authGateModal {
       } catch (e) {}
     }
 
+    function classifyAccessType(nameStr, emailStr) {
+      const cleanEmail = (emailStr && emailStr !== '—' && !emailStr.startsWith('candidate_usr')) ? normalizeEmail(emailStr) : '';
+      if (cleanEmail) return 'email_registered';
+      const cleanName = String(nameStr || '').trim();
+      if (cleanName && cleanName !== 'Candidate' && cleanName !== 'CFA Candidate' && !cleanName.startsWith('Guest Candidate #')) {
+        return 'username_only';
+      }
+      return 'instant_anonymous';
+    }
+
     function recordCurrentUserIntoTelemetryDirectory(eventType) {
       const reg = loadUsersRegistry();
       const cur = reg[currentActiveUserEmail] || {};
       if (!cur.visitorId) {
         cur.visitorId = generateVisitorId();
-        reg[currentActiveUserEmail] = cur;
-        saveUsersRegistry(reg);
       }
       const prog = getProfileProgressSummary(currentActiveUserEmail);
       const cleanEmail = cur.displayEmail || (!currentActiveUserEmail.startsWith('candidate_usr') ? currentActiveUserEmail : '');
+      const rawName = (appState.userProfile && appState.userProfile.name) || cur.name || '';
+      const displayName = (!rawName || rawName === 'Candidate' || rawName === 'CFA Candidate')
+        ? (cleanEmail ? cleanEmail.split('@')[0] : getDefaultGuestNameFromVisitorId(cur.visitorId))
+        : rawName;
+
+      const accessType = classifyAccessType(displayName, cleanEmail);
+      const meta = detectVisitorDeviceAndTimezone();
+      const nowIso = new Date().toISOString();
+
+      cur.name = displayName;
+      cur.accessType = accessType;
+      cur.deviceInfo = cur.deviceInfo || meta.deviceSummary;
+      cur.timezone = cur.timezone || meta.timezone;
+      cur.lastActive = nowIso;
+      if (eventType) cur.lastAction = eventType;
+      reg[currentActiveUserEmail] = cur;
+      saveUsersRegistry(reg);
+
+      const dir = getLocalTrackedUsersDirectory();
+      const existing = dir[cur.visitorId] || {};
       const entry = {
         visitorId: cur.visitorId,
         profileKey: currentActiveUserEmail,
-        name: (appState.userProfile && appState.userProfile.name) || cur.name || 'Candidate',
+        name: displayName,
         email: cleanEmail || '—',
+        accessType: accessType,
+        deviceInfo: cur.deviceInfo || existing.deviceInfo || meta.deviceSummary,
+        timezone: cur.timezone || existing.timezone || meta.timezone,
+        isCustomPlan: prog.isCustomPlan,
         startDate: prog.startDate,
         endDate: prog.endDate,
         weekdayHours: prog.weekdayHours,
@@ -6149,23 +6534,55 @@ body.auth-locked #authGateModal {
         lessonsDone: prog.lessonsDone,
         questionsAttempted: prog.questionsAttempted,
         studyHours: prog.studyHours,
-        totalVisits: (appState.dailyLoginHistory ? appState.dailyLoginHistory.length : 1),
-        lastEvent: eventType || 'session_open',
-        lastActive: new Date().toISOString()
+        activeMinutes: Math.max(prog.activeMinutes || 1, existing.activeMinutes || 1),
+        totalVisits: Math.max((appState.dailyLoginHistory ? appState.dailyLoginHistory.length : 1), existing.totalVisits || 1),
+        lastEvent: eventType || existing.lastEvent || 'Opened Dashboard (Instant Use)',
+        lastAction: eventType || existing.lastAction || 'Opened Dashboard (Instant Use)',
+        firstSeen: existing.firstSeen || cur.createdAt || nowIso,
+        lastActive: nowIso
       };
-      const dir = getLocalTrackedUsersDirectory();
       dir[cur.visitorId] = entry;
       saveLocalTrackedUsersDirectory(dir);
+
+      // Broadcast to other open tabs on the same browser immediately
+      try {
+        if (window._cfaTelemetryChannel) {
+          window._cfaTelemetryChannel.postMessage({ type: 'USER_TELEMETRY_UPDATE', entry: entry });
+        }
+      } catch (e) {}
+
       return entry;
     }
 
-    async function sendActiveUserTelemetryPing(eventType, forceEmailOnSetup) {
-      const entry = recordCurrentUserIntoTelemetryDirectory(eventType);
-      const todayIso = new Date().toISOString().slice(0, 10);
-      const pingThrottleKey = 'cfa_l2_last_ping_' + entry.visitorId;
-      const lastPingDate = localStorage.getItem(pingThrottleKey) || '';
+    async function pushEntryToCloudTelemetryStores(entry) {
+      // 1. Same-origin Vercel Serverless API (/api/telemetry) when deployed on Vercel
+      try {
+        fetch('/api/telemetry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'track_user', user: entry })
+        }).catch(() => {});
+      } catch (e) {}
 
-      // 1. If Google Apps Script Live Tracker Webhook is configured, post real-time heartbeat
+      // 2. Shared Zero-Config CORS Cloud KV Store so anonymous visitors on other devices sync automatically
+      try {
+        const res = await fetch(CLOUD_TELEMETRY_BUCKET_URL, { method: 'GET', headers: { 'Accept': 'application/json' } });
+        let cloudMap = {};
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.trim().startsWith('{')) {
+            cloudMap = JSON.parse(text);
+          }
+        }
+        cloudMap[entry.visitorId] = entry;
+        await fetch(CLOUD_TELEMETRY_BUCKET_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cloudMap)
+        });
+      } catch (e) {}
+
+      // 3. Optional Google Apps Script Live Sheet Webhook if configured
       try {
         const gasUrl = (localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '').trim();
         if (gasUrl && gasUrl.startsWith('https://script.google.com/')) {
@@ -6177,12 +6594,29 @@ body.auth-locked #authGateModal {
           }).catch(() => {});
         }
       } catch (e) {}
+    }
 
-      // 2. Notify Admin via FormSubmit AJAX when a user sets up their study plan or logs a new active day (throttled once/day)
+    async function sendActiveUserTelemetryPing(eventType, forceEmailNotification) {
+      const entry = recordCurrentUserIntoTelemetryDirectory(eventType);
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const pingThrottleKey = 'cfa_l2_last_ping_' + entry.visitorId;
+      const lastPingDate = localStorage.getItem(pingThrottleKey) || '';
+
+      // Push real-time update to cloud telemetry stores (debounced so rapid clicks batch smoothly)
+      clearTimeout(window._cloudPushDebounceTimer);
+      window._cloudPushDebounceTimer = setTimeout(() => {
+        pushEntryToCloudTelemetryStores(entry);
+      }, 400);
+
+      // Also notify Admin via FormSubmit AJAX for BOTH Email users AND Instant-Open (No Email) users (throttled once/day per visitorId)
       const isOwnerSelf = normalizeEmail(entry.email) === MASTER_OWNER_EMAIL;
-      if (!isOwnerSelf && (forceEmailOnSetup || lastPingDate !== todayIso)) {
+      if (!isOwnerSelf && (forceEmailNotification || lastPingDate !== todayIso)) {
         try {
           localStorage.setItem(pingThrottleKey, todayIso);
+          const hasEmail = entry.email && entry.email !== '—';
+          const modeLabel = entry.accessType === 'email_registered'
+            ? 'Email Linked'
+            : (entry.accessType === 'username_only' ? 'Username Only (No Email)' : 'Instant Open (No Email Provided)');
           fetch('https://formsubmit.co/ajax/' + MASTER_OWNER_EMAIL, {
             method: 'POST',
             headers: {
@@ -6190,13 +6624,16 @@ body.auth-locked #authGateModal {
               'Accept': 'application/json'
             },
             body: JSON.stringify({
-              _subject: `📊 Active User on CFA Level II Study Guide: ${entry.name} (${entry.visitorId})`,
-              Candidate_Name: entry.name,
-              Candidate_Email: entry.email,
-              Unique_User_ID: entry.visitorId,
+              _subject: `📊 ${hasEmail ? 'Active User' : '⚡ Instant-Open Visitor (No Email)'}: ${entry.name} (${entry.visitorId})`,
+              email: hasEmail ? entry.email : ('instant-visitor-' + entry.visitorId.toLowerCase() + '@cfastudyplan.vercel.app'),
+              Access_Mode: modeLabel,
+              Visitor_Name: entry.name,
+              Candidate_Email: hasEmail ? entry.email : 'No Email (Instant Open User)',
+              Unique_Visitor_ID: entry.visitorId,
+              Device_and_Browser: `${entry.deviceInfo} • ${entry.timezone}`,
               Study_Schedule: `${entry.startDate} to ${entry.endDate} (${entry.weekdayHours}h Wk / ${entry.weekendHours}h Wknd)`,
-              Progress_Summary: `${entry.lessonsDone} items completed • ${entry.questionsAttempted} questions attempted • ${entry.studyHours} timer hrs`,
-              Activity_Event: eventType,
+              Live_Progress: `${entry.lessonsDone} items done • ${entry.questionsAttempted} Qs attempted • ${entry.studyHours}h timer • ${entry.activeMinutes || 1}m active on site`,
+              Latest_Activity: entry.lastAction || eventType,
               Last_Active_Timestamp: entry.lastActive,
               _template: 'table'
             })
@@ -6206,11 +6643,29 @@ body.auth-locked #authGateModal {
     }
 
     // ==================== 14. ADMIN ACTIVE USERS & PLATFORM TRACKER MODAL ====================
+    let currentAdminUserFilter = 'ALL';
+
+    function setAdminUserFilter(filterMode) {
+      currentAdminUserFilter = filterMode || 'ALL';
+      ['ALL', 'NO_EMAIL', 'WITH_EMAIL', 'ACTIVE_TODAY'].forEach(mode => {
+        const btn = document.getElementById('adminFilterBtn-' + mode);
+        if (!btn) return;
+        if (mode === currentAdminUserFilter) {
+          btn.className = 'px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-extrabold transition';
+        } else if (mode === 'NO_EMAIL') {
+          btn.className = 'px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-extrabold transition';
+        } else {
+          btn.className = 'px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition';
+        }
+      });
+      renderAdminActiveUsersTable();
+    }
+
     function openAdminCodeModal() {
       loadAdminEmailJsConfigInputs();
-      recordCurrentUserIntoTelemetryDirectory('admin_view');
+      recordCurrentUserIntoTelemetryDirectory('Opened Admin Tracker');
       renderAdminActiveUsersTable();
-      fetchCloudActiveUsersForAdmin();
+      fetchCloudActiveUsersForAdmin(false);
       const banner = document.getElementById('adminSendStatusBanner');
       if (banner) banner.classList.add('hidden');
       const modal = document.getElementById('adminCodeModal');
@@ -6229,130 +6684,294 @@ body.auth-locked #authGateModal {
     }
 
     function getAllCombinedTrackedUsers() {
-      // Combine all local profiles + telemetry directory entries
+      recoverOverwrittenAnonymousProfiles();
       const reg = loadUsersRegistry();
       const dir = getLocalTrackedUsersDirectory();
+      const meta = detectVisitorDeviceAndTimezone();
+
       Object.values(reg).forEach(u => {
         if (!u || !u.email) return;
         const vid = u.visitorId || ('USR-' + u.email.slice(0, 4).toUpperCase());
         const prog = getProfileProgressSummary(u.email);
         const cleanEmail = u.displayEmail || (!u.email.startsWith('candidate_usr') ? u.email : '');
-        dir[vid] = Object.assign({}, dir[vid] || {}, {
+        const existing = dir[vid] || {};
+        const rawName = u.name || existing.name || '';
+        const displayName = (!rawName || rawName === 'Candidate' || rawName === 'CFA Candidate')
+          ? (cleanEmail ? cleanEmail.split('@')[0] : getDefaultGuestNameFromVisitorId(vid))
+          : rawName;
+        const accessType = classifyAccessType(displayName, cleanEmail);
+
+        dir[vid] = Object.assign({}, existing, {
           visitorId: vid,
-          name: u.name || 'Candidate',
+          profileKey: u.email,
+          name: displayName,
           email: cleanEmail || '—',
-          startDate: prog.startDate,
-          endDate: prog.endDate,
-          weekdayHours: prog.weekdayHours,
-          weekendHours: prog.weekendHours,
-          lessonsDone: Math.max((dir[vid] && dir[vid].lessonsDone) || 0, prog.lessonsDone),
-          questionsAttempted: Math.max((dir[vid] && dir[vid].questionsAttempted) || 0, prog.questionsAttempted),
-          studyHours: Math.max((dir[vid] && dir[vid].studyHours) || 0, prog.studyHours),
-          lastActive: u.lastActive || (dir[vid] && dir[vid].lastActive) || new Date().toISOString()
+          accessType: accessType,
+          deviceInfo: u.deviceInfo || existing.deviceInfo || meta.deviceSummary,
+          timezone: u.timezone || existing.timezone || meta.timezone,
+          isCustomPlan: prog.isCustomPlan || existing.isCustomPlan || false,
+          startDate: prog.startDate || existing.startDate || '2026-11-01',
+          endDate: prog.endDate || existing.endDate || '2027-03-28',
+          weekdayHours: prog.weekdayHours ?? existing.weekdayHours ?? 2.0,
+          weekendHours: prog.weekendHours ?? existing.weekendHours ?? 2.0,
+          lessonsDone: Math.max(existing.lessonsDone || 0, prog.lessonsDone),
+          questionsAttempted: Math.max(existing.questionsAttempted || 0, prog.questionsAttempted),
+          studyHours: Math.max(existing.studyHours || 0, prog.studyHours),
+          activeMinutes: Math.max(existing.activeMinutes || 1, prog.activeMinutes || 1),
+          totalVisits: Math.max(existing.totalVisits || 1, 1),
+          lastAction: u.lastAction || existing.lastAction || existing.lastEvent || 'Opened Dashboard (Instant Use)',
+          firstSeen: existing.firstSeen || u.createdAt || new Date().toISOString(),
+          lastActive: u.lastActive || existing.lastActive || new Date().toISOString()
         });
       });
+
       saveLocalTrackedUsersDirectory(dir);
       return Object.values(dir).sort((a, b) => String(b.lastActive || '').localeCompare(String(a.lastActive || '')));
+    }
+
+    function formatRelativeTimeAgo(isoStr) {
+      if (!isoStr) return { badge: 'Active Today', isOnline: false };
+      const ms = Date.parse(isoStr);
+      if (isNaN(ms)) return { badge: isoStr.slice(0, 16), isOnline: false };
+      const diffSec = Math.max(0, Math.floor((Date.now() - ms) / 1000));
+      if (diffSec < 300) return { badge: '🟢 Online now', isOnline: true };
+      if (diffSec < 3600) return { badge: Math.floor(diffSec / 60) + 'm ago', isOnline: false };
+      if (diffSec < 86400) return { badge: Math.floor(diffSec / 3600) + 'h ago', isOnline: false };
+      return { badge: Math.floor(diffSec / 86400) + 'd ago', isOnline: false };
     }
 
     function renderAdminActiveUsersTable() {
       const tbody = document.getElementById('adminActiveUsersTableBody');
       if (!tbody) return;
-      const list = getAllCombinedTrackedUsers();
+      const allUsers = getAllCombinedTrackedUsers();
 
       const nowMs = Date.now();
+      const todayIso = new Date().toISOString().slice(0, 10);
+      let noEmailCount = 0;
+      let withEmailCount = 0;
       let active7d = 0;
+      let activeTodayCount = 0;
+      let onlineNowCount = 0;
       let totalLessons = 0;
+      let totalActiveMins = 0;
 
-      list.forEach(u => {
+      allUsers.forEach(u => {
+        const hasEmail = Boolean(u.email && u.email !== '—' && !u.email.startsWith('candidate_usr'));
+        if (hasEmail) withEmailCount++;
+        else noEmailCount++;
+
         totalLessons += (Number(u.lessonsDone) || 0);
+        totalActiveMins += (Number(u.activeMinutes) || 1);
+
         const lastMs = Date.parse(u.lastActive || '');
-        if (!isNaN(lastMs) && (nowMs - lastMs) <= 7 * 86400000) {
-          active7d++;
+        if (!isNaN(lastMs)) {
+          if ((nowMs - lastMs) <= 7 * 86400000) active7d++;
+          if ((nowMs - lastMs) <= 300000) onlineNowCount++;
+        }
+        if (String(u.lastActive || '').slice(0, 10) === todayIso) {
+          activeTodayCount++;
         }
       });
 
       const totEl = document.getElementById('adminMetricTotalUsers');
+      const anonEl = document.getElementById('adminMetricAnonymousUsers');
+      const emEl = document.getElementById('adminMetricEmailUsers');
       const actEl = document.getElementById('adminMetricActive7d');
+      const onSubEl = document.getElementById('adminMetricOnlineSub');
       const lesEl = document.getElementById('adminMetricTotalLessons');
       const cldEl = document.getElementById('adminMetricCloudStatus');
-      const gasUrl = (localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '').trim();
 
-      if (totEl) totEl.textContent = String(list.length);
+      if (totEl) totEl.textContent = String(allUsers.length);
+      if (anonEl) anonEl.textContent = String(noEmailCount);
+      if (emEl) emEl.textContent = String(withEmailCount);
       if (actEl) actEl.textContent = String(active7d);
-      if (lesEl) lesEl.textContent = String(totalLessons);
-      if (cldEl) cldEl.textContent = gasUrl ? 'Live Sheet Connected' : 'Email + Local Active';
+      if (onSubEl) onSubEl.textContent = onlineNowCount > 0 ? `${onlineNowCount} online right now` : 'Recent study sessions';
+      if (lesEl) lesEl.textContent = `${totalLessons} items`;
+      if (cldEl) cldEl.textContent = `${totalActiveMins}m total platform time`;
 
-      if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="py-4 px-3 text-center text-slate-400">No active users recorded yet.</td></tr>`;
+      const cAll = document.getElementById('adminCountAll'); if (cAll) cAll.textContent = String(allUsers.length);
+      const cNoEm = document.getElementById('adminCountNoEmail'); if (cNoEm) cNoEm.textContent = String(noEmailCount);
+      const cEm = document.getElementById('adminCountWithEmail'); if (cEm) cEm.textContent = String(withEmailCount);
+      const cTod = document.getElementById('adminCountToday'); if (cTod) cTod.textContent = String(activeTodayCount);
+
+      // Apply selected filter
+      const filteredList = allUsers.filter(u => {
+        const hasEmail = Boolean(u.email && u.email !== '—' && !u.email.startsWith('candidate_usr'));
+        if (currentAdminUserFilter === 'NO_EMAIL') return !hasEmail;
+        if (currentAdminUserFilter === 'WITH_EMAIL') return hasEmail;
+        if (currentAdminUserFilter === 'ACTIVE_TODAY') return String(u.lastActive || '').slice(0, 10) === todayIso;
+        return true;
+      });
+
+      if (filteredList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="py-6 px-4 text-center text-slate-500">
+              No users match this filter yet. Click <strong>"+ Test New Instant-Open Visitor"</strong> above to test how anonymous no-email visitors are tracked!
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      tbody.innerHTML = list.map(u => {
+      tbody.innerHTML = filteredList.map(u => {
+        const hasEmail = Boolean(u.email && u.email !== '—' && !u.email.startsWith('candidate_usr'));
+        const accType = u.accessType || classifyAccessType(u.name, u.email);
+        let accessBadge = '';
+        if (accType === 'email_registered' && hasEmail) {
+          accessBadge = `<span class="inline-block px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-extrabold text-[10px]">&#9993; Email User</span>`;
+        } else if (accType === 'username_only') {
+          accessBadge = `<span class="inline-block px-2 py-0.5 rounded bg-teal-100 text-teal-900 font-extrabold text-[10px]">&#128100; Username Only (No Email)</span>`;
+        } else {
+          accessBadge = `<span class="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-extrabold text-[10px]">&#9889; Instant Open (No Email)</span>`;
+        }
+
+        const rel = formatRelativeTimeAgo(u.lastActive);
         const lastDateStr = (u.lastActive || '').replace('T', ' ').slice(0, 16);
+        const planTypeBadge = u.isCustomPlan
+          ? `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">Custom Plan</span>`
+          : `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">Default Plan (Instant Use)</span>`;
+
         return `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-2.5 px-3">
-              <strong class="font-extrabold text-slate-900 block">${u.name || 'Candidate'}</strong>
-              <span class="text-[11px] text-slate-500 font-mono">${u.visitorId || ''}</span>
-              ${u.email && u.email !== '—' ? `<span class="text-[11px] text-indigo-600 block">${u.email}</span>` : ''}
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <strong class="font-extrabold text-slate-900">${u.name || getDefaultGuestNameFromVisitorId(u.visitorId)}</strong>
+                ${accessBadge}
+              </div>
+              <div class="text-[11px] text-slate-500 font-mono mt-0.5">
+                ID: ${u.visitorId || 'USR-0001'}
+                ${hasEmail ? ` • <span class="text-indigo-600 font-sans font-semibold">${u.email}</span>` : ` • <span class="text-amber-800 font-sans font-semibold">Accessed without email</span>`}
+              </div>
             </td>
             <td class="py-2.5 px-3 text-slate-600">
-              <span class="font-bold text-slate-800 block">${u.startDate || '2026-11-01'} &rarr; ${u.endDate || '2027-03-28'}</span>
-              <span class="text-[11px] text-slate-500">${u.weekdayHours ?? 2}h/wkday • ${u.weekendHours ?? 2}h/wknd</span>
+              <span class="font-bold text-slate-800 block text-[11px]">${u.deviceInfo || 'Desktop • Browser'}</span>
+              <span class="text-[10px] text-slate-500 block">${u.timezone || 'Local Time'}</span>
+            </td>
+            <td class="py-2.5 px-3 text-slate-600">
+              <div class="mb-0.5">${planTypeBadge}</div>
+              <span class="font-bold text-slate-800 block text-[11px]">${u.startDate || '2026-11-01'} &rarr; ${u.endDate || '2027-03-28'}</span>
+              <span class="text-[10px] text-slate-500">${u.weekdayHours ?? 2}h/wkday • ${u.weekendHours ?? 2}h/wknd</span>
             </td>
             <td class="py-2.5 px-3">
-              <span class="px-2 py-0.5 rounded bg-teal-100 text-teal-900 font-extrabold text-[11px]">${u.lessonsDone || 0} items done</span>
-              <span class="text-[11px] text-slate-500 block mt-0.5">${u.questionsAttempted || 0} Qs • ${u.studyHours || 0}h timer</span>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-2 py-0.5 rounded bg-teal-100 text-teal-900 font-extrabold text-[11px]">${u.lessonsDone || 0} items done</span>
+                <span class="text-[11px] text-slate-600 font-semibold">${u.questionsAttempted || 0} Qs • ${u.studyHours || 0}h timer</span>
+              </div>
+              <span class="text-[11px] text-indigo-700 font-semibold block mt-1">
+                &#9656; ${u.lastAction || u.lastEvent || 'Opened Dashboard (Instant Use)'}
+              </span>
             </td>
-            <td class="py-2.5 px-3 text-slate-600 font-mono text-[11px]">
-              ${lastDateStr || 'Active Today'}
+            <td class="py-2.5 px-3 text-slate-600">
+              <span class="font-extrabold ${rel.isOnline ? 'text-emerald-700' : 'text-slate-800'} block text-[11px]">${rel.badge}</span>
+              <span class="text-[10px] text-slate-500 block">${u.totalVisits || 1} visit(s) • ${u.activeMinutes || 1}m active</span>
+              <span class="text-[10px] text-slate-400 font-mono block">${lastDateStr}</span>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    async function fetchCloudActiveUsersForAdmin() {
+    async function fetchCloudActiveUsersForAdmin(showToastOnComplete) {
       renderAdminActiveUsersTable();
-      const gasUrl = (localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '').trim();
-      if (!gasUrl || !gasUrl.startsWith('https://script.google.com/')) {
-        return;
-      }
+      let mergedCount = 0;
+
+      // 1. Fetch from built-in Vercel Serverless API (/api/telemetry)
       try {
-        const resp = await fetch(gasUrl + '?action=list_users');
-        if (!resp.ok) return;
-        const data = await resp.json();
-        if (data && Array.isArray(data.users)) {
-          const dir = getLocalTrackedUsersDirectory();
-          data.users.forEach(u => {
-            if (u && u.visitorId) {
-              dir[u.visitorId] = Object.assign({}, dir[u.visitorId] || {}, u);
-            }
-          });
-          saveLocalTrackedUsersDirectory(dir);
-          renderAdminActiveUsersTable();
-          showToast('Synced live active users from Google Sheet!');
+        const apiResp = await fetch('/api/telemetry?action=list_users');
+        if (apiResp.ok) {
+          const data = await apiResp.json();
+          if (data && Array.isArray(data.users)) {
+            const dir = getLocalTrackedUsersDirectory();
+            data.users.forEach(u => {
+              if (u && u.visitorId) {
+                dir[u.visitorId] = Object.assign({}, dir[u.visitorId] || {}, u);
+                mergedCount++;
+              }
+            });
+            saveLocalTrackedUsersDirectory(dir);
+          }
         }
       } catch (e) {}
+
+      // 2. Fetch from shared Zero-Config Cloud KV Telemetry Bucket
+      try {
+        const kvResp = await fetch(CLOUD_TELEMETRY_BUCKET_URL, { method: 'GET', headers: { 'Accept': 'application/json' } });
+        if (kvResp.ok) {
+          const text = await kvResp.text();
+          if (text && text.trim().startsWith('{')) {
+            const cloudMap = JSON.parse(text);
+            const dir = getLocalTrackedUsersDirectory();
+            Object.values(cloudMap).forEach(u => {
+              if (u && u.visitorId) {
+                const localEntry = dir[u.visitorId] || {};
+                dir[u.visitorId] = Object.assign({}, localEntry, u, {
+                  lessonsDone: Math.max(localEntry.lessonsDone || 0, u.lessonsDone || 0),
+                  questionsAttempted: Math.max(localEntry.questionsAttempted || 0, u.questionsAttempted || 0),
+                  activeMinutes: Math.max(localEntry.activeMinutes || 1, u.activeMinutes || 1)
+                });
+                mergedCount++;
+              }
+            });
+            saveLocalTrackedUsersDirectory(dir);
+          }
+        }
+      } catch (e) {}
+
+      // 3. Fetch from optional Google Apps Script Sheet Webhook if configured
+      try {
+        const gasUrl = (localStorage.getItem(GAS_WEBHOOK_URL_KEY) || '').trim();
+        if (gasUrl && gasUrl.startsWith('https://script.google.com/')) {
+          const resp = await fetch(gasUrl + '?action=list_users');
+          if (resp.ok) {
+            const data = await resp.json();
+            if (data && Array.isArray(data.users)) {
+              const dir = getLocalTrackedUsersDirectory();
+              data.users.forEach(u => {
+                if (u && u.visitorId) {
+                  dir[u.visitorId] = Object.assign({}, dir[u.visitorId] || {}, u);
+                  mergedCount++;
+                }
+              });
+              saveLocalTrackedUsersDirectory(dir);
+            }
+          }
+        }
+      } catch (e) {}
+
+      renderAdminActiveUsersTable();
+      if (showToastOnComplete) {
+        showToast('Refreshed live active users (Instant-Open + Email users synced)!');
+      }
     }
 
     function exportActiveUsersCsv() {
       const list = getAllCombinedTrackedUsers();
-      const headers = ['Visitor_ID', 'Name', 'Email', 'Start_Date', 'End_Date', 'Weekday_Hours', 'Weekend_Hours', 'Lessons_Completed', 'Questions_Attempted', 'Timer_Hours', 'Last_Active'];
-      const rows = list.map(u => [
-        u.visitorId || '',
-        `"${String(u.name || '').replace(/"/g, '""')}"`,
-        `"${String(u.email || '').replace(/"/g, '""')}"`,
-        u.startDate || '',
-        u.endDate || '',
-        u.weekdayHours ?? 2,
-        u.weekendHours ?? 2,
-        u.lessonsDone || 0,
-        u.questionsAttempted || 0,
-        u.studyHours || 0,
-        u.lastActive || ''
-      ].join(','));
+      const headers = ['Visitor_ID', 'Access_Mode', 'Name', 'Email', 'Device_Browser', 'Timezone', 'Plan_Mode', 'Start_Date', 'End_Date', 'Weekday_Hours', 'Weekend_Hours', 'Lessons_Completed', 'Questions_Attempted', 'Timer_Hours', 'Active_Minutes', 'Total_Visits', 'Last_Action', 'Last_Active'];
+      const rows = list.map(u => {
+        const hasEmail = Boolean(u.email && u.email !== '—' && !u.email.startsWith('candidate_usr'));
+        const mode = hasEmail ? 'Email_User' : (u.accessType === 'username_only' ? 'Username_Only_No_Email' : 'Instant_Open_No_Email');
+        return [
+          u.visitorId || '',
+          mode,
+          `"${String(u.name || '').replace(/"/g, '""')}"`,
+          `"${String(hasEmail ? u.email : 'No Email (Instant Open)').replace(/"/g, '""')}"`,
+          `"${String(u.deviceInfo || '').replace(/"/g, '""')}"`,
+          `"${String(u.timezone || '').replace(/"/g, '""')}"`,
+          u.isCustomPlan ? 'Custom' : 'Default_Instant_Use',
+          u.startDate || '',
+          u.endDate || '',
+          u.weekdayHours ?? 2,
+          u.weekendHours ?? 2,
+          u.lessonsDone || 0,
+          u.questionsAttempted || 0,
+          u.studyHours || 0,
+          u.activeMinutes || 1,
+          u.totalVisits || 1,
+          `"${String(u.lastAction || '').replace(/"/g, '""')}"`,
+          u.lastActive || ''
+        ].join(',');
+      });
       const csv = [headers.join(','), ...rows].join('\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
@@ -6361,7 +6980,7 @@ body.auth-locked #authGateModal {
       a.download = 'cfa_level2_active_users_' + new Date().toISOString().slice(0, 10) + '.csv';
       a.click();
       URL.revokeObjectURL(url);
-      showToast('Exported Active Users CSV!');
+      showToast('Exported Active Users CSV (including Instant-Open No-Email users)!');
     }
 
     function generateAdminCodeLive() {}
@@ -6379,7 +6998,7 @@ body.auth-locked #authGateModal {
         ``,
         `It opens immediately with zero login barriers and saves your personal progress automatically every day:`,
         `1. Open ${appUrl} on your laptop or phone.`,
-        `2. Set your preferred Core Reading Start/End Dates and Weekday/Weekend study hours in the welcome pop-up.`,
+        `2. Set your preferred Core Reading Start/End Dates and Weekday/Weekend study hours in the welcome pop-up (or skip to use the default schedule right away).`,
         `3. Track your daily lessons, LES practice questions, formulas, and mocks right from your dashboard.`,
         ``,
         `Best of luck with your CFA Level II preparation!`
@@ -6451,12 +7070,51 @@ body.auth-locked #authGateModal {
         localStorage.removeItem(GAS_WEBHOOK_URL_KEY);
       }
       renderAdminActiveUsersTable();
-      fetchCloudActiveUsersForAdmin();
+      fetchCloudActiveUsersForAdmin(true);
       showToast('Saved Live Active-User Tracker URL!');
     }
 
     function checkUrlApproveActionOnLoad() { return false; }
     function closeOneClickApproveModal() {}
+
+    // Start 60-second active-session heartbeat so anonymous Instant-Open users' time on platform & live status are tracked
+    function startActiveSessionHeartbeat() {
+      try {
+        if ('BroadcastChannel' in window) {
+          window._cfaTelemetryChannel = new BroadcastChannel('cfa_l2_live_telemetry_v2');
+          window._cfaTelemetryChannel.onmessage = (ev) => {
+            if (ev.data && ev.data.type === 'USER_TELEMETRY_UPDATE' && ev.data.entry) {
+              const dir = getLocalTrackedUsersDirectory();
+              dir[ev.data.entry.visitorId] = ev.data.entry;
+              saveLocalTrackedUsersDirectory(dir);
+              const adminModal = document.getElementById('adminCodeModal');
+              if (adminModal && !adminModal.classList.contains('hidden')) {
+                renderAdminActiveUsersTable();
+              }
+            }
+          };
+        }
+      } catch (e) {}
+
+      window.addEventListener('storage', (ev) => {
+        if (ev.key === ACTIVE_USERS_TELEMETRY_KEY || ev.key === USERS_REGISTRY_KEY) {
+          const adminModal = document.getElementById('adminCodeModal');
+          if (adminModal && !adminModal.classList.contains('hidden')) {
+            renderAdminActiveUsersTable();
+          }
+        }
+      });
+
+      clearInterval(window._cfaActiveHeartbeatInterval);
+      window._cfaActiveHeartbeatInterval = setInterval(() => {
+        if (document.visibilityState === 'visible' && appState) {
+          appState.activeMinutesSpent = (Number(appState.activeMinutesSpent) || 1) + 1;
+          saveState();
+          const entry = recordCurrentUserIntoTelemetryDirectory(null);
+          pushEntryToCloudTelemetryStores(entry);
+        }
+      }, 60000);
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       checkUrlHashSyncOnLoad();
@@ -6478,8 +7136,9 @@ body.auth-locked #authGateModal {
       updateTimerDisplays();
       refreshAllViews();
 
-      // Log active session heartbeat
-      sendActiveUserTelemetryPing('session_open', false);
+      // Log active session heartbeat immediately (tracks both Instant-Open anonymous users and Email users)
+      sendActiveUserTelemetryPing('Opened Dashboard (Instant Use)', false);
+      startActiveSessionHeartbeat();
 
       // If this is a new user's very first visit, pop up the Study Dates, Hours & Name customizer so their schedule is tailored right away
       if (!appState.hasCompletedPlanSetup) {
