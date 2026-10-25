@@ -372,6 +372,88 @@
     .timer-running-badge {
       animation: pulse-subtle 2s infinite;
     }
+  
+    @media (min-width: 640px) {
+      .sm\:col-span-1 { grid-column: span 1 / span 1 !important; }
+      .sm\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; }
+    }
+    /* Prevent tall modals from clipping their top header above the viewport when flex-centered */
+    #adminCodeModal, #authGateModal, #planSettingsModal, #oneClickApproveModal {
+      align-items: flex-start !important;
+      padding-top: 1rem !important;
+      padding-bottom: 1rem !important;
+    }
+    #adminCodeModal > div, #authGateModal > div, #planSettingsModal > div, #oneClickApproveModal > div {
+      margin-top: auto !important;
+      margin-bottom: auto !important;
+    }
+    .modal-sticky-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(8px);
+      margin: -1.5rem -1.5rem 1rem -1.5rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+    }
+    .btn-modal-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      border: 1px solid #cbd5e1 !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-modal-back:hover {
+      background-color: #e2e8f0;
+      color: #0f172a;
+    }
+    .btn-modal-close {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background-color: #fff1f2;
+      color: #be123c;
+      border: 1px solid #fecdd3 !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-modal-close:hover {
+      background-color: #ffe4e6;
+      color: #9f1239;
+    }
+    .btn-modal-close-dark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background-color: #0f172a;
+      color: #ffffff;
+      border: 1px solid #0f172a !important;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-modal-close-dark:hover {
+      background-color: #334155;
+    }
+
   </style>
   <style id="workspace-design">:root{--ink:#202635;--muted:#7b8090;--accent:#6955d9;--border:#e9e9ef;--rail:236px;--paper:#f7f7fa}html,body{font-family:'Segoe UI',Arial,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6}body{padding-left:var(--rail)}button,input,select,textarea{font-family:inherit}button{cursor:pointer}button,a,input,textarea,select{transition:background .18s,border-color .18s,box-shadow .18s}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #afa0ef;outline-offset:3px}header{background:#fff!important;box-shadow:none!important;border-bottom:1px solid var(--border)!important;color:var(--ink)!important;position:relative!important}header>.max-w-7xl{max-width:none;padding:21px 38px;gap:18px}header h1{color:#303447!important;font-size:14px!important;font-weight:600!important}header p{color:#969aaa!important;font-size:10px!important;margin-top:3px}header h1+span,header .w-10{display:none}header [class*="bg-slate-800"]{background:#f8f8fb!important;border-color:var(--border)!important}header [class*="text-slate-"],header input{color:#737789!important}header #miniTimerDisplay{color:var(--accent)!important}header button,header label{font-size:10px!important}header #miniTimerOpenTabBtn{text-decoration:none}nav[aria-label="Dashboard Sections"]{position:fixed;inset:0 auto 0 0;width:var(--rail);background:#fff;border-right:1px solid var(--border);margin:0!important;padding:174px 18px 190px;display:flex;flex-direction:column;align-items:stretch;gap:9px;z-index:40;overflow-y:auto}nav::before{content:'STUDY WORKSPACE';position:absolute;top:140px;left:30px;font-size:9px;letter-spacing:1.8px;color:#a0a2af;font-weight:650}nav button{border:0!important;box-shadow:none!important;border-radius:10px!important;min-height:47px;flex-shrink:0;padding:12px 14px!important;width:100%;white-space:normal!important;text-align:left;font-size:12px!important;gap:12px!important;font-weight:550!important}nav button svg{width:18px;height:18px;flex-shrink:0;opacity:.85}.tab-btn-active{background:#eeeafa!important;color:#6a50c9!important}.tab-btn-inactive{background:transparent!important;color:#838697!important}.tab-btn-inactive:hover{background:#f6f4fc!important;color:#6955d9!important}.rail-brand{position:fixed;top:30px;left:30px;width:180px;z-index:45;display:flex;align-items:center;gap:11px}.brand-icon{height:36px;width:36px;border-radius:11px;background:#6a53d8;color:#fff;display:grid;place-items:center;font-family:Georgia,serif;font-size:23px;box-shadow:0 5px 12px #6955d926}.rail-brand strong{font-size:18px;letter-spacing:-.6px;color:#292d3e;display:block}.rail-brand small{display:block;color:#999bad;font-size:9px;letter-spacing:1.1px}.rail-profile{position:fixed;left:24px;bottom:23px;z-index:45;display:flex;align-items:center;gap:10px;font-size:11px}.avatar{height:33px;width:33px;background:#eeeafa;color:#6a53d8;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:650}.rail-profile strong,.rail-profile small{display:block}.rail-profile small{color:#9a9baa;font-size:10px}.rail-note{position:fixed;left:23px;bottom:98px;z-index:45;background:#f7f5fd;border:1px solid #eee9fa;border-radius:13px;width:188px;padding:17px;color:#77718d;font-size:10px;line-height:1.8}.rail-note strong{display:block;color:#67548b;font-size:12px;margin-bottom:4px}body>section{background:transparent!important;border:0!important;box-shadow:none!important}body>section>.max-w-7xl{max-width:none;padding:31px 38px 0}.page-intro{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:25px}.eyebrow{color:#9c96ac;font-size:10px;letter-spacing:1.5px;font-weight:650}.page-intro h2{margin:5px 0 5px;font-size:29px;letter-spacing:-1px;font-weight:650;line-height:1.3}.page-intro p{margin:0;color:#9495a3;font-size:12px}.exam-tag{color:#8b859f;border:1px solid #e4dff0;background:#f1edf9;border-radius:8px;padding:8px 13px;font-size:10px}.journey{position:relative;overflow:hidden;display:flex;justify-content:space-between;gap:28px;padding:29px 32px;margin-bottom:24px;border-radius:19px;background:#292541;color:white;min-height:171px}.journey::after{content:'';position:absolute;right:10%;top:-130px;width:400px;height:400px;border:1px solid #ffffff0c;border-radius:50%;box-shadow:0 0 0 38px #ffffff03,0 0 0 76px #ffffff03;pointer-events:none}.journey-kicker{font-size:9px;letter-spacing:2px;color:#b4a9d0}.journey h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:30px;line-height:1.25;margin:8px 0;color:#f6f1ff;letter-spacing:-.7px}.journey p{font-size:11px;color:#b5afc8;margin:0}.journey button{margin-top:17px;border:1px solid #8d7ac9;background:#8270c1;border-radius:7px;padding:8px 14px;font-size:10px;color:white;font-weight:600}.journey-plan{position:relative;z-index:1;display:flex;align-items:center;gap:26px}.journey-stat strong{display:block;font-weight:400;font-size:30px;color:#e9dfff;letter-spacing:-1px}.journey-stat span{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:#a9a0bd}.journey-stat{padding:0 23px;border-left:1px solid #ffffff15}.journey-phase{font-size:10px;color:#c3b9d4;background:#ffffff08;border:1px solid #ffffff12;border-radius:10px;padding:14px 18px;margin-top:12px;max-width:220px}.journey-phase b{color:#e0d6f3;display:block;font-size:11px;margin-bottom:3px}body>section .grid{gap:13px}body>section .grid>div{background:#fff!important;border:1px solid var(--border)!important;border-radius:13px;padding:18px;min-height:139px;box-shadow:0 2px 4px #1c173302}body>section .grid .uppercase{font-size:9px;letter-spacing:.7px;color:#90919f}body>section .grid [id$="Count"]{font-size:25px!important;font-weight:600!important;letter-spacing:-.9px}body>section .grid .text-xs.block{font-size:10px;color:#9a9ca8}body>section .grid .h-2{height:4px;background:#f0eef6}body>section .grid [id$="Bar"]{background:#9c8ade!important}body>section .grid .rounded-full:not(.h-2){font-size:9px;padding:3px 6px;background:#f0edf9!important;color:#8a78bd!important}#kpiCountdownText{font-size:20px!important}#jumpToCarryBtn{color:#9986bc;text-decoration:none;font-size:10px}main.max-w-7xl{max-width:none;padding:25px 38px 42px}main .bg-white{border-color:var(--border)!important;box-shadow:0 2px 5px #25203c02}main .rounded-2xl{border-radius:14px}main .p-5{padding:23px}main h3{font-weight:600!important;letter-spacing:-.25px}main .text-xs{font-size:11px;line-height:1.65}main .text-slate-500{color:#9899a7}main .text-slate-600{color:#818493}main .font-extrabold{font-weight:650}main .border-slate-100{border-color:#f0eef5}main .text-blue-600,main .text-teal-600{color:#9b8abb}.bg-teal-600{background:#7560ce!important}.bg-teal-600:hover{background:#604bb8!important}.bg-indigo-600{background:#7560ce!important}.text-teal-700{color:#8b73ba!important}.bg-amber-500{background:#fcf8ef!important;color:#b59963!important;border:1px solid #eee4cf}.bg-blue-100{background:#eee9f8}.text-blue-800{color:#8f78b8}#tabPanel-daily>div:first-child{padding:23px 26px!important;align-items:center;border:1px solid var(--border)!important}#dailyDateHeading{font-size:23px!important;letter-spacing:-.7px;font-weight:600!important;margin-top:10px}#dailyAllocationDesc{font-size:11px!important;max-width:610px;line-height:1.8}#dailyWeekBadge{color:#8b78b2;background:#f1edf9;font-size:9px;letter-spacing:.8px}#dailySubjectBadge{font-size:9px}#dailyTypeBadge{font-size:9px;background:#f7f8fb;border-color:#efeff4;color:#9394a3}#tabPanel-daily>div:first-child>div:last-child{max-width:365px;gap:7px}#tabPanel-daily>div:first-child button,#tabPanel-daily>div:first-child a{font-size:10px!important;padding:9px 12px;border-radius:8px}#tabPanel-daily>div:first-child a{background:#fff;border-color:#e8e6ef;color:#9391a2}#dailyMainItemsContainer>div,#dailyEthicsItemsContainer>div{border:1px solid #efedf4!important;background:#fdfcfe;padding:14px!important;border-radius:10px;transition:background .2s,border-color .2s}#dailyMainItemsContainer>div:hover,#dailyEthicsItemsContainer>div:hover{background:#f7f3fe;border-color:#d8ceeb!important}.checkbox-custom{accent-color:#8e76c8;width:17px;height:17px;flex-shrink:0}#dailyMainItemsContainer .text-sm,#dailyEthicsItemsContainer .text-sm{font-size:12px;line-height:1.7}#dailyMainItemsContainer .bg-blue-50{background:#f2eef9}#dailyMainItemsContainer .text-blue-700{color:#967cba}main .bg-slate-900{background:#fff!important;color:#323042!important;border-color:var(--border)!important;box-shadow:none!important}main .bg-slate-900 h3{color:#444050!important}main .bg-slate-900 [class*="text-teal-"]{color:#aa92cf!important}main [class*="bg-slate-800"]{background:#f8f6fc!important;border-color:#eee9f6!important;color:#8e84a4!important}#quickTimerPresetSelect{max-width:145px;font-size:9px}#sideTimerDisplay{display:grid;place-items:center;position:relative;isolation:isolate;width:190px;height:190px;margin:4px auto;font-size:39px;letter-spacing:-1.8px;font-weight:400;color:#766291!important;font-family:'Segoe UI',sans-serif;font-variant-numeric:tabular-nums}#sideTimerDisplay::before{content:'';position:absolute;inset:6px;border-radius:50%;border:7px solid #eee8f6;border-top-color:#ad93cf;border-right-color:#c8b6e0;transform:rotate(-35deg);z-index:-1}#sideTimerDisplay::after{content:'TIME TO FOCUS';position:absolute;top:120px;left:0;right:0;text-align:center;font-size:8px;letter-spacing:2px;color:#b5a7c9}#sideTimerDisplay+ p{font-size:10px;color:#a197ae}#sideTimerDisplay.parent{border:0}#sideTimerStartBtn{font-size:11px!important;border-radius:8px}#sideTimerResetBtn{color:#a097ad!important;font-size:10px;border-radius:8px}#sideTimerLogBtn{font-size:10px;border-radius:8px;background:#f1edf8!important;color:#9a83bd!important}main .bg-slate-900 .text-center{background:transparent!important;border:0!important;padding:0!important}main .bg-slate-900 .text-slate-400{color:#b0a4be}table{border-collapse:separate;border-spacing:0;font-size:11px}th{padding:14px!important;background:#f8f7fb!important;color:#9c95a9;font-size:9px;font-weight:600;letter-spacing:.5px}td{padding:14px!important;border-color:#f1eef6!important}tbody tr:hover{background:#faf8fd}input:not([type="checkbox"]),select,textarea{border-radius:8px;border-color:#e7e2ef}textarea{line-height:1.8}footer{border-color:var(--border)!important;color:#a39cad}.shadow-xs,.shadow-sm{box-shadow:none}@media(min-width:1650px){header>.max-w-7xl,body>section>.max-w-7xl,main.max-w-7xl{padding-left:52px;padding-right:52px}.journey{padding:33px 38px}}@media(max-width:1250px){:root{--rail:205px}header>.max-w-7xl,body>section>.max-w-7xl,main.max-w-7xl{padding-left:24px;padding-right:24px}.rail-note{width:163px;left:20px}.rail-brand{left:25px}.journey-plan{gap:0}.journey-stat{padding:0 17px}.journey-phase{display:none}body>section .grid{grid-template-columns:repeat(3,minmax(0,1fr))}body>section .grid>div:last-child{grid-column:span 1}}@media(max-width:800px){body{padding-left:0}.rail-brand,.rail-note,.rail-profile{display:none}header>.max-w-7xl{padding:17px 20px}header h1{font-size:15px!important}header>.max-w-7xl>div:last-child{gap:8px}body>section>.max-w-7xl{padding:24px 20px 0}.page-intro h2{font-size:26px}.exam-tag{display:none}.journey{padding:24px;min-height:180px}.journey h3{font-size:27px}.journey-plan{display:none}body>section .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}body>section .grid>div:last-child{grid-column:span 2}body>section .grid>div{min-height:130px;padding:15px}nav[aria-label="Dashboard Sections"]{position:relative;inset:auto;width:auto;flex-direction:row;padding:7px!important;margin-top:20px!important;border:1px solid var(--border);border-radius:12px;overflow-x:auto;gap:5px}nav::before{display:none}nav button{width:auto;white-space:nowrap!important;font-size:11px!important;min-height:40px;padding:10px!important;gap:7px!important}nav button svg{width:15px;height:15px}main.max-w-7xl{padding:20px}main .p-5{padding:19px}#dailyDateHeading{font-size:21px!important}#tabPanel-daily>div:first-child{padding:20px!important}.page-intro{margin-bottom:20px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
 /* === ALIGNMENT & VISUAL POLISH FIXES === */
@@ -1944,13 +2026,20 @@ body.auth-locked #authGateModal {
   <!-- ==================== MODAL 1: CANDIDATE PROFILE & MULTI-USER SWITCHER (HIDDEN BY DEFAULT — ZERO LOGIN SCREEN) ==================== -->
   <div id="authGateModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 my-8">
-      <div class="flex items-start justify-between border-b border-slate-100 pb-3.5">
-        <div>
+      <div class="flex flex-col gap-2 border-b border-slate-100 pb-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <button type="button" onclick="closeAuthGateModal()" class="btn-modal-back">
+            <span>&larr;</span> Back
+          </button>
           <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">INSTANT MULTI-USER WORKSPACE</span>
+          <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="btn-modal-close">
+            <span>&times;</span> Close
+          </button>
+        </div>
+        <div>
           <h3 id="authGateMainHeading" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">Candidate Profile &amp; Switch User</h3>
           <p id="authGateSubHeading" class="text-xs text-slate-500 mt-0.5">Personalize your display name or switch between separate candidate profiles on this device. No password required.</p>
         </div>
-        <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="text-slate-400 hover:text-slate-700 text-xl font-bold leading-none">&times;</button>
       </div>
 
       <!-- Current Profile Editor -->
@@ -1995,13 +2084,20 @@ body.auth-locked #authGateModal {
   <!-- ==================== MODAL 2: PROPORTIONAL SCHEDULE & STUDY HOURS CUSTOMIZER (POPS UP ON FIRST VISIT OR ANYTIME) ==================== -->
   <div id="planSettingsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
-      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
-        <div>
+      <div class="flex flex-col gap-2 border-b border-slate-100 pb-3">
+        <div class="flex items-center justify-between gap-2">
+          <button type="button" onclick="closePlanSettingsModal()" class="btn-modal-back">
+            <span>&larr;</span> Back
+          </button>
           <span id="planModalEyebrowBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-800">PERSONALIZE YOUR STUDY PLAN</span>
+          <button id="closePlanSettingsModalBtn" type="button" onclick="closePlanSettingsModal()" class="btn-modal-close">
+            <span>&times;</span> Close
+          </button>
+        </div>
+        <div>
           <h3 id="planModalHeadingText" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Set Your Preferred Study Dates &amp; Daily Hours</h3>
           <p class="text-xs text-slate-500">Enter your name and preferred reading dates/hours so your CFA Level II Study Guide is tailored to your schedule and saved automatically on every visit.</p>
         </div>
-        <button id="closePlanSettingsModalBtn" type="button" onclick="closePlanSettingsModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
       </div>
 
       <div id="planOnboardingWelcomeBanner" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium">
@@ -2074,13 +2170,22 @@ body.auth-locked #authGateModal {
   <!-- ==================== MODAL 3: ADMIN ACTIVE USERS & PLATFORM TRACKER (OWNER ONLY) ==================== -->
   <div id="adminCodeModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-5xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-8">
-      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+      <div class="modal-sticky-topbar flex flex-col gap-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-back" title="Return to Study Dashboard">
+              <span>&larr;</span> Back to Dashboard
+            </button>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded bg-amber-100 text-amber-900">ADMIN ACTIVE USERS &amp; PLATFORM TELEMETRY</span>
+          </div>
+          <button id="closeAdminCodeModalBtn" type="button" onclick="closeAdminCodeModal()" class="btn-modal-close" title="Close Admin Tracker (Esc)">
+            <span style="font-size: 1rem; line-height: 1;">&times;</span> Close
+          </button>
+        </div>
         <div>
-          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-amber-100 text-amber-900">ADMIN ACTIVE USERS &amp; PLATFORM TELEMETRY</span>
-          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Active Platform Users &amp; Study Progress Tracker (Instant-Open &amp; Email Users)</h3>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Active Platform Users &amp; Study Progress Tracker (Instant-Open &amp; Email Users)</h3>
           <p class="text-xs text-slate-500">Automatically tracks every user who logs on and uses the platform — including anonymous <strong>Instant-Open (No Email)</strong> visitors, username-only visitors, and email-linked candidates.</p>
         </div>
-        <button id="closeAdminCodeModalBtn" type="button" onclick="closeAdminCodeModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
       </div>
 
       <!-- Active Users Summary KPI Strip (5 Cards including Instant-Open No-Email Users) -->
@@ -2139,6 +2244,9 @@ body.auth-locked #authGateModal {
             </button>
             <button type="button" onclick="exportActiveUsersCsv()" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
               &#128229; Export CSV
+            </button>
+            <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-close-dark" title="Close Admin Tracker and return to Dashboard">
+              &larr; Back / Close
             </button>
           </div>
         </div>
@@ -2201,6 +2309,16 @@ body.auth-locked #authGateModal {
           <div id="adminSendStatusBanner" class="hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold"></div>
         </div>
       </details>
+
+      <!-- Bottom Navigation & Close Bar -->
+      <div class="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-back">
+          <span>&larr;</span> Back to Study Dashboard
+        </button>
+        <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-close-dark">
+          <span>&times;</span> Close Admin Tracker
+        </button>
+      </div>
     </div>
   </div>
 
@@ -6672,8 +6790,30 @@ body.auth-locked #authGateModal {
       if (modal) {
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        modal.scrollTop = 0;
       }
     }
+
+    
+    // Allow Escape key or clicking the dark backdrop overlay to close any open modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (typeof closeAdminCodeModal === 'function') closeAdminCodeModal();
+        if (typeof closeAuthGateModal === 'function') closeAuthGateModal();
+        if (typeof closePlanSettingsModal === 'function') closePlanSettingsModal();
+      }
+    });
+    ['adminCodeModal', 'authGateModal', 'planSettingsModal', 'oneClickApproveModal'].forEach(function(modalId) {
+      const el = document.getElementById(modalId);
+      if (el) {
+        el.addEventListener('click', function(e) {
+          if (e.target === el) {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+          }
+        });
+      }
+    });
 
     function closeAdminCodeModal() {
       const modal = document.getElementById('adminCodeModal');
