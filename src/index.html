@@ -1,0 +1,2320 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6955d9" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="CFA Level II Study Guide" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%236a53d8'/%3E%3Ctext x='64' y='78' font-family='Arial,sans-serif' font-weight='bold' font-size='44' text-anchor='middle' fill='%23ffffff'%3ECFA%3C/text%3E%3C/svg%3E" />
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22CFA%20Level%20II%20Study%20Guide%22%2C%22short_name%22%3A%22CFA%20Study%20Guide%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f7f7fa%22%2C%22theme_color%22%3A%22%236955d9%22%7D" />
+  <title>CFA Level II Study Guide — Interactive Prep Dashboard</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/assets/styles.min.css">
+  
+</head>
+<body class="min-h-full flex flex-col bg-slate-50 text-slate-900">
+  <div class="rail-brand"><span class="brand-icon" style="font-family:'Segoe UI',Inter,sans-serif;font-size:13px;font-weight:800;letter-spacing:-0.5px;">CFA</span><div><strong style="font-size:14.5px;line-height:1.2;letter-spacing:-0.4px;">CFA Level II<br><span style="color:#6955d9">Study Guide</span></strong><small style="margin-top:2px;">STUDY WORKSPACE</small></div></div>
+  <div class="rail-note"><strong>Small steps. Big ambition.</strong>Make room for a little progress today. It all adds up.</div>
+  <div class="rail-profile" style="flex-direction:column; align-items:stretch; gap:8px;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span id="sidebarUserAvatar" class="avatar">CF</span>
+      <div style="min-width:0; flex:1;">
+        <strong id="sidebarUserName" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Candidate</strong>
+        <small id="sidebarUserEmail" style="display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Signed In</small>
+      </div>
+    </div>
+    <div style="display:flex; gap:6px; flex-wrap:wrap; padding-top:4px; border-top:1px solid #ece8f6;">
+      <button id="sidebarPlanConfigBtn" type="button" onclick="openPlanSettingsModal()" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f5f2fc; color:#5340b8; border:1px solid #dcd3f7; cursor:pointer;">Dates &amp; Hrs</button>
+      <button id="sidebarSwitchUserBtn" type="button" onclick="openAuthGateModal()" style="flex:1; font-size:10px; font-weight:700; padding:5px 8px; border-radius:8px; background:#f3f4f8; color:#2f3545; border:1px solid #dce0ec; cursor:pointer;">Switch User</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 hidden">
+    <div id="toastBox" class="flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg bg-slate-900 text-white text-sm font-medium border border-slate-700">
+      <span id="toastMessage">Saved</span>
+    </div>
+  </div>
+
+  <!-- Top Header & Persistent Mini-Timer Bar -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand / Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 font-extrabold text-sm tracking-tight">
+          CFA II
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">CFA Level II Study Guide</h1>
+            <span id="headerPlanStatsBadge" class="text-xs px-2 py-0.5 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 font-medium">LES Verified • 148 Days / 296 Hrs</span>
+          </div>
+          <p id="headerPlanDatesSub" class="text-xs text-slate-400">Core Reading: 1 Nov 2026 – 28 Mar 2027 • Q-Bank &amp; Mocks: 29 Mar – May 2027 Exam</p>
+        </div>
+      </div>
+
+      <!-- Active Study Date Simulator + Mini Timer + Backup Actions -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <!-- Mini Timer Pill with Quick Adjust -->
+        <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-xl px-2.5 py-1.5">
+          <span id="miniTimerIndicator" class="w-2 h-2 rounded-full bg-slate-500"></span>
+          <span id="miniTimerLabel" class="text-xs text-slate-300 font-medium">Pomodoro</span>
+          <button id="miniTimerMinusBtn" type="button" onclick="adjustActiveTimerMinutes(-5)" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold" title="Subtract 5 minutes">-5m</button>
+          <span id="miniTimerDisplay" class="font-mono text-sm font-bold text-teal-300">25:00</span>
+          <button id="miniTimerPlusBtn" type="button" onclick="adjustActiveTimerMinutes(5)" class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold" title="Add 5 minutes">+5m</button>
+          <button id="miniTimerToggleBtn" onclick="toggleTimer()" class="text-xs px-2 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white font-semibold transition">Start</button>
+          <button id="miniTimerOpenTabBtn" onclick="switchTab('timer')" class="text-xs text-slate-400 hover:text-white underline ml-0.5" title="Open Full Timer Studio">Timers</button>
+        </div>
+
+        <!-- Active Study Date Picker -->
+        <div class="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-xl px-2.5 py-1">
+          <button id="prevDayBtn" onclick="stepActiveDate(-1)" class="text-slate-300 hover:text-white px-1.5 py-0.5 text-xs font-bold" title="Previous Day">&#9664;</button>
+          <div class="flex flex-col">
+            <label for="activeDateInput" class="text-[10px] uppercase tracking-wider text-slate-400 leading-none">Active Study Day</label>
+            <input id="activeDateInput" type="date" value="2026-11-02" min="2025-01-01" max="2029-12-31" onchange="onActiveDateChange(this.value)" class="bg-transparent text-xs font-semibold text-white focus:outline-none cursor-pointer" />
+          </div>
+          <button id="nextDayBtn" onclick="stepActiveDate(1)" class="text-slate-300 hover:text-white px-1.5 py-0.5 text-xs font-bold" title="Next Day">&#9654;</button>
+          <button id="jumpToTodayBtn" onclick="jumpToTodayOrNextUnfinished()" class="text-xs px-2 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white font-semibold transition ml-1" title="Jump to Today or Next Unfinished Study Day">Today</button>
+        </div>
+
+        <!-- Plan Dates, Sync, Admin & User Profile Actions -->
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <button id="openPlanSettingsBtn" type="button" onclick="openPlanSettingsModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition" title="Adjust study start/end dates and daily weekday/weekend study hours">&#9881; Plan Dates &amp; Hours</button>
+          <button id="openAdminGeneratorBtn" type="button" onclick="openAdminCodeModal()" class="hidden text-xs px-2.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition" title="View Active Users &amp; Admin Tools">&#128202; Active Users &amp; Admin</button>
+          <button id="openAuthModalBtn" type="button" onclick="openAuthGateModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 font-semibold transition" title="Candidate Profile / Switch User">&#128100; <span id="headerUserBadgeText">Candidate</span> (Switch User)</button>
+          <button id="openSyncModalBtn" onclick="openSyncModal()" class="text-xs px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold transition" title="Sync study progress between your Laptop and Android Phone">&#8644; Sync Phone / Laptop</button>
+          <button id="exportDataBtn" onclick="exportBackupJson()" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition">Export Backup</button>
+          <label for="importFileInput" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-medium transition cursor-pointer">Import</label>
+          <input id="importFileInput" type="file" accept=".json" onchange="importBackupJson(event)" class="hidden" />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Executive KPI Summary Strip -->
+  <section class="bg-white border-b border-slate-200 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <!-- Dedicated Header for Non-Daily Tabs (Hidden on Daily Workspace) -->
+      <div id="subTabHeaderBanner" class="hidden page-intro" style="margin-bottom: 6px; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+        <div>
+          <span id="subTabEyebrow" class="eyebrow">STUDY ROADMAP</span>
+          <h2 id="subTabTitle" style="margin:4px 0 4px; font-size:26px; letter-spacing:-0.8px; font-weight:650; line-height:1.25;">21-Week Schedule &amp; 148-Day Pacing Heatmap</h2>
+          <p id="subTabSubtitle" style="margin:0; color:#7b8090; font-size:12px;">Track your reading pace, inspect all 148 daily blocks, and rebalance unfinished backlog.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="subTabStatPill" class="exam-tag">461 LESSONS &nbsp; · &nbsp; 86 ETHICS</span>
+          <button id="subTabBackToDailyBtn" onclick="switchTab('daily')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-300 transition">&larr; Back to Daily Workspace</button>
+        </div>
+      </div>
+
+      <!-- Daily Workspace Hero + 5 KPI Cards Wrapper -->
+      <div id="dailyHeroAndKpiWrapper">
+      <div class="page-intro">
+        <div>
+          <span class="eyebrow">YOUR PERSONAL STUDY SPACE</span>
+          <h2>A little closer, every day.</h2>
+          <p id="heroWelcomeText">Welcome back. Let's make this session count.</p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <span id="heroExamTag" class="exam-tag">MAY 2027 &nbsp; · &nbsp; LEVEL II</span>
+          <button id="heroCustomizePlanBtn" type="button" onclick="openPlanSettingsModal()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition">&#9881; Adjust Dates &amp; Daily Hours</button>
+        </div>
+      </div>
+      <div class="journey">
+        <div>
+          <span class="journey-kicker">CONSISTENCY IS YOUR EDGE</span>
+          <h3>Big goals. Focused sessions.</h3>
+          <p id="journeySubDesc">A clear path from your first reading to exam day.</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button id="journeyStartFocusBtn" onclick="switchTab('timer')">Start a focus session &nbsp; ↗</button>
+          </div>
+        </div>
+        <div class="journey-plan">
+          <div class="journey-stat"><strong id="journeyWeeksStat">21</strong><span>Weeks of reading</span></div>
+          <div class="journey-stat"><strong id="journeyHoursStat">296<span style="font-size:14px;letter-spacing:0"> h</span></strong><span>Planned study</span></div>
+          <div id="journeyPhaseText" class="journey-phase"><b>Your preparation, mapped out.</b>Core readings → Practice → Mocks<br>November 2026 – May 2027</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <!-- KPI 1: Main-Subject Lessons -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Reading progress</span>
+            <span id="kpiMainPct" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">0.0%</span>
+          </div>
+          <div class="my-1.5">
+            <span id="kpiMainCount" class="text-xl sm:text-2xl font-extrabold text-slate-900">0 / 461</span>
+            <span class="text-xs text-slate-500 block">Across 9 main courses (43 modules)</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="kpiMainBar" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- KPI 2: Ethics Coverage -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Ethics progress</span>
+            <span id="kpiEthicsPct" class="text-xs font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">0.0%</span>
+          </div>
+          <div class="my-1.5">
+            <span id="kpiEthicsCount" class="text-xl sm:text-2xl font-extrabold text-slate-900">0 / 144</span>
+            <span class="text-xs text-slate-500 block" id="kpiEthicsSub">Weekday readings &amp; case blocks</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="kpiEthicsBar" class="h-full bg-teal-600 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- KPI 3: Practice questions & Accuracy -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Practice questions</span>
+            <span id="kpiAccuracyBadge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">--% Acc</span>
+          </div>
+          <div class="my-1.5">
+            <span id="kpiQuestionsCount" class="text-xl sm:text-2xl font-extrabold text-slate-900">0 / 1,936</span>
+            <span class="text-xs text-slate-500 block" id="kpiWeakestNotice">Log module practice to rank gaps</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="kpiQuestionsBar" class="h-full bg-emerald-600 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- KPI 4: Carry-Forward & Backlog Queue -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Your backlog</span>
+            <span id="kpiCarryBadge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">On Track</span>
+          </div>
+          <div class="my-1.5">
+            <span id="kpiCarryCount" class="text-xl sm:text-2xl font-extrabold text-slate-900">0 today</span>
+            <span class="text-xs text-slate-500 block" id="kpiCarryRuleText">Mon–Thu &rarr; Next Day | Fri &rarr; Weekend</span>
+          </div>
+          <button id="jumpToCarryBtn" onclick="switchTab('daily')" class="text-xs font-semibold text-teal-700 hover:text-teal-900 text-left underline">View daily shift queue &rarr;</button>
+        </div>
+
+        <!-- KPI 5: Study Hours & Exam Countdown -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between col-span-2 md:col-span-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">The finish line</span>
+            <span id="kpiHoursPct" class="text-xs font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800">0 / 296h</span>
+          </div>
+          <div class="my-1.5">
+            <span id="kpiCountdownText" class="text-lg sm:text-xl font-extrabold text-slate-900">147d to Mar 28</span>
+            <span class="text-xs text-slate-500 block" id="kpiExamCountdownSub">May 2027 Exam Window</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="kpiHoursBar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ==================== FEATURE 5: COMPACT EXAM READINESS FORECAST & FEASIBILITY PANEL ==================== -->
+      <div id="examReadinessForecastPanel" class="mt-4 bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs space-y-3.5">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-900 text-white" style="background:#292541 !important; color:#fff !important;">EXAM READINESS FORECAST</span>
+            <span id="readinessOverallBadge" class="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">Status: On Track</span>
+            <span id="readinessPhasePill" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-800 border border-indigo-200">Phase 1: Core Reading</span>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" onclick="openManualTimeModal(appState.activeDate)" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-bold transition">
+              + Log Study Hours
+            </button>
+            <button id="toggleReadinessDetailsBtn" type="button" onclick="toggleReadinessDetailsDrawer()" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              Inspect 10-Topic Readiness &amp; Methodology &#9662;
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Primary Readiness Indicators -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+          <!-- Indicator 1: Curriculum Completion -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">1. Curriculum Done</span>
+              <span id="readinessInd1Badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-100 text-blue-800">0%</span>
+            </div>
+            <div id="readinessInd1Value" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">0.0%</div>
+            <span id="readinessInd1Sub" class="text-[11px] text-slate-500 block">0/461 lessons • 0h est. done</span>
+          </div>
+
+          <!-- Indicator 2: LES Practice Accuracy -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">2. LES Accuracy</span>
+              <span id="readinessInd2Badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">No Data</span>
+            </div>
+            <div id="readinessInd2Value" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Insufficient Data</div>
+            <span id="readinessInd2Sub" class="text-[11px] text-slate-500 block">0 Qs logged across 0/10 topics</span>
+          </div>
+
+          <!-- Indicator 3: Study Hours Completed (Actual vs Planned) -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">3. Study Hours</span>
+              <span id="readinessInd3Badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-800">0% of Plan</span>
+            </div>
+            <div id="readinessInd3Value" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">0.0 / 296.0h</div>
+            <span id="readinessInd3Sub" class="text-[11px] text-slate-500 block">To date: 0.0h act vs 0.0h plan</span>
+          </div>
+
+          <!-- Indicator 4: Study Pace & Schedule Feasibility -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">4. Study Pace</span>
+              <span id="readinessInd4Badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">Feasible</span>
+            </div>
+            <div id="readinessInd4Value" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">On Track</div>
+            <span id="readinessInd4Sub" class="text-[11px] text-slate-500 block">Rem. workload fits available hrs</span>
+          </div>
+
+          <!-- Indicator 5: Final Review & Revision Readiness -->
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 col-span-2 sm:col-span-1">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">5. Final Review</span>
+              <span id="readinessInd5Badge" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-teal-100 text-teal-800">Protected</span>
+            </div>
+            <div id="readinessInd5Value" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">14d Reserved</div>
+            <span id="readinessInd5Sub" class="text-[11px] text-slate-500 block">Proj. finish: 28 Mar 2027</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Recommendation & Feasibility Alert Box -->
+        <div id="readinessRecommendationBox" class="p-3.5 rounded-xl bg-indigo-50/80 border border-indigo-200 text-xs text-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div class="space-y-1 flex-1">
+            <div class="font-extrabold text-indigo-950 flex items-center gap-1.5">
+              <span>&#128161; Intelligent Study Recommendation &amp; Schedule Feasibility:</span>
+              <span id="readinessScenarioTag" class="text-[10px] px-2 py-0.5 rounded bg-white text-indigo-800 border border-indigo-200 font-bold">Baseline Estimate</span>
+            </div>
+            <p id="readinessRecommendationText" class="text-xs text-slate-700 leading-relaxed m-0"></p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="openPlanSettingsModal()" class="px-3 py-1.5 rounded-xl bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-300 text-xs font-extrabold transition">
+              Adjust Hours / Deadlines
+            </button>
+          </div>
+        </div>
+
+        <!-- Expandable 10-Topic Readiness Breakdown & Forecasting Methodology Drawer -->
+        <div id="readinessExpandableDrawer" class="hidden pt-3 border-t border-slate-200 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">Topic-by-Topic Exam Readiness Breakdown (All 10 CFA Topics)</h4>
+              <p class="text-[11px] text-slate-500">Separates <strong>Curriculum Progress</strong>, <strong>Recorded Study Time</strong>, and <strong>LES Question Mastery</strong> (minimum sample size: <span id="readinessSampleSizeLabel">15</span> Qs; target accuracy: &ge;<span id="readinessTargetAccLabel">65</span>%).</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <label class="text-[11px] font-bold text-slate-600">Target Acc %:</label>
+              <input id="readinessTargetAccInput" type="number" min="50" max="90" value="65" onchange="updateReadinessThresholds(this.value)" class="w-14 rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+            </div>
+          </div>
+          <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] font-extrabold">
+                <tr>
+                  <th class="py-2 px-2.5">CFA Topic</th>
+                  <th class="py-2 px-2.5 text-right">Curriculum Done</th>
+                  <th class="py-2 px-2.5 text-right">Est. Rem. Workload</th>
+                  <th class="py-2 px-2.5 text-right">Actual Logged Hrs</th>
+                  <th class="py-2 px-2.5 text-right">LES Accuracy (Sample)</th>
+                  <th class="py-2 px-2.5 text-center">&#9733; Hard Lessons</th>
+                  <th class="py-2 px-2.5">Readiness &amp; Gap Diagnosis</th>
+                </tr>
+              </thead>
+              <tbody id="readinessTopicTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+            </table>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
+            <strong>Forecasting Methodology &amp; Limitations:</strong> Remaining curriculum workload is calculated bottom-up from unfinished lessons (<span id="methodologyMinsPerLessonLabel">~23m</span>/lesson baseline, refined by your observed study pace once &ge;10 lessons and &ge;5 focus hours are recorded), non-overlapping Ethics allocations, and scheduled revision blocks. Readiness classifications (<em>On Track</em>, <em>Attention Needed</em>, <em>At Risk</em>, <em>Insufficient Data</em>) describe preparation schedule feasibility and practice coverage—they are <strong>not</strong> a statistically validated probability of passing the CFA Level II exam. Study hours measure time invested, whereas LES accuracy and mock scores measure concept mastery.
+          </div>
+        </div>
+      </div>
+      </div><!-- /#dailyHeroAndKpiWrapper -->
+
+      <!-- Navigation Bar -->
+      <nav class="mt-4 flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar" aria-label="Dashboard Sections">
+        <button id="tabBtn-daily" onclick="switchTab('daily')" class="tab-btn-active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3z M14 3h7v7h-7z M3 14h7v7H3z M14 14h7v7h-7z"/></svg><span>Daily workspace</span>
+        </button>
+        <button id="tabBtn-schedule" onclick="switchTab('schedule')" class="tab-btn-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v16H4z M4 10h16 M8 2v6 M16 2v6"/></svg><span>Study roadmap</span>
+        </button>
+        <button id="tabBtn-modules" onclick="switchTab('modules')" class="tab-btn-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10 M10 20V4 M16 20v-7 M22 20H2"/></svg><span>Modules &amp; accuracy</span>
+        </button>
+        <button id="tabBtn-weekly" onclick="switchTab('weekly')" class="tab-btn-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18H5z M8 8h8 M8 12h8 M8 16h5"/></svg><span>Weekly reflection</span>
+        </button>
+        <button id="tabBtn-mocks" onclick="switchTab('mocks')" class="tab-btn-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10"/></svg><span>Mocks &amp; practice</span>
+        </button>
+        <button id="tabBtn-timer" onclick="switchTab('timer')" class="tab-btn-inactive px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition flex items-center gap-1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M12 8v5l3 2 M9 1h6"/></svg><span>Focus studio</span>
+        </button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
+
+    <!-- ==================== TAB 1: DAILY STUDY & CARRY-FORWARD ==================== -->
+    <div id="tabPanel-daily" class="space-y-6">
+      <!-- Top Banner for Selected Day -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="dailyWeekBadge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-900 text-white">WEEK 01</span>
+            <span id="dailySubjectBadge" class="text-xs font-bold px-2.5 py-1 rounded-md bg-blue-100 text-blue-800">Corporate Issuers</span>
+            <span id="dailyTypeBadge" class="text-xs font-semibold px-2.5 py-1 rounded-md bg-teal-50 text-teal-700 border border-teal-200">Weekday: 100m Reading + 20m Ethics</span>
+          </div>
+          <h2 id="dailyDateHeading" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">Monday, 02 Nov 2026</h2>
+          <p id="dailyAllocationDesc" class="text-xs sm:text-sm text-slate-600 mt-0.5">
+            Spend ~85 min reading assigned main-subject lessons &amp; worked examples, 15 min writing concise notes, and 20 min on Ethics.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="markAllDayDoneBtn" onclick="markEntireActiveDay(true)" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-semibold transition shadow-xs">
+            Complete today’s items
+          </button>
+          <button id="shiftUnfinishedDayBtn" onclick="shiftUnfinishedFromActiveDay()" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-semibold transition shadow-xs" title="Shifts unfinished Mon-Thu items to next weekday, or Friday items to Weekend">
+            Move unfinished →
+          </button>
+          <a id="dailyOpenLesCourseLink" href="https://learn.cfainstitute.org//courses/2373/modules" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-semibold transition border border-slate-300">
+            Open LES Course &#8599;
+          </a>
+          <a href="https://learn.cfainstitute.org/accounts/1/external_tools/261?launch_type=global_navigation&toolId=practice-261" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-semibold transition border border-slate-300">
+            Open LES Practice &#8599;
+          </a>
+        </div>
+      </div>
+
+      <!-- Flexible Day Activity Override & Ethics Time Allocation Bar -->
+      <div id="dailyScheduleControlBar" class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs space-y-3">
+        <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+          <!-- Left: Today's Activity Mode Override (Reading vs Revision/Practice vs Combo) -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="mr-1">
+              <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">Today's Study Mode (Daily Override)</span>
+              <span id="dailyModeStatusSub" class="text-[11px] text-slate-500">Following your weekly schedule</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="dailyOverrideBtn-reading" type="button" onclick="setSingleDayModeOverride('reading')" class="px-3 py-1.5 rounded-xl border text-xs font-bold transition day-mode-pill-inactive" title="Dedicate today to New Curriculum Readings">
+                &#128214; New Readings
+              </button>
+              <button id="dailyOverrideBtn-revision_practice" type="button" onclick="setSingleDayModeOverride('revision_practice')" class="px-3 py-1.5 rounded-xl border text-xs font-bold transition day-mode-pill-inactive" title="Dedicate today to Structured Revision &amp; LES Practice Questions">
+                &#127919; Revision &amp; LES Practice
+              </button>
+              <button id="dailyOverrideBtn-mixed" type="button" onclick="setSingleDayModeOverride('mixed')" class="px-3 py-1.5 rounded-xl border text-xs font-bold transition day-mode-pill-inactive" title="Combine New Readings + LES Practice Questions today">
+                &#9889; Combo (Read + Practice)
+              </button>
+              <button id="dailyOverrideResetBtn" type="button" onclick="setSingleDayModeOverride('default')" class="hidden px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[11px] font-bold transition" title="Revert today back to your preferred weekly schedule">
+                &#8634; Weekly Default
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Ethics Mode & Adjustable Daily Time Split -->
+          <div class="flex flex-wrap items-center gap-2 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-100">
+            <div id="dailyTimeSplitControlsBox" class="flex flex-wrap items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5">
+              <span id="dailyEthicsModePill" class="text-[11px] font-extrabold px-2 py-0.5 rounded bg-teal-100 text-teal-900">Daily Ethics Mode</span>
+              <div id="dailyEthicsMinsAdjustGroup" class="flex items-center gap-1 text-xs">
+                <span class="text-[11px] font-semibold text-slate-600">Ethics Split:</span>
+                <button type="button" onclick="adjustDailyEthicsMinutes(-5)" class="px-1.5 py-0.5 rounded bg-white hover:bg-slate-100 border border-slate-300 text-[11px] font-extrabold text-slate-700" title="Decrease daily Ethics allocation by 5 min">-5m</button>
+                <input id="dailyEthicsMinsQuickInput" type="number" min="0" max="180" step="5" value="20" onchange="setDailyEthicsMinutesDirect(this.value)" class="w-12 text-center font-extrabold text-xs bg-white border border-slate-300 rounded px-1 py-0.5 text-slate-900" title="Custom daily Ethics minutes" />
+                <span class="text-[11px] text-slate-500">m</span>
+                <button type="button" onclick="adjustDailyEthicsMinutes(5)" class="px-1.5 py-0.5 rounded bg-white hover:bg-slate-100 border border-slate-300 text-[11px] font-extrabold text-slate-700" title="Increase daily Ethics allocation by 5 min">+5m</button>
+                <button id="dailyEthicsResetRecBtn" type="button" onclick="resetDailyEthicsMinutesToRecommended()" class="hidden text-[10px] font-bold text-indigo-600 hover:underline ml-1" title="Reset to recommended ~17% of daily study time">Rec</button>
+              </div>
+              <button type="button" onclick="switchTab('schedule'); setTimeout(() => { const el = document.getElementById('roadmapFlexibilityCard'); if (el) el.scrollIntoView({behavior:'smooth'}); }, 100);" class="text-[11px] font-bold text-indigo-700 hover:underline ml-1">
+                Reorder Topics &rarr;
+              </button>
+            </div>
+
+            <!-- Day-Specific Planned Hours Override & Mark as Day Off Toggle -->
+            <div class="flex flex-wrap items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs">
+              <span class="text-[11px] font-bold text-slate-600">Today's Plan:</span>
+              <input id="dailyPlannedHoursOverrideInput" type="number" step="0.25" min="0" max="16" value="2.0" onchange="setSingleDatePlannedHoursOverride(appState.activeDate, this.value)" class="w-14 text-center font-extrabold text-xs bg-white border border-slate-300 rounded px-1.5 py-0.5 text-slate-900" title="Override planned study hours for this specific date" />
+              <span class="text-[11px] text-slate-500">hrs</span>
+              <button id="dailyResetHoursOverrideBtn" type="button" onclick="clearSingleDatePlannedHoursOverride(appState.activeDate)" class="hidden text-[10px] font-bold text-indigo-600 hover:underline" title="Revert to recurring daily hour mode">Rec</button>
+              <span class="text-slate-300">|</span>
+              <button id="dailyToggleDayOffBtn" type="button" onclick="handleToggleDayOffClick(appState.activeDate)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-900 border border-slate-300 text-[11px] font-extrabold transition" title="Mark or unmark this date as a scheduled Day Off (0h planned, no streak/completion penalty)">
+                &#127958; Mark as Day Off
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unscheduled Backlog Queue Banner (Appears when items are placed in Unscheduled Backlog via Day-Off Option 3) -->
+      <div id="unscheduledBacklogBanner" class="hidden bg-indigo-50/90 border border-indigo-300 rounded-2xl p-4 shadow-xs space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-indigo-200 text-indigo-950">UNSCHEDULED BACKLOG</span>
+            <h3 class="text-sm font-extrabold text-indigo-950" id="unscheduledBacklogTitle">0 Unscheduled Curriculum Items</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="assignAllUnscheduledBacklogToDate(appState.activeDate)" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition">
+              + Assign All to Active Day
+            </button>
+            <button type="button" onclick="redistributeAllUnscheduledBacklog()" class="px-3 py-1 rounded-lg bg-white hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-bold transition">
+              Auto-Redistribute Across Future Days
+            </button>
+          </div>
+        </div>
+        <div id="unscheduledBacklogList" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+      </div>
+
+      <!-- Carry-Forward Alert Banner -->
+      <div id="dailyCarryForwardSection" class="hidden bg-amber-50/90 border border-amber-300 rounded-2xl p-5 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-amber-200 text-amber-900">CARRY-FORWARD QUEUE</span>
+            <h3 class="text-sm sm:text-base font-bold text-amber-950" id="dailyCarryForwardTitle">Unfinished Reading Shifted into Today</h3>
+          </div>
+          <span class="text-xs text-amber-800 font-medium">Rule: Mon–Thu unfinished reading shifts to next weekday; Friday reading shifts into Weekend (Sat/Sun)</span>
+        </div>
+        <div id="dailyCarryForwardList" class="space-y-2"></div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left 2 Columns -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Main Subject Block (100 Minutes) -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div>
+                <span id="dailyBlock1DurationLabel" class="text-xs font-bold uppercase tracking-wider text-blue-600">Block 1 • 100 Minutes</span>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">Today’s reading</h3>
+              </div>
+              <span id="dailyMainProgressBadge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">0 / 0 Done</span>
+            </div>
+            <div id="dailyMainItemsContainer" class="space-y-2.5"></div>
+          </div>
+
+          <!-- Ethics Block (Dynamic: Daily Ethics Block OR Optional Manual Ethics Drawer in 10-Topic Sequence Mode) -->
+          <div id="dailyEthicsBlockCard" class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+              <div>
+                <span id="dailyBlock2DurationLabel" class="text-xs font-bold uppercase tracking-wider text-teal-600">Block 2 • 20 Minutes</span>
+                <h3 class="text-base sm:text-lg font-bold text-slate-900">Your daily ethics practice</h3>
+              </div>
+              <div class="flex items-center gap-2">
+                <a href="https://learn.cfainstitute.org//courses/2379/modules" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-teal-700 hover:underline">Open Ethics LES &#8599;</a>
+                <span id="dailyEthicsProgressBadge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">0 / 0 Done</span>
+              </div>
+            </div>
+            <div id="dailyEthicsItemsContainer" class="space-y-2.5"></div>
+          </div>
+
+          <!-- Active Week Strip & Collapsible Interactive Monthly Calendar (Synchronized) -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <h3 class="text-sm font-bold text-slate-800" id="dailyWeekStripTitle">This Week's 7-Day Strip</h3>
+                <div class="inline-flex rounded-xl bg-slate-100 p-0.5 border border-slate-200">
+                  <button id="dailyCalModeBtn-week" type="button" onclick="setDailyCalendarDisplayMode('week')" class="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-900 shadow-2xs transition">
+                    7-Day Strip
+                  </button>
+                  <button id="dailyCalModeBtn-month" type="button" onclick="setDailyCalendarDisplayMode('month')" class="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+                    &#128197; Monthly Calendar
+                  </button>
+                  <button id="dailyCalModeBtn-both" type="button" onclick="setDailyCalendarDisplayMode('both')" class="px-2.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+                    Both
+                  </button>
+                </div>
+              </div>
+              <button id="openWeekSummaryModalBtn" onclick="JumpToCurrentWeekSummary()" class="text-xs font-semibold text-teal-700 hover:text-teal-900 underline">Open This Week's Sunday Check-In Form &rarr;</button>
+            </div>
+
+            <!-- 7-Day Weekly Strip Container -->
+            <div id="dailyWeekStripGrid" class="grid grid-cols-2 sm:grid-cols-7 gap-2"></div>
+
+            <!-- Collapsible Interactive Monthly Calendar on Daily Workspace -->
+            <div id="dailyMonthlyCalendarWrapper" class="hidden pt-3 border-t border-slate-100 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="stepCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold border border-slate-300">&larr; Prev</button>
+                  <span id="dailyCalMonthHeading" class="text-sm sm:text-base font-extrabold text-slate-900 px-2">November 2026</span>
+                  <button type="button" onclick="stepCalendarMonth(1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold border border-slate-300">Next &rarr;</button>
+                  <button type="button" onclick="jumpCalendarToActiveOrToday()" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-800 text-xs font-bold border border-indigo-200 ml-1">Today / Active</button>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-600">
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-100 border border-emerald-300 inline-block"></span>Completed</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-100 border border-amber-300 inline-block"></span>Partial</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 border border-slate-400 inline-block"></span>Day Off</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-indigo-100 border border-indigo-300 inline-block"></span>Final Review</span>
+                  <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-indigo-900 inline-block"></span>EXAM DAY</span>
+                </div>
+              </div>
+              <div class="cal-grid-7 text-center text-[10px] font-extrabold uppercase tracking-wider text-slate-500 pb-1">
+                <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+              </div>
+              <div id="dailyMonthlyCalendarGrid" class="cal-grid-7"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-6">
+          <!-- Embedded Study & Pomodoro Timer Card -->
+          <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-sm border border-slate-800">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-teal-400">A LITTLE DEEP WORK</span>
+                <h3 class="text-base font-bold text-white" id="sideTimerModeTitle">Pomodoro: 25m Focus</h3>
+              </div>
+              <select id="quickTimerPresetSelect" onchange="selectTimerPreset(this.value)" class="bg-slate-800 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1.5 focus:outline-none">
+                <option value="pomo_25">Pomodoro: 25m Focus</option>
+                <option value="pomo_5">Pomodoro: 5m Break</option>
+                <option value="pomo_15">Pomodoro: 15m Long Break</option>
+                <option value="wk_85">Weekday: 85m Main Reading</option>
+                <option value="wk_15">Weekday: 15m Concise Notes</option>
+                <option value="wk_20">Daily: 20m Ethics Block</option>
+                <option value="sat_25">Saturday: 25m Weekly Revision</option>
+                <option value="sat_45">Weekend: 45m LES Questions</option>
+                <option value="sat_30">Saturday: 30m Review Explanations</option>
+                <option value="sun_20">Sunday: 20m Cumulative Revision</option>
+                <option value="sun_25">Sunday: 25m Review Explanations</option>
+                <option value="sun_10">Sunday: 10m Error Log &amp; Check-In</option>
+              </select>
+            </div>
+
+            <div class="text-center py-4 bg-slate-800/70 rounded-xl border border-slate-700/80 my-2">
+              <div id="sideTimerDisplay" class="font-mono text-4xl font-extrabold tracking-tight text-teal-300">25:00</div>
+              <p id="sideTimerSubtext" class="text-xs text-slate-400 mt-1">Pomodoro Focus Cycle • Ready</p>
+            </div>
+
+            <div class="flex items-center gap-2 mt-3">
+              <button id="sideTimerStartBtn" onclick="toggleTimer()" class="flex-1 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm transition">Start / Pause</button>
+              <button id="sideTimerResetBtn" onclick="resetTimer()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700 transition">Reset</button>
+              <button id="sideTimerLogBtn" onclick="logCompletedTimerSession()" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition" title="Add elapsed or preset minutes to logged study hours">+ Log Time</button>
+            </div>
+
+            <!-- Flexible Custom Pomodoro & Any-Minute Setter on Daily Workspace -->
+            <div class="mt-3 pt-3 border-t border-slate-800 space-y-2">
+              <div class="flex items-center justify-between gap-1.5">
+                <span class="text-[11px] font-semibold text-slate-300">Custom Timer (Min):</span>
+                <div class="flex items-center gap-1">
+                  <button id="sideMinus5Btn" type="button" onclick="adjustActiveTimerMinutes(-5)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold border border-slate-700">-5m</button>
+                  <input id="sideCustomMinutesInput" type="number" value="25" min="1" max="300" class="w-14 bg-slate-800 text-white text-xs font-bold px-2 py-1 rounded border border-slate-700 text-center" />
+                  <button id="sidePlus5Btn" type="button" onclick="adjustActiveTimerMinutes(5)" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-bold border border-slate-700">+5m</button>
+                  <button id="sideApplyCustomMinBtn" type="button" onclick="applySideCustomMinutes()" class="px-2.5 py-1 rounded bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-bold">Set</button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between gap-1.5 text-[11px]">
+                <button id="sideCustomFocusBtn" type="button" onclick="selectTimerPreset('pomo_25')" class="flex-1 py-1 px-2 rounded bg-slate-800/90 hover:bg-slate-700 text-teal-300 border border-slate-700 font-semibold">Focus (<span id="sideFocusMinLabel">25</span>m)</button>
+                <button id="sideCustomShortBreakBtn" type="button" onclick="selectTimerPreset('pomo_5')" class="flex-1 py-1 px-2 rounded bg-slate-800/90 hover:bg-slate-700 text-emerald-300 border border-slate-700 font-semibold">Break (<span id="sideShortBreakMinLabel">5</span>m)</button>
+                <button id="sideCustomLongBreakBtn" type="button" onclick="selectTimerPreset('pomo_15')" class="flex-1 py-1 px-2 rounded bg-slate-800/90 hover:bg-slate-700 text-blue-300 border border-slate-700 font-semibold">Long (<span id="sideLongBreakMinLabel">15</span>m)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FEATURE 4: Daily Planned vs. Actual Study Hours Summary Card -->
+          <div id="dailyTimeTrackingSummaryCard" class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-700">PLANNED VS. ACTUAL HOURS</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">Daily Study-Time Summary</h3>
+              </div>
+              <button type="button" onclick="openManualTimeModal(appState.activeDate)" class="px-2.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">
+                + Log Manual Time
+              </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+              <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-[10px] font-bold uppercase text-slate-500 block">Planned</span>
+                <strong id="dailySummaryPlannedHrs" class="text-sm font-extrabold text-slate-900">2.0h</strong>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-[10px] font-bold uppercase text-slate-500 block">Actual</span>
+                <strong id="dailySummaryActualHrs" class="text-sm font-extrabold text-teal-700">0.0h</strong>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-[10px] font-bold uppercase text-slate-500 block">Difference</span>
+                <strong id="dailySummaryDiffHrs" class="text-sm font-extrabold text-slate-700">-2.0h</strong>
+              </div>
+              <div class="p-2 rounded-xl bg-slate-50 border border-slate-200">
+                <span class="text-[10px] font-bold uppercase text-slate-500 block">Target Met</span>
+                <strong id="dailySummaryPctMet" class="text-sm font-extrabold text-indigo-700">0%</strong>
+              </div>
+            </div>
+            <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div id="dailySummaryTimeBar" class="h-full bg-teal-600 transition-all duration-300" style="width:0%"></div>
+            </div>
+            <div class="flex items-center justify-between text-[11px] text-slate-500">
+              <span id="dailySummaryActivityStatus">Curriculum items today: 0/0 done</span>
+              <span id="dailySummaryWeekTotals">This week: 0.0h / 14.0h</span>
+            </div>
+            <div id="dailySummarySessionsList" class="space-y-1.5 max-h-36 overflow-y-auto custom-scrollbar"></div>
+          </div>
+
+          <!-- Sunday Cumulative Revision Priority Box -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600">REVISION PRIORITIES</span>
+                <h3 class="text-sm sm:text-base font-bold text-slate-900">Where to focus next</h3>
+              </div>
+              <button id="openModuleLogFromSideBtn" onclick="switchTab('modules')" class="text-xs font-semibold text-teal-700 hover:underline">Log Scores &rarr;</button>
+            </div>
+            <p class="text-xs text-slate-500 mb-3">
+              Automatically ranks your lowest-accuracy LES modules and flagged weak concepts for Sunday's 4–6 cumulative review questions.
+            </p>
+            <div id="sideLowestModulesList" class="space-y-2"></div>
+          </div>
+
+          <!-- Daily Notes Scratchpad -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-2">
+              <label for="dailyScratchpadInput" class="text-sm font-bold text-slate-900">Daily Notes &amp; Difficult Passages (15m Slot)</label>
+              <span class="text-[11px] text-slate-400">Auto-saves per day</span>
+            </div>
+            <textarea id="dailyScratchpadInput" rows="4" oninput="saveDailyNote(this.value)" placeholder="Jot down key formulas, difficult passages to reread, or vignette traps from today's lessons..." class="w-full rounded-xl border border-slate-300 p-3 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: 21-WEEK SCHEDULE & ROADMAP ==================== -->
+    <div id="tabPanel-schedule" class="hidden space-y-6">
+      <!-- Pacing Indicator & 148-Day Visual Calendar Heatmap -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span id="scheduleHeatmapEyebrow" class="text-xs font-bold uppercase tracking-wider text-teal-700">148-DAY PACING &amp; CONSISTENCY TRACKER</span>
+            <h2 id="scheduleHeatmapHeading" class="text-lg font-extrabold text-slate-900">Visual Study Heatmap &amp; Schedule Pace (1 Nov 2026 – 28 Mar 2027)</h2>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="paceStatusBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">On Track</span>
+            <button id="scheduleOpenPlanSettingsBtn" type="button" onclick="openPlanSettingsModal()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+              &#9881; Adjust Start / End Dates &amp; Hours
+            </button>
+            <button id="autoRebalanceBacklogBtn" onclick="autoRebalanceOverdueItems()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold transition" title="Shifts any unfinished lessons prior to your Active Study Day into upcoming slots">
+              Auto-Rebalance Past Backlog &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Pacing Summary Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold uppercase text-slate-500 block">Planned By Active Date</span>
+            <span id="paceExpectedLessons" class="text-lg font-extrabold text-slate-900">3 lessons</span>
+            <span id="paceActiveDateSub" class="text-[11px] text-slate-500 block">As of 2026-11-02</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold uppercase text-slate-500 block">Actual Completed</span>
+            <span id="paceActualLessons" class="text-lg font-extrabold text-teal-700">0 lessons</span>
+            <span id="paceDeltaSub" class="text-[11px] text-slate-500 block">0 ethics items done</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold uppercase text-slate-500 block">Days Fully Completed</span>
+            <span id="paceCompletedDaysCount" class="text-lg font-extrabold text-slate-900">0 / 148 days</span>
+            <span id="paceStreakSub" class="text-[11px] text-slate-500 block">Current streak: 0 days</span>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+            <span class="text-[11px] font-semibold uppercase text-slate-500 block">Confidence Breakdown</span>
+            <span id="paceConfidenceSummary" class="text-lg font-extrabold text-slate-900">0 ★ Hard</span>
+            <span id="paceMasteredSub" class="text-[11px] text-slate-500 block">0 ★★★ Mastered</span>
+          </div>
+        </div>
+
+        <!-- Interactive Monthly Study Calendar (Start Date -> Core Reading -> Phase 2 -> Final Review Sprint -> EXAM DAY) -->
+        <div id="roadmapMonthlyCalendarSection" class="space-y-3 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-indigo-100 text-indigo-900">&#128197; Interactive Monthly Study Calendar</span>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="stepCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold border border-slate-300">&larr; Prev Month</button>
+                <select id="roadmapCalMonthSelect" onchange="jumpCalendarToYearMonth(this.value)" class="rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-extrabold bg-white text-slate-900"></select>
+                <button type="button" onclick="stepCalendarMonth(1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold border border-slate-300">Next Month &rarr;</button>
+                <button type="button" onclick="jumpCalendarToActiveOrToday()" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold border border-teal-200">Today</button>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button id="toggleRoadmapCalendarCollapseBtn" type="button" onclick="toggleRoadmapMonthlyCalendarCollapse()" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-300">
+                Collapse Calendar &#9652;
+              </button>
+              <button type="button" onclick="document.getElementById('roadmapCompactHeatmapWrapper').classList.toggle('hidden')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-300">
+                Toggle Mini-Heatmap
+              </button>
+            </div>
+          </div>
+
+          <div id="roadmapMonthlyCalendarBody" class="space-y-3">
+            <!-- Phase Legend & Month Summary Totals -->
+            <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+              <div id="roadmapMonthStatsSummary" class="font-bold text-slate-800">
+                Month Summary: Planned 0.0h • Actual 0.0h • 0 Study Days • 0 Days Off
+              </div>
+              <div class="flex flex-wrap items-center gap-2.5 text-[11px] font-semibold text-slate-600">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-white border border-slate-300 inline-block"></span>Core Reading</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-100 border border-emerald-300 inline-block"></span>Completed</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-100 border border-amber-300 inline-block"></span>Partial</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-200 border border-slate-400 inline-block"></span>Day Off</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-indigo-100 border border-indigo-300 inline-block"></span>Final Review Sprint</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-indigo-900 inline-block"></span>EXAM DAY</span>
+              </div>
+            </div>
+
+            <!-- 7-Column Calendar Header & Grid -->
+            <div class="cal-grid-7 text-center text-[11px] font-extrabold uppercase tracking-wider text-slate-500">
+              <div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+            </div>
+            <div id="roadmapMonthlyCalendarGrid" class="cal-grid-7"></div>
+
+            <!-- Selected Calendar Day Quick-Inspector & Edit Bar -->
+            <div id="calendarSelectedDayInspector" class="p-4 rounded-xl bg-slate-50 border border-indigo-200 space-y-3 text-xs"></div>
+          </div>
+        </div>
+
+        <!-- 148-Day Heatmap Grid (Collapsible Overview) -->
+        <div id="roadmapCompactHeatmapWrapper">
+          <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+            <span class="text-xs font-bold text-slate-600">Compact All-Days Pacing Grid (Click any day square to open in Daily Workspace):</span>
+            <div class="flex items-center gap-3 text-[11px] text-slate-500">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-slate-100 border border-slate-300 inline-block"></span>Upcoming / 0%</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-200 inline-block"></span>In Progress</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-600 inline-block"></span>100% Complete</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded border-2 border-indigo-600 inline-block"></span>Active Day</span>
+            </div>
+          </div>
+          <div id="scheduleHeatmapGrid" class="grid grid-cols-7 sm:grid-cols-14 gap-1.5 pt-1"></div>
+        </div>
+      </div>
+      <!-- Interactive Topic Sequence, Ethics Mode & Weekly Schedule Customizer -->
+      <div id="roadmapFlexibilityCard" class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-5">
+        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 pb-3.5">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-900">FULL SCHEDULE CONTROL &amp; RECOMMENDATIONS</span>
+            <h2 class="text-lg font-extrabold text-slate-900 mt-1">Customize Topic Sequence (9 or 10 Topics), Ethics Mode &amp; Weekly Study Days</h2>
+            <p class="text-xs text-slate-500">Drag-and-drop or use the arrow buttons to reorder topics at any time. Your completed lessons, confidence ratings, and practice logs are 100% preserved automatically.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="roadmapRecommendationBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200">Recommended Pace Active</span>
+            <button type="button" onclick="openPlanSettingsModal()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition">
+              &#9881; Dates &amp; Hours Setup
+            </button>
+          </div>
+        </div>
+
+        <!-- Smart Recommendation Summary Banner -->
+        <div id="smartScheduleRecommendationBox" class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200/80 text-xs text-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div id="smartScheduleRecommendationText" class="leading-relaxed">
+            <strong>&#128161; Recommended Study Architecture:</strong> Based on your schedule, we recommend <strong>2.0 hrs/day</strong> (100m Main Topic + 20m Daily Ethics) with <strong>Mon–Fri New Readings</strong> and <strong>Sat–Sun Revision &amp; LES Practice</strong>. Every setting below is a recommendation—customize freely!
+          </div>
+          <button type="button" onclick="applyRecommendedScheduleDefaults()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-300 text-xs font-extrabold shrink-0 transition">
+            &#8634; Restore Recommended Defaults
+          </button>
+        </div>
+
+        <!-- Grid: 1. Ethics Mode & Time Allocation + 2. Weekly Reading/Revision Rhythm -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Box 1: Ethics Mode & Daily Time Split -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">1. Ethics Mode &amp; Daily Time Allocation</span>
+              <span id="roadmapEthicsModeStatus" class="text-[11px] font-bold text-teal-700">Daily Ethics (~17% rec.)</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button id="roadmapEthicsBtn-daily_parallel" type="button" onclick="setEthicsModePreference('daily_parallel')" class="p-3 rounded-xl border text-left transition day-mode-pill-active">
+                <div class="text-xs font-extrabold flex items-center justify-between">
+                  <span>&#128197; Daily Ethics (9+1 Mode)</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-white/20">Recommended</span>
+                </div>
+                <p class="text-[11px] opacity-90 mt-1 leading-snug">Study Ethics alongside the 9 main topics. Recommends ~20m/day (on a 2h plan), adjustable to any minutes you prefer.</p>
+              </button>
+              <button id="roadmapEthicsBtn-sequence_10" type="button" onclick="setEthicsModePreference('sequence_10')" class="p-3 rounded-xl border text-left transition day-mode-pill-inactive">
+                <div class="text-xs font-extrabold flex items-center justify-between">
+                  <span>&#128290; 10-Topic Sequence</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">100% Topic Focus</span>
+                </div>
+                <p class="text-[11px] opacity-90 mt-1 leading-snug">Ethics becomes a standalone 10th topic placed anywhere in your sequence. 100% of daily study time goes to the active topic.</p>
+              </button>
+            </div>
+            <!-- Adjustable Daily Ethics Minutes Row (Visible in Daily Ethics mode) -->
+            <div id="roadmapDailyEthicsAllocationRow" class="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div>
+                <span class="font-bold text-slate-800">Daily Ethics Time Allocation:</span>
+                <span id="roadmapEthicsSplitPreview" class="text-[11px] text-slate-600 block">Recommended: 20m Ethics + 100m Main Topic (out of 120m/day)</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="adjustDailyEthicsMinutes(-5)" class="px-2 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 font-extrabold text-xs">-5m</button>
+                <input id="roadmapEthicsMinsInput" type="number" min="0" max="180" step="5" value="20" onchange="setDailyEthicsMinutesDirect(this.value)" class="w-14 text-center font-extrabold text-xs bg-white border border-slate-300 rounded-lg px-2 py-1" />
+                <span class="text-xs font-semibold text-slate-600">min/day</span>
+                <button type="button" onclick="adjustDailyEthicsMinutes(5)" class="px-2 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 font-extrabold text-xs">+5m</button>
+                <button type="button" onclick="resetDailyEthicsMinutesToRecommended()" class="px-2 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 font-bold text-[11px]">Use Recommended</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 2: Flexible Reading, Revision & LES Practice Days -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">2. Reading, Revision &amp; LES Practice Days</span>
+              <span id="roadmapWeeklyModeStatus" class="text-[11px] font-bold text-indigo-700">Mon–Fri Read • Sat–Sun Rev/Qs</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button id="roadmapWeeklyBtn-recommended" type="button" onclick="setWeeklyScheduleMode('recommended')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-active">
+                <div class="text-xs font-extrabold">Recommended Split</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Mon–Fri Reading • Sat–Sun Revision &amp; LES Qs</p>
+              </button>
+              <button id="roadmapWeeklyBtn-all_reading" type="button" onclick="setWeeklyScheduleMode('all_reading')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-inactive">
+                <div class="text-xs font-extrabold">New Readings 7 Days</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Schedule new lessons every day (Mon–Sun)</p>
+              </button>
+              <button id="roadmapWeeklyBtn-custom" type="button" onclick="setWeeklyScheduleMode('custom')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-inactive">
+                <div class="text-xs font-extrabold">Custom Weekly Days</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Choose Read, Practice, or Combo per day</p>
+              </button>
+            </div>
+            <!-- Per-Day Customizer Strip (Mon - Sun) -->
+            <div class="pt-2 border-t border-slate-200/80">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold text-slate-700">Click any day below to cycle its weekly activity (<span class="text-blue-700">Read</span> &rarr; <span class="text-amber-800">Rev/Qs</span> &rarr; <span class="text-purple-800">Combo</span>):</span>
+              </div>
+              <div id="roadmapCustomDaysStrip" class="grid grid-cols-7 gap-1.5"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Box 3: Interactive 9- or 10-Topic Sequence Reorder (Drag-and-Drop + Arrow Buttons) -->
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">3. Topic Study Order (<span id="roadmapTopicCountLabel">9 Core Topics</span> — Drag &amp; Drop or Click &uarr;/&darr; to Reorder Anytime)</span>
+              <p class="text-[11px] text-slate-500">Reordering updates your remaining schedule immediately while preserving all completed lessons and confidence ratings.</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[11px] font-bold text-slate-500 mr-1">Quick Presets:</span>
+              <button type="button" onclick="applyTopicOrderPreset('recommended')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[11px] font-bold transition">Recommended (CI &rarr; DV)</button>
+              <button type="button" onclick="applyTopicOrderPreset('cfai_curriculum')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[11px] font-bold transition">CFAI Book Order (QM &rarr; PM)</button>
+              <button type="button" onclick="applyTopicOrderPreset('heavy_weights')" class="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[11px] font-bold transition">Heavy Weights First (EQ/FA/FI/PM)</button>
+            </div>
+          </div>
+          <div id="roadmapTopicOrderGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2"></div>
+        </div>
+
+        <!-- Box 4: Study-Hour Configuration Modes (Mode A: Fixed, Mode B: Gradual Ramp-Up, Mode C: Custom Per-Day) & Final Review Sprint -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <!-- Study-Hour Mode Selector & Settings -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">4. Daily Study-Hour Mode (Fixed, Ramp-Up, or Custom)</span>
+              <span id="roadmapHourModeBadge" class="text-[11px] font-bold text-indigo-700">Mode A: Fixed Hours</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button id="hourModeBtn-fixed" type="button" onclick="setStudyHourMode('fixed')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-active">
+                <div class="text-xs font-extrabold">Mode A: Fixed</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Consistent Weekday &amp; Weekend targets</p>
+              </button>
+              <button id="hourModeBtn-ramp_up" type="button" onclick="setStudyHourMode('ramp_up')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-inactive">
+                <div class="text-xs font-extrabold">Mode B: Ramp-Up</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Gradually increase hours toward Exam</p>
+              </button>
+              <button id="hourModeBtn-custom_days" type="button" onclick="setStudyHourMode('custom_days')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-inactive">
+                <div class="text-xs font-extrabold">Mode C: Custom</div>
+                <p class="text-[10px] opacity-90 mt-0.5">Set hours for Mon–Sun &amp; specific dates</p>
+              </div>
+            </div>
+
+            <!-- Mode A Controls -->
+            <div id="hourModePanel-fixed" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2 border-t border-slate-200/80 text-xs">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Weekday Hrs/Day (Mon–Fri)</label>
+                <input id="rmFixedWeekdayHrs" type="number" step="0.25" min="0" max="14" value="2.0" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-bold bg-white" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Weekend Hrs/Day (Sat–Sun)</label>
+                <input id="rmFixedWeekendHrs" type="number" step="0.25" min="0" max="14" value="2.0" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-bold bg-white" />
+              </div>
+              <div class="flex items-end">
+                <button type="button" onclick="applyRoadmapHourModeSettings()" class="w-full py-1.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition">Apply Hours</button>
+              </div>
+            </div>
+
+            <!-- Mode B (Gradual Exam-Date Ramp-Up) Controls -->
+            <div id="hourModePanel-ramp_up" class="hidden space-y-2.5 pt-2 border-t border-slate-200/80 text-xs">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Start Wkday (h)</label>
+                  <input id="rmRampStartWk" type="number" step="0.25" min="0" max="14" value="2.0" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Start Wknd (h)</label>
+                  <input id="rmRampStartWe" type="number" step="0.25" min="0" max="14" value="3.0" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Final Wkday (h)</label>
+                  <input id="rmRampFinalWk" type="number" step="0.25" min="0" max="14" value="3.5" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Final Wknd (h)</label>
+                  <input id="rmRampFinalWe" type="number" step="0.25" min="0" max="14" value="4.5" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Ramp Start Date</label>
+                  <input id="rmRampStartDate" type="date" value="2027-01-15" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Ramp Days</label>
+                  <input id="rmRampDurationDays" type="number" min="7" max="240" value="60" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-slate-600">Max Hrs/Day Cap</label>
+                  <input id="rmRampMaxDaily" type="number" step="0.5" min="1" max="16" value="6.0" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+                </div>
+                <div class="flex items-end">
+                  <button type="button" onclick="applyRoadmapHourModeSettings()" class="w-full py-1.5 px-2.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold">Apply Ramp-Up</button>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-500">Smoothly progresses daily planned study hours from initial targets to final-stage targets over your ramp window.</p>
+            </div>
+
+            <!-- Mode C (Custom Per-Weekday Mon-Sun Hours) Controls -->
+            <div id="hourModePanel-custom_days" class="hidden space-y-2.5 pt-2 border-t border-slate-200/80 text-xs">
+              <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5" id="rmCustomWeekdayHoursGrid"></div>
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] text-slate-500">Set 0h on any weekday to make it a recurring rest day.</span>
+                <button type="button" onclick="applyRoadmapHourModeSettings()" class="py-1.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold">Save Custom Daily Hours</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Box 5: Configurable 3-Phase Boundaries & Final Review Sprint + Workload Assumptions -->
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-800">5. Phase Boundaries, Final Review Sprint &amp; Workload</span>
+              <span id="roadmapFinalReviewBadge" class="text-[11px] font-bold text-teal-700">14-Day Final Review</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Core Reading Finish</label>
+                <input id="rmCoreEndDateInput" type="date" value="2027-03-28" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Exam Date (EXAM DAY)</label>
+                <input id="rmExamDateInput" type="date" value="2027-05-22" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Final Review Days</label>
+                <input id="rmFinalReviewDaysInput" type="number" min="0" max="60" value="14" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" title="Default recommendation: 7-14 days immediately before Exam Day" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-600 mb-1">Est. Min / Lesson</label>
+                <input id="rmLessonMinsInput" type="number" min="10" max="60" value="23" class="w-full rounded border border-slate-300 px-2 py-1 text-xs font-bold bg-white" title="Baseline reading duration per lesson before observed-pace refinement" />
+              </div>
+            </div>
+            <div id="roadmapPhaseBoundarySummary" class="p-2.5 rounded-lg bg-white border border-slate-200 text-[11px] text-slate-700 leading-relaxed"></div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] text-slate-500">Changing Final Review days never forces your Core Reading deadline to move silently.</span>
+              <button type="button" onclick="applyPhaseAndWorkloadSettings()" class="py-1.5 px-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold shrink-0">Save Phase Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h2 id="roadmapSequenceHeading" class="text-lg font-extrabold text-slate-900">Subject Roadmap (CI &rarr; AI &rarr; EC &rarr; EQ &rarr; FA &rarr; QM &rarr; PM &rarr; FI &rarr; DV + Ethics)</h2>
+            <p class="text-xs text-slate-500">All 461 numbered lessons in 9 main courses + 86 Ethics items across 10 Ethics modules. Click any subject to filter the schedule.</p>
+          </div>
+          <button id="clearSubjectFilterBtn" onclick="filterScheduleBySubject('ALL')" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold">Show All Subjects</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="py-2.5 px-3 rounded-tl-lg w-24">Order</th>
+                <th class="py-2.5 px-3">Subject / Code</th>
+                <th class="py-2.5 px-3">LES Course Name</th>
+                <th class="py-2.5 px-3">New Reading Dates</th>
+                <th class="py-2.5 px-3 text-right">Weekdays</th>
+                <th class="py-2.5 px-3 text-right">Lessons Done</th>
+                <th class="py-2.5 px-3 text-right">Q-Bank Acc</th>
+                <th class="py-2.5 px-3 rounded-tr-lg text-right">LES Link</th>
+              </tr>
+            </thead>
+            <tbody id="roadmapTableBody" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Filter & Search Toolbar -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="scheduleWeekFilter" class="text-xs font-bold text-slate-600">Jump to Week:</label>
+          <select id="scheduleWeekFilter" onchange="renderFullSchedule()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-medium bg-white">
+            <option value="ALL">All 21 Weeks (+ Opening Sunday)</option>
+          </select>
+
+          <label for="scheduleSubjectFilter" class="text-xs font-bold text-slate-600 ml-2">Subject:</label>
+          <select id="scheduleSubjectFilter" onchange="renderFullSchedule()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-medium bg-white">
+            <option value="ALL">All Subjects</option>
+            <option value="CI">CI - Corporate Issuers</option>
+            <option value="AI">AI - Alternative Investments</option>
+            <option value="EC">EC - Economics</option>
+            <option value="EQ">EQ - Equity Investments</option>
+            <option value="FA">FA - Financial Statement Analysis</option>
+            <option value="QM">QM - Quantitative Methods</option>
+            <option value="PM">PM - Portfolio Management</option>
+            <option value="FI">FI - Fixed Income</option>
+            <option value="DV">DV - Derivatives</option>
+            <option value="ET">ET - Ethical &amp; Professional Standards</option>
+          </select>
+
+          <label for="scheduleStatusFilter" class="text-xs font-bold text-slate-600 ml-2">Status:</label>
+          <select id="scheduleStatusFilter" onchange="renderFullSchedule()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-medium bg-white">
+            <option value="ALL">All Items</option>
+            <option value="UNFINISHED">Unfinished Only</option>
+            <option value="COMPLETED">Completed Only</option>
+            <option value="SHIFTED">Shifted / Carried-Forward</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 flex-1 max-w-xs">
+          <input id="scheduleSearchInput" type="text" oninput="renderFullSchedule()" placeholder="Search lesson code or title (e.g. EQ 3.02, VaR)..." class="w-full rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" />
+        </div>
+      </div>
+
+      <div id="fullScheduleContainer" class="space-y-6"></div>
+    </div>
+
+    <!-- ==================== TAB 3: MODULE DIRECTORY, ACCURACY LOG & WEAKEST MODULES ==================== -->
+    <div id="tabPanel-modules" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800">REVISION PRIORITIES Queue</span>
+              <span class="text-xs text-slate-500">Target: 4–6 earlier-module questions every Sunday</span>
+            </div>
+            <h2 class="text-lg font-extrabold text-slate-900">Lowest-Scoring &amp; Flagged LES Modules</h2>
+            <p class="text-xs text-slate-500 mt-0.5 mb-4">
+              Modules with the lowest question accuracy or flagged persistent errors appear here automatically so you can prioritize them during Sunday cumulative revision.
+            </p>
+            <div id="moduleTabWeakestContainer" class="space-y-2.5"></div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>Tip: Click "Log Practice / Errors" on any module below after Saturday/Sunday LES sets.</span>
+            <a href="https://learn.cfainstitute.org/accounts/1/external_tools/261?launch_type=global_navigation&toolId=practice-261" target="_blank" rel="noopener noreferrer" class="font-semibold text-teal-700 hover:underline">Open LES Practice &#8599;</a>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">Subject Accuracy % vs. Reading Completion %</h3>
+              <p class="text-xs text-slate-500">Aggregated across all 53 LES modules (1,936 total LES questions)</p>
+            </div>
+          </div>
+          <div class="relative h-64 w-full">
+            <canvas id="topicAccuracyChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Bar for 53 Modules -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <label for="moduleSubjectFilter" class="text-xs font-bold text-slate-600">Filter by Course:</label>
+          <select id="moduleSubjectFilter" onchange="renderModulesTable()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-medium bg-white">
+            <option value="ALL">All 53 LES Modules (10 Courses)</option>
+            <option value="CI">CI - Corporate Issuers (4 modules)</option>
+            <option value="AI">AI - Alternative Investments (4 modules)</option>
+            <option value="EC">EC - Economics (2 modules)</option>
+            <option value="EQ">EQ - Equities (6 modules)</option>
+            <option value="FA">FA - Financial Statement Analysis (6 modules)</option>
+            <option value="QM">QM - Quantitative Methods (8 modules)</option>
+            <option value="PM">PM - Portfolio Construction (6 modules)</option>
+            <option value="FI">FI - Fixed Income (5 modules)</option>
+            <option value="DV">DV - Derivatives (2 modules)</option>
+            <option value="ET">ET - Ethics (10 modules)</option>
+          </select>
+
+          <label for="moduleSortSelect" class="text-xs font-bold text-slate-600 ml-2">Sort by:</label>
+          <select id="moduleSortSelect" onchange="renderModulesTable()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm font-medium bg-white">
+            <option value="DEFAULT">Study Plan Order</option>
+            <option value="LOWEST_ACC">Lowest Accuracy First (Revision Priority)</option>
+            <option value="HIGHEST_ACC">Highest Accuracy First</option>
+            <option value="MOST_ATTEMPTED">Most Questions Attempted</option>
+          </select>
+        </div>
+
+        <input id="moduleSearchInput" type="text" oninput="renderModulesTable()" placeholder="Search module title, code, or error log..." class="w-full sm:w-72 rounded-xl border border-slate-300 px-3 py-1.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" />
+      </div>
+
+      <!-- Searchable 53-Module Formula & Vignette Trap Vault -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800">FABIAN MOA (2026) v1.0 FORMULA SHEET VAULT</span>
+              <a href="https://youtu.be/0MS8d8QOFmc" target="_blank" rel="noopener noreferrer" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 hover:underline">&#9654; BA II Plus Calculator Setup Video &#8599;</a>
+            </div>
+            <h2 class="text-lg font-extrabold text-slate-900 mt-1">Complete CFA Level II Formula Sheet (Fabian Moa 56-Page Edition) + Ethics &amp; Vignette Traps</h2>
+            <p class="text-xs text-slate-500">Every equation, variable definition, and video tutorial link from Fabian Moa's 2026 Formula Sheet mapped to your 53 LES modules.</p>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <button id="togglePinnedFormulasBtn" onclick="toggleFormulaPinFilter()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-300 transition">
+              Show Pinned Only &#9733;
+            </button>
+            <button id="openAddFormulaBtn" onclick="toggleAddFormulaForm()" class="px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">
+              + Add Custom Formula / Trap
+            </button>
+          </div>
+        </div>
+
+        <!-- Add Custom Formula Form -->
+        <div id="addFormulaFormBox" class="hidden bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div>
+              <label for="newFormulaModuleSelect" class="block text-[11px] font-bold text-slate-600 mb-1">LES Module</label>
+              <select id="newFormulaModuleSelect" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white"></select>
+            </div>
+            <div class="sm:col-span-3">
+              <label for="newFormulaTitleInput" class="block text-[11px] font-bold text-slate-600 mb-1">Concept / Formula Name</label>
+              <input id="newFormulaTitleInput" type="text" placeholder="e.g. Justified Leading P/E &amp; PEG Ratio" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="newFormulaEqInput" class="block text-[11px] font-bold text-slate-600 mb-1">Formula / Equation</label>
+              <input id="newFormulaEqInput" type="text" placeholder="e.g. P0 / E1 = (1 - b) / (r - g)" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs font-mono" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="newFormulaTrapInput" class="block text-[11px] font-bold text-slate-600 mb-1">Vignette Exam Trap / Key Watchout</label>
+              <input id="newFormulaTrapInput" type="text" placeholder="e.g. Always match leading E1 (not trailing E0) when dividing by r - g!" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+            </div>
+          </div>
+          <div class="flex justify-end gap-2">
+            <button id="cancelAddFormulaBtn" onclick="toggleAddFormulaForm()" class="px-3 py-1.5 rounded-lg bg-slate-200 text-slate-700 text-xs font-semibold">Cancel</button>
+            <button id="saveCustomFormulaBtn" onclick="saveCustomFormulaEntry()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold">Save to Formula Vault</button>
+          </div>
+        </div>
+
+        <!-- Formula Search & Filter Controls -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <label for="formulaVaultSubjectSelect" class="text-xs font-bold text-slate-600">Topic Filter:</label>
+            <select id="formulaVaultSubjectSelect" onchange="renderFormulaVault()" class="rounded-xl border border-slate-300 px-3 py-1.5 text-xs font-medium bg-white">
+              <option value="ALL">All 10 Subjects (53 Modules)</option>
+              <option value="CI">CI - Corporate Issuers</option>
+              <option value="AI">AI - Alternative Investments</option>
+              <option value="EC">EC - Economics</option>
+              <option value="EQ">EQ - Equity Investments</option>
+              <option value="FA">FA - Financial Statement Analysis</option>
+              <option value="QM">QM - Quantitative Methods</option>
+              <option value="PM">PM - Portfolio Management</option>
+              <option value="FI">FI - Fixed Income</option>
+              <option value="DV">DV - Derivatives</option>
+              <option value="ET">ET - Ethical &amp; Professional Standards</option>
+            </select>
+            <span id="formulaVaultCountLabel" class="text-xs text-slate-500 font-semibold ml-1">53 formula cards</span>
+          </div>
+          <input id="formulaVaultSearchInput" type="text" oninput="renderFormulaVault()" placeholder="Search formulas, symbols, or vignette traps (e.g. FCFE, BSM, Cirp, Beneish)..." class="w-full sm:w-72 rounded-xl border border-slate-300 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-teal-500" />
+        </div>
+
+        <!-- Formula Cards Grid -->
+        <div id="formulaVaultGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-96 overflow-y-auto custom-scrollbar p-1"></div>
+      </div>
+
+      <!-- 53 Modules Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="py-3 px-3">Code</th>
+                <th class="py-3 px-3">LES Module Title &amp; Lesson Range</th>
+                <th class="py-3 px-3 text-center">Reading Progress</th>
+                <th class="py-3 px-3 text-center">Questions Attempted</th>
+                <th class="py-3 px-3 text-center">Accuracy %</th>
+                <th class="py-3 px-3">Error Log / Weak Concepts / Notes</th>
+                <th class="py-3 px-3 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="modulesTableBody" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: WEEKLY SUMMARY FORMS (SUNDAY CHECK-INS) ==================== -->
+    <div id="tabPanel-weekly" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+          <h2 class="text-lg font-extrabold text-slate-900">Weekly Check-In Trend (Questions Attempted &amp; Accuracy %)</h2>
+          <p class="text-xs text-slate-500 mb-3">Every Sunday, record lessons finished, questions attempted, accuracy before checking answers, and your 3 weakest concepts.</p>
+          <div class="relative h-64 w-full">
+            <canvas id="weeklyTrendChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-teal-400">Sunday Protocol</span>
+            <h3 class="text-base font-bold mt-1">How Sunday Check-Ins Work</h3>
+            <ul class="mt-3 space-y-2 text-xs text-slate-300">
+              <li class="flex items-start gap-2"><span class="text-teal-400 font-bold">1.</span><span><strong>Lessons Done:</strong> Auto-counted from your checked lessons for that week (or override manually).</span></li>
+              <li class="flex items-start gap-2"><span class="text-teal-400 font-bold">2.</span><span><strong>Questions &amp; Accuracy:</strong> Record total LES questions attempted on Sat/Sun and accuracy % before checking answers.</span></li>
+              <li class="flex items-start gap-2"><span class="text-teal-400 font-bold">3.</span><span><strong>3 Weakest Concepts:</strong> Flag your top 3 conceptual or formula gaps so they surface for future cumulative reviews.</span></li>
+              <li class="flex items-start gap-2"><span class="text-teal-400 font-bold">4.</span><span><strong>Carry-Forward Rule:</strong> Unfinished Mon–Thu reading shifts to the next weekday; unfinished Friday reading shifts into Saturday/Sunday.</span></li>
+            </ul>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-400">
+            All 21 weekly check-in cards are editable below.
+          </div>
+        </div>
+      </div>
+
+      <div id="weeklyFormsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+    </div>
+
+    <!-- ==================== TAB 5: PHASE 2 — POST-MARCH 28 MOCKS & Q-BANK HUB ==================== -->
+    <div id="tabPanel-mocks" class="hidden space-y-6">
+      <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-sm border border-slate-800 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
+            Phase 2 • 29 March 2027 – May 2027 Exam Day
+          </span>
+          <h2 class="text-xl sm:text-2xl font-extrabold mt-2">Final Review: Question Grinding &amp; Mock Exam Command Center</h2>
+          <p class="text-xs sm:text-sm text-slate-300 mt-1">
+            Core reading finishes on 28 March 2027. Use this window exclusively for solving remaining LES / Practice Pack questions and taking full timed mock exams.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 bg-slate-800/90 p-3.5 rounded-xl border border-slate-700">
+          <div>
+            <label for="examDateInput" class="block text-[10px] uppercase tracking-wider text-slate-400">Target May 2027 Exam Date</label>
+            <input id="examDateInput" type="date" value="2027-05-22" min="2027-05-01" max="2027-05-31" onchange="updateExamDate(this.value)" class="bg-slate-900 text-white text-xs sm:text-sm font-bold px-2.5 py-1 rounded border border-slate-600 mt-1" />
+          </div>
+          <div class="pl-3 border-l border-slate-700">
+            <span class="block text-[10px] uppercase tracking-wider text-slate-400">Post-Mar 28 Prep Window</span>
+            <span id="mockWindowDaysLabel" class="text-base sm:text-lg font-extrabold text-teal-300">55 Days</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 28 March 2027 Completion Milestone Record -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Page 29 Milestone Record</span>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Your Completion Record — 28 March 2027</h3>
+          </div>
+          <button id="saveCompletionRecordBtn" onclick="saveMarch28Record()" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition">Save Milestone Record</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="recReadingThrough" class="block text-xs font-bold text-slate-700 mb-1">Reading completed through:</label>
+            <input id="recReadingThrough" type="text" placeholder="e.g. All 461 main lessons & 86 Ethics items completed on 26 Mar 2027" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
+          </div>
+          <div>
+            <label for="recSecondPassModules" class="block text-xs font-bold text-slate-700 mb-1">Modules needing a second pass:</label>
+            <input id="recSecondPassModules" type="text" placeholder="e.g. FI M3 (Embedded Options), DV M2 (BSM/Greeks), FA M2 (Pensions)" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
+          </div>
+          <div>
+            <label for="recPersistentErrors" class="block text-xs font-bold text-slate-700 mb-1">Unfinished questions / persistent errors:</label>
+            <input id="recPersistentErrors" type="text" placeholder="e.g. Temporal vs Current Rate method, CVA spread calculations" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
+          </div>
+          <div>
+            <label for="recNextMockPlan" class="block text-xs font-bold text-slate-700 mb-1">Next revision and mock plan (Mar 29 – Exam):</label>
+            <input id="recNextMockPlan" type="text" placeholder="e.g. 40 Qs/day Mon-Fri + 1 Full Timed Mock every Saturday (6 Mocks total)" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock Exams + Daily Question-Solving Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Left: Full Mock Exam Logger -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Mock Exam Tracker (AM &amp; PM Vignette Sessions)</h3>
+              <p class="text-xs text-slate-500">Log full or half mocks (88 questions = 22 item sets per full mock: 44 AM + 44 PM)</p>
+            </div>
+            <button id="openAddMockModalBtn" onclick="toggleAddMockForm()" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">+ Log Mock Exam</button>
+          </div>
+
+          <div id="addMockFormBox" class="hidden bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div class="col-span-2">
+                <label for="mockNameInput" class="block text-[11px] font-bold text-slate-600">Mock Title / Provider</label>
+                <input id="mockNameInput" type="text" placeholder="e.g. CFAI Mock Exam #1" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockDateInput" class="block text-[11px] font-bold text-slate-600">Date Taken</label>
+                <input id="mockDateInput" type="date" value="2027-04-03" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockQuestionsInput" class="block text-[11px] font-bold text-slate-600">Total Questions</label>
+                <input id="mockQuestionsInput" type="number" value="88" min="12" max="120" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockAmScoreInput" class="block text-[11px] font-bold text-slate-600">AM Session (%)</label>
+                <input id="mockAmScoreInput" type="number" placeholder="72" min="0" max="100" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockPmScoreInput" class="block text-[11px] font-bold text-slate-600">PM Session (%)</label>
+                <input id="mockPmScoreInput" type="number" placeholder="75" min="0" max="100" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockAvgVignetteMinsInput" class="block text-[11px] font-bold text-slate-600">Avg Min / Vignette (Target ≤12m)</label>
+                <input id="mockAvgVignetteMinsInput" type="number" step="0.5" value="11.5" min="4" max="30" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="mockWeakTopicsInput" class="block text-[11px] font-bold text-slate-600">Weakest Vignettes to Review</label>
+                <input id="mockWeakTopicsInput" type="text" placeholder="e.g. FI Binomial Trees, FA Multinational" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+            </div>
+            <!-- Topic-by-Topic Vignette Breakdown (% Accuracy per Subject in this Mock) -->
+            <div class="pt-2 border-t border-slate-200">
+              <span class="block text-[11px] font-bold text-slate-700 mb-1.5">Topic-by-Topic Vignette Score Breakdown (% Correct per Subject — Optional):</span>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                <div><label class="text-[10px] font-bold text-slate-500">CI %</label><input id="mockSubj-CI" type="number" min="0" max="100" placeholder="75" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">AI %</label><input id="mockSubj-AI" type="number" min="0" max="100" placeholder="75" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">EC %</label><input id="mockSubj-EC" type="number" min="0" max="100" placeholder="70" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">EQ %</label><input id="mockSubj-EQ" type="number" min="0" max="100" placeholder="80" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">FA %</label><input id="mockSubj-FA" type="number" min="0" max="100" placeholder="67" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">QM %</label><input id="mockSubj-QM" type="number" min="0" max="100" placeholder="75" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">PM %</label><input id="mockSubj-PM" type="number" min="0" max="100" placeholder="75" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">FI %</label><input id="mockSubj-FI" type="number" min="0" max="100" placeholder="65" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">DV %</label><input id="mockSubj-DV" type="number" min="0" max="100" placeholder="70" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+                <div><label class="text-[10px] font-bold text-slate-500">ET %</label><input id="mockSubj-ET" type="number" min="0" max="100" placeholder="83" class="w-full rounded border border-slate-300 px-2 py-1 text-xs" /></div>
+              </div>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button id="cancelAddMockBtn" onclick="toggleAddMockForm()" class="px-3 py-1.5 rounded-lg bg-slate-200 text-slate-700 text-xs font-semibold">Cancel</button>
+              <button id="saveMockExamBtn" onclick="addMockExamEntry()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold">Save Mock Exam</button>
+            </div>
+          </div>
+
+          <div class="relative h-56 w-full">
+            <canvas id="mockScoreChart"></canvas>
+          </div>
+
+          <div id="mockExamsListContainer" class="space-y-2.5"></div>
+          <div class="pt-3 border-t border-slate-100">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Topic-by-Topic Mock Vignette Averages &amp; 12-Min Pacing</span>
+            <div id="mockTopicBreakdownGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-2"></div>
+          </div>
+        </div>
+
+        <!-- Right: Post-March 28 Daily Question Grinding Log -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Post-Mar 28 Question Grinding Log</h3>
+              <p class="text-xs text-slate-500" id="qbankBurnDownSummary">Track daily item-set practice bursts between March 29 and Exam Day</p>
+            </div>
+            <button id="openAddDrillBtn" onclick="toggleAddDrillForm()" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition">+ Log Q-Bank Burst</button>
+          </div>
+
+          <div id="addDrillFormBox" class="hidden bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div>
+                <label for="drillDateInput" class="block text-[11px] font-bold text-slate-600">Date</label>
+                <input id="drillDateInput" type="date" value="2027-03-29" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="drillTopicSelect" class="block text-[11px] font-bold text-slate-600">Subject / Topic</label>
+                <select id="drillTopicSelect" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white">
+                  <option value="MIXED">Mixed Item Sets</option>
+                  <option value="CI">CI - Corporate Issuers</option>
+                  <option value="AI">AI - Alternative Investments</option>
+                  <option value="EC">EC - Economics</option>
+                  <option value="EQ">EQ - Equities</option>
+                  <option value="FA">FA - Financial Statement Analysis</option>
+                  <option value="QM">QM - Quantitative Methods</option>
+                  <option value="PM">PM - Portfolio Management</option>
+                  <option value="FI">FI - Fixed Income</option>
+                  <option value="DV">DV - Derivatives</option>
+                  <option value="ET">ET - Ethics</option>
+                </select>
+              </div>
+              <div>
+                <label for="drillAttemptedInput" class="block text-[11px] font-bold text-slate-600">Questions Solved</label>
+                <input id="drillAttemptedInput" type="number" value="24" min="1" max="200" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div>
+                <label for="drillCorrectInput" class="block text-[11px] font-bold text-slate-600">Correct</label>
+                <input id="drillCorrectInput" type="number" value="18" min="0" max="200" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+              <div class="col-span-2 sm:col-span-4">
+                <label for="drillNotesInput" class="block text-[11px] font-bold text-slate-600">Key Formula / Vignette Takeaways</label>
+                <input id="drillNotesInput" type="text" placeholder="e.g. Reviewed BSM carry benefits & FCFE from CFO formulas" class="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs" />
+              </div>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button id="cancelAddDrillBtn" onclick="toggleAddDrillForm()" class="px-3 py-1.5 rounded-lg bg-slate-200 text-slate-700 text-xs font-semibold">Cancel</button>
+              <button id="saveDrillBtn" onclick="addDrillEntry()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold">Save Practice Burst</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-[11px] text-slate-500 font-semibold block">Total Qs Solved</span>
+              <span id="phase2TotalQs" class="text-lg font-extrabold text-slate-900">0</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-[11px] text-slate-500 font-semibold block">Remaining in Bank</span>
+              <span id="phase2RemainingQs" class="text-lg font-extrabold text-slate-900">1,936</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+              <span class="text-[11px] text-slate-500 font-semibold block">Pace to Clear Bank</span>
+              <span id="phase2DailyPace" class="text-lg font-extrabold text-indigo-700">35 Qs/day</span>
+            </div>
+          </div>
+
+          <div id="drillEntriesListContainer" class="space-y-2.5 max-h-96 overflow-y-auto custom-scrollbar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: STUDY TIMER & POMODORO STUDIO ==================== -->
+    <div id="tabPanel-timer" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-slate-900 text-white rounded-2xl p-6 shadow-md border border-slate-800 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30">
+                CFA Level II Pacing &amp; Pomodoro Studio
+              </span>
+              <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+                <input id="timerSoundToggle" type="checkbox" checked class="checkbox-custom" />
+                <span>Audio Chime on Completion</span>
+              </label>
+            </div>
+
+            <div class="text-center my-8 py-8 rounded-2xl bg-slate-800/80 border border-slate-700">
+              <span id="fullTimerPhaseBadge" class="text-xs uppercase font-bold tracking-widest text-teal-400">POMODORO FOCUS SESSION</span>
+              <div id="fullTimerDisplay" class="font-mono text-6xl sm:text-7xl font-extrabold tracking-tight text-white my-3">25:00</div>
+              <p id="fullTimerDescription" class="text-xs sm:text-sm text-slate-300">25 minutes focused study followed by a 5-minute break</p>
+
+              <div class="flex flex-wrap items-center justify-center gap-3 mt-6">
+                <button id="fullTimerToggleBtn" onclick="toggleTimer()" class="px-6 py-3 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 font-extrabold text-sm transition shadow-md">
+                  Start / Pause Timer
+                </button>
+                <button id="fullTimerResetBtn" onclick="resetTimer()" class="px-5 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-sm transition">
+                  Reset
+                </button>
+                <button id="fullTimerLogBtn" onclick="logCompletedTimerSession()" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm transition">
+                  + Log Session to Study Hours
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Pomodoro Mode &amp; Custom Duration</h4>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button id="presetBtn-pomo25" onclick="selectTimerPreset('pomo_25')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span id="studioFocusBtnTitle" class="block text-xs font-bold text-teal-300">25m Pomodoro</span>
+                  <span class="text-[11px] text-slate-400">Deep focus sprint</span>
+                </button>
+                <button id="presetBtn-pomo5" onclick="selectTimerPreset('pomo_5')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span id="studioShortBreakBtnTitle" class="block text-xs font-bold text-emerald-300">5m Short Break</span>
+                  <span class="text-[11px] text-slate-400">Stretch &amp; hydrate</span>
+                </button>
+                <button id="presetBtn-pomo15" onclick="selectTimerPreset('pomo_15')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span id="studioLongBreakBtnTitle" class="block text-xs font-bold text-blue-300">15m Long Break</span>
+                  <span class="text-[11px] text-slate-400">After 4 Pomodoros</span>
+                </button>
+                <div class="p-2 rounded-xl bg-slate-800 border border-slate-700 flex items-center gap-1.5">
+                  <input id="customTimerMinutesInput" type="number" value="50" min="1" max="240" class="w-16 bg-slate-900 text-white text-xs font-bold px-2 py-1.5 rounded border border-slate-600" />
+                  <button id="setCustomTimerBtn" onclick="setCustomTimerMinutes()" class="flex-1 py-1.5 px-2 rounded bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold">Set Min</button>
+                </div>
+              </div>
+
+              <!-- Personal Pomodoro Defaults & Custom Preset Builder -->
+              <div class="mt-3 p-3.5 rounded-xl bg-slate-800/90 border border-slate-700 space-y-2.5">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-teal-300">Customize Your Personal Pomodoro Defaults (Saved to Your Profile)</span>
+                  <button id="saveUserPomoDefaultsBtn" type="button" onclick="saveUserPomodoroDefaults()" class="px-3 py-1 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">Save My Timer Defaults</button>
+                </div>
+                <div class="grid grid-cols-3 gap-2.5">
+                  <div>
+                    <label for="userPomoFocusInput" class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Focus Sprint (Min)</label>
+                    <input id="userPomoFocusInput" type="number" value="25" min="1" max="240" class="w-full bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5 rounded border border-slate-600" />
+                  </div>
+                  <div>
+                    <label for="userPomoShortBreakInput" class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Short Break (Min)</label>
+                    <input id="userPomoShortBreakInput" type="number" value="5" min="1" max="120" class="w-full bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5 rounded border border-slate-600" />
+                  </div>
+                  <div>
+                    <label for="userPomoLongBreakInput" class="block text-[10px] uppercase text-slate-400 font-bold mb-1">Long Break (Min)</label>
+                    <input id="userPomoLongBreakInput" type="number" value="15" min="1" max="180" class="w-full bg-slate-900 text-white text-xs font-bold px-2.5 py-1.5 rounded border border-slate-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">PDF Study Plan Official Time Allocations (Page 3)</h4>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <button id="presetBtn-wk85" onclick="selectTimerPreset('wk_85')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-white">Weekday: 85m Reading</span>
+                  <span class="text-[11px] text-slate-400">Main lessons &amp; examples</span>
+                </button>
+                <button id="presetBtn-wk15" onclick="selectTimerPreset('wk_15')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-white">Weekday: 15m Notes</span>
+                  <span class="text-[11px] text-slate-400">Concise notes &amp; mark hard spots</span>
+                </button>
+                <button id="presetBtn-wk20" onclick="selectTimerPreset('wk_20')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-white">Daily: 20m Ethics</span>
+                  <span class="text-[11px] text-slate-400">Assigned Ethics reading / Qs</span>
+                </button>
+                <button id="presetBtn-sat25" onclick="selectTimerPreset('sat_25')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-amber-300">Sat: 25m Revision</span>
+                  <span class="text-[11px] text-slate-400">Sun: 20m Cumulative Revision</span>
+                </button>
+                <button id="presetBtn-sat45" onclick="selectTimerPreset('sat_45')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-amber-300">Sat/Sun: 45m LES Qs</span>
+                  <span class="text-[11px] text-slate-400">Attempt 8–12 scored questions</span>
+                </button>
+                <button id="presetBtn-sat30" onclick="selectTimerPreset('sat_30')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left transition">
+                  <span class="block text-xs font-bold text-amber-300">Sat: 30m Explanations</span>
+                  <span class="text-[11px] text-slate-400">Review &amp; log mistakes</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <h3 class="text-base font-extrabold text-slate-900">Planned vs. Actual Study Hours &amp; Session Log</h3>
+              <button type="button" onclick="openManualTimeModal(appState.activeDate)" class="px-2.5 py-1 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">+ Log Manual Session</button>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5 mb-4">
+              Your plan budgets 175.0 weekday reading hours + 71.7 weekend hours + 49.3 Ethics hours = 296.0 total hours.
+            </p>
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 mb-4 space-y-2">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-600 font-medium">Actual Recorded Study Hours (Timer + Manual):</span>
+                <span id="timerLoggedSessionsCount" class="font-extrabold text-teal-700">0.0 hrs (0 sessions)</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-600 font-medium">This Week (Actual / Planned):</span>
+                <span id="timerWeeklyPlannedVsActual" class="font-bold text-slate-900">0.0h / 14.0h (0%)</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-600 font-medium">This Month (Actual / Planned):</span>
+                <span id="timerMonthlyPlannedVsActual" class="font-bold text-slate-900">0.0h / 60.0h (0%)</span>
+              </div>
+              <div class="flex justify-between text-xs border-t border-slate-200 pt-1.5">
+                <span class="text-slate-500">Est. Curriculum Workload Completed:</span>
+                <span id="timerEquivHours" class="font-semibold text-slate-700">0.0 hrs (separate from actual time)</span>
+              </div>
+            </div>
+            <div class="mb-4">
+              <div class="flex items-center justify-between mb-1.5">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Hours Tagged by CFA Subject (Auto-Tagged)</h4>
+                <span id="activeTimerSubjectTagBadge" class="text-[11px] font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-800">Active Tag: CI</span>
+              </div>
+              <div id="timerSubjectHoursBreakdown" class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar pr-1"></div>
+            </div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Recent Timed Sessions</h4>
+            <div id="timerSessionHistoryList" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar"></div>
+          </div>
+          <button id="clearTimerHistoryBtn" onclick="clearTimerHistory()" class="mt-4 text-xs text-slate-400 hover:text-rose-600 underline text-left">Clear session history</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== MODAL: EDIT MODULE PRACTICE & ERROR LOG ==================== -->
+  <div id="moduleEditModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <span id="modalModuleCodeBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-slate-900 text-white">CI M1</span>
+          <h3 id="modalModuleTitle" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Analysis of Dividends and Share Repurchases</h3>
+          <p id="modalModuleSub" class="text-xs text-slate-500">Lesson range: 1.01 - 1.11</p>
+        </div>
+        <button id="closeModuleModalBtn" onclick="closeModuleModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+        <div>
+          <label for="modalQuestionsAttempted" class="block text-xs font-bold text-slate-700 mb-1">Questions Attempted</label>
+          <input id="modalQuestionsAttempted" type="number" min="0" max="500" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold" />
+        </div>
+        <div>
+          <label for="modalQuestionsCorrect" class="block text-xs font-bold text-slate-700 mb-1">Questions Correct</label>
+          <input id="modalQuestionsCorrect" type="number" min="0" max="500" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold" />
+        </div>
+      </div>
+
+      <div>
+        <label for="modalWeakConceptsInput" class="block text-xs font-bold text-slate-700 mb-1">Weakest Concepts / Persistent Errors (Surfaces on Sundays)</label>
+        <input id="modalWeakConceptsInput" type="text" placeholder="e.g. Signaling vs Bird-in-Hand, FCFE debt cash flow sign..." class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm" />
+      </div>
+
+      <div>
+        <label for="modalNotesInput" class="block text-xs font-bold text-slate-700 mb-1">Formula Sheet &amp; Module Revision Notes</label>
+        <textarea id="modalNotesInput" rows="3" placeholder="Key equations, traps, or examples to review..." class="w-full rounded-xl border border-slate-300 p-3 text-xs sm:text-sm"></textarea>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <label class="flex items-center gap-2 text-xs font-semibold text-rose-700 cursor-pointer">
+          <input id="modalFlagSecondPass" type="checkbox" class="checkbox-custom" />
+          <span>Pin to REVISION PRIORITIES / Second Pass</span>
+        </label>
+        <div class="flex items-center gap-2">
+          <button id="cancelModuleModalBtn" onclick="closeModuleModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+          <button id="saveModuleModalBtn" onclick="saveModuleModal()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-xs">Save Module Log</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: LAPTOP <-> ANDROID PHONE QUICK SYNC ==================== -->
+  <div id="deviceSyncModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl border border-slate-200 space-y-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-teal-100 text-teal-800">CROSS-DEVICE PROGRESS SYNC</span>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Sync Laptop &harr; Android Phone</h3>
+          <p class="text-xs text-slate-500">Transfer your checked lessons, confidence stars, notes, and mock scores in seconds.</p>
+        </div>
+        <button id="closeSyncModalBtn" onclick="closeSyncModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <!-- Step 1: Send from this device -->
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-slate-800">1. Send Progress FROM This Device</span>
+          <span id="syncSummaryStatsBadge" class="text-[11px] font-semibold text-teal-700">0 items logged</span>
+        </div>
+        <p class="text-xs text-slate-500">Copy a magic link or sync code to send via Google Keep, WhatsApp, or Chrome "Send to your devices":</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="copySyncLinkBtn" onclick="copySyncUrlToClipboard()" class="flex-1 py-2 px-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold transition">
+            &#128279; Copy Magic Sync Link
+          </button>
+          <button id="copySyncCodeBtn" onclick="copySyncCodeToClipboard()" class="py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition">
+            &#128203; Copy Sync Code
+          </button>
+          <button id="shareSyncNativeBtn" onclick="shareSyncNative()" class="py-2 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition">
+            Share &nearr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Receive on this device -->
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+        <label for="pasteSyncCodeInput" class="block text-xs font-extrabold text-slate-800">2. Load Progress ONTO This Device</label>
+        <p class="text-xs text-slate-500">Paste a Sync Code or Magic Sync Link copied from your other device below:</p>
+        <textarea id="pasteSyncCodeInput" rows="3" placeholder="Paste your Sync Code or Magic Sync Link here..." class="w-full rounded-xl border border-slate-300 p-2.5 text-xs font-mono text-slate-800"></textarea>
+        <div class="flex justify-end gap-2 pt-1">
+          <button id="cancelSyncModalBtn" onclick="closeSyncModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-bold">Close</button>
+          <button id="applySyncCodeBtn" onclick="applyPastedSyncCode()" class="px-4 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold">Apply Sync Code</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== MODAL 1: CANDIDATE PROFILE & MULTI-USER SWITCHER (HIDDEN BY DEFAULT — ZERO LOGIN SCREEN) ==================== -->
+  <div id="authGateModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-5 my-8">
+      <div class="flex flex-col gap-2 border-b border-slate-100 pb-3.5">
+        <div class="flex items-center justify-between gap-2">
+          <button type="button" onclick="closeAuthGateModal()" class="btn-modal-back">
+            <span>&larr;</span> Back
+          </button>
+          <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-100 text-indigo-800">INSTANT MULTI-USER WORKSPACE</span>
+          <button id="closeAuthGateModalBtn" type="button" onclick="closeAuthGateModal()" class="btn-modal-close">
+            <span>&times;</span> Close
+          </button>
+        </div>
+        <div>
+          <h3 id="authGateMainHeading" class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">Candidate Profile &amp; Switch User</h3>
+          <p id="authGateSubHeading" class="text-xs text-slate-500 mt-0.5">Personalize your display name or switch between separate candidate profiles on this device. No password required.</p>
+        </div>
+      </div>
+
+      <!-- Current Profile Editor -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-indigo-700">Active Profile Settings</span>
+          <span id="profileModalVisitorIdBadge" class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-700">ID: USR-0000</span>
+        </div>
+        <div>
+          <label for="loginNameInput" class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+          <input id="loginNameInput" type="text" value="" autocomplete="off" oninput="onLiveUsernameOrEmailInput('auth')" placeholder="e.g. Alex Mensah" onkeydown="if(event.key==='Enter'){event.preventDefault();saveActiveProfileDetails();}" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label for="loginEmailInput" class="block text-xs font-bold text-slate-700 mb-1">Email Address <span class="text-slate-400 font-normal">(Optional — for progress backup &amp; admin access)</span></label>
+          <input id="loginEmailInput" type="email" value="" autocomplete="off" placeholder="you@example.com" onkeydown="if(event.key==='Enter'){event.preventDefault();saveActiveProfileDetails();}" class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <p id="loginErrorMsg" class="hidden text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
+        <div class="flex items-center gap-2 pt-1">
+          <button id="submitEmailLoginBtn" type="button" onclick="saveActiveProfileDetails()" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-extrabold transition shadow-xs">
+            Save Profile &amp; Update Dashboard
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500 leading-relaxed">
+          <strong>Note:</strong> Visitors who use the platform without entering an email are automatically tracked as <strong>Instant-Open (No Email)</strong> users. Entering your admin email unlocks the <strong>&#128202; Active Users &amp; Admin</strong> tracker without overwriting existing anonymous visitor sessions.
+        </p>
+      </div>
+
+      <!-- Switch or Create Separate User Profiles on This Device -->
+      <div class="space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-slate-600">User Profiles on This Device</span>
+          <button id="createNewProfileBtn" type="button" onclick="startNewUserProfileOnDevice()" class="text-xs font-extrabold text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200 transition">
+            + Add New User Profile
+          </button>
+        </div>
+        <p class="text-[11px] text-slate-500">Each profile stores its own independent study schedule, completed lessons, question logs, and mock scores.</p>
+        <div id="deviceProfilesListContainer" class="space-y-2 max-h-52 overflow-y-auto custom-scrollbar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: PROPORTIONAL SCHEDULE & STUDY HOURS CUSTOMIZER (POPS UP ON FIRST VISIT OR ANYTIME) ==================== -->
+  <div id="planSettingsModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
+      <div class="flex flex-col gap-2 border-b border-slate-100 pb-3">
+        <div class="flex items-center justify-between gap-2">
+          <button type="button" onclick="closePlanSettingsModal()" class="btn-modal-back">
+            <span>&larr;</span> Back
+          </button>
+          <span id="planModalEyebrowBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-800">PERSONALIZE YOUR STUDY PLAN</span>
+          <button id="closePlanSettingsModalBtn" type="button" onclick="closePlanSettingsModal()" class="btn-modal-close">
+            <span>&times;</span> Close
+          </button>
+        </div>
+        <div>
+          <h3 id="planModalHeadingText" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Set Your Preferred Study Dates &amp; Daily Hours</h3>
+          <p class="text-xs text-slate-500">Enter your name and preferred reading dates/hours so your CFA Level II Study Guide is tailored to your schedule and saved automatically on every visit.</p>
+        </div>
+      </div>
+
+      <div id="planOnboardingWelcomeBanner" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium">
+        <strong>&#128075; Welcome to the CFA Level II Study Guide!</strong> No login or password is required — your progress is saved automatically to your personal profile every day. Set your name and study schedule below to begin.
+      </div>
+
+      <!-- Candidate Name & Email Row inside Plan Setup -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-indigo-50/60 p-3.5 rounded-xl border border-indigo-100">
+        <div>
+          <label for="planCandidateNameInput" class="block text-xs font-bold text-slate-800 mb-1">Username</label>
+          <input id="planCandidateNameInput" type="text" oninput="onLiveUsernameOrEmailInput('plan')" placeholder="Enter username" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+        <div>
+          <label for="planCandidateEmailInput" class="block text-xs font-bold text-slate-800 mb-1">Your Email <span class="text-slate-400 font-normal">(Optional)</span></label>
+          <input id="planCandidateEmailInput" type="email" placeholder="you@example.com" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div>
+          <label for="planStartDateInput" class="block text-xs font-bold text-slate-700 mb-1">Core Reading Start Date</label>
+          <input id="planStartDateInput" type="date" value="" onchange="updateModalPlanPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="planEndDateInput" class="block text-xs font-bold text-slate-700 mb-1">Core Reading Finish Date</label>
+          <input id="planEndDateInput" type="date" value="" onchange="updateModalPlanPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="planWeekdayHoursInput" class="block text-xs font-bold text-slate-700 mb-1">Weekday Study Hours / Day (Mon–Fri)</label>
+          <input id="planWeekdayHoursInput" type="number" step="0.25" min="0" max="12" value="" placeholder="Enter hours" oninput="updateModalPlanPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="planWeekendHoursInput" class="block text-xs font-bold text-slate-700 mb-1">Weekend Study Hours / Day (Sat–Sun)</label>
+          <input id="planWeekendHoursInput" type="number" step="0.25" min="0" max="14" value="" placeholder="Enter hours" oninput="updateModalPlanPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="planExamDateModalInput" class="block text-xs font-bold text-slate-700 mb-1">Target CFA Level II Exam Date</label>
+          <input id="planExamDateModalInput" type="date" value="" onchange="updateModalPlanPreview()" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div class="flex flex-col justify-end">
+          <button id="planAutoCalcEndDateBtn" type="button" onclick="autoCalculateEndDateFromHours('modal')" class="w-full py-2 px-3 rounded-lg bg-indigo-100 hover:bg-indigo-200 text-indigo-900 text-xs font-extrabold border border-indigo-200 transition" title="Calculates the exact Core Reading Finish Date needed to complete 296 study hours at your chosen Weekday & Weekend daily hours">
+            &#9889; Auto-Calc Finish Date from Hours
+          </button>
+        </div>
+      </div>
+
+      <!-- Ethics Mode, Topic Order & Weekly Schedule Customizer inside Plan Setup Modal -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/80 pb-2.5">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-800">Schedule Preferences &amp; Topic Sequence (Full Control)</span>
+            <p class="text-[11px] text-slate-500">All defaults below are recommendations—customize your Ethics mode, topic sequence, and reading vs. revision days anytime.</p>
+          </div>
+          <button type="button" onclick="applyRecommendedScheduleDefaultsInModal()" class="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-bold">
+            &#8634; Use Recommended
+          </button>
+        </div>
+
+        <!-- 1. Ethics Mode & Daily Minutes -->
+        <div class="space-y-2">
+          <label class="block text-xs font-extrabold text-slate-800">1. Ethics Study Mode &amp; Daily Allocation</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button id="modalEthicsBtn-daily_parallel" type="button" onclick="setModalEthicsMode('daily_parallel')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-active">
+              <div class="text-xs font-extrabold">Daily Ethics Alongside 9 Topics</div>
+              <p class="text-[10px] opacity-90 mt-0.5">Recommended ~17% of daily study time (e.g., 20m/2h), adjustable below.</p>
+            </button>
+            <button id="modalEthicsBtn-sequence_10" type="button" onclick="setModalEthicsMode('sequence_10')" class="p-2.5 rounded-xl border text-left transition day-mode-pill-inactive">
+              <div class="text-xs font-extrabold">10-Topic Sequence (Standalone Ethics)</div>
+              <p class="text-[10px] opacity-90 mt-0.5">Place Ethics anywhere in your 10-topic order; 100% daily time on active topic.</p>
+            </button>
+          </div>
+          <div id="modalDailyEthicsMinsBox" class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+            <span id="modalEthicsRecommendationHint" class="text-[11px] text-slate-600">Recommended Ethics allocation: <strong>~20 min/day</strong> on a 2.0h plan (leave blank for auto-recommended or set custom minutes):</span>
+            <div class="flex items-center gap-1.5">
+              <input id="modalEthicsCustomMinsInput" type="number" min="0" max="180" step="5" value="" placeholder="Auto (~17%)" oninput="updateModalPlanPreview()" class="w-28 rounded-lg border border-slate-300 px-2.5 py-1 text-xs font-bold bg-white" />
+              <span class="text-[11px] text-slate-600 font-semibold">min/day</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Weekly Reading vs. Revision & LES Practice Days -->
+        <div class="space-y-2 pt-2 border-t border-slate-200/80">
+          <label class="block text-xs font-extrabold text-slate-800">2. Weekly Reading, Revision &amp; LES Practice Days</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <button id="modalWeeklyBtn-recommended" type="button" onclick="setModalWeeklyMode('recommended')" class="p-2 rounded-xl border text-left transition day-mode-pill-active">
+              <div class="text-xs font-extrabold">Recommended</div>
+              <span class="text-[10px] opacity-90 block">Mon–Fri Read • Sat–Sun Rev/Qs</span>
+            </button>
+            <button id="modalWeeklyBtn-all_reading" type="button" onclick="setModalWeeklyMode('all_reading')" class="p-2 rounded-xl border text-left transition day-mode-pill-inactive">
+              <div class="text-xs font-extrabold">Readings Every Day</div>
+              <span class="text-[10px] opacity-90 block">New readings all 7 days (Mon–Sun)</span>
+            </button>
+            <button id="modalWeeklyBtn-custom" type="button" onclick="setModalWeeklyMode('custom')" class="p-2 rounded-xl border text-left transition day-mode-pill-inactive">
+              <div class="text-xs font-extrabold">Custom Weekly Days</div>
+              <span class="text-[10px] opacity-90 block">Set Read / Rev / Combo per day</span>
+            </button>
+          </div>
+          <div id="modalCustomDaysStrip" class="grid grid-cols-7 gap-1 pt-1"></div>
+        </div>
+
+        <!-- 3. Topic Order Customizer (Drag & Drop + Up/Down Buttons) -->
+        <div class="space-y-2 pt-2 border-t border-slate-200/80">
+          <div class="flex flex-wrap items-center justify-between gap-1.5">
+            <label class="block text-xs font-extrabold text-slate-800">3. Topic Sequence (<span id="modalTopicCountLabel">9 Topics</span> — Drag or Use &uarr;/&darr; Buttons)</label>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="applyModalTopicPreset('recommended')" class="px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">Recommended</button>
+              <button type="button" onclick="applyModalTopicPreset('cfai_curriculum')" class="px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">CFAI Order</button>
+              <button type="button" onclick="applyModalTopicPreset('heavy_weights')" class="px-2 py-0.5 rounded bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-[10px] font-bold">Heavy Weights</button>
+            </div>
+          </div>
+          <div id="modalTopicOrderList" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 max-h-56 overflow-y-auto custom-scrollbar pr-1"></div>
+        </div>
+      </div>
+
+      <!-- Live Proportional Compression / Expansion Preview Box -->
+      <div id="modalPlanPreviewBox" class="p-3.5 rounded-xl bg-teal-50/90 border border-teal-200 space-y-1.5 text-xs text-slate-800">
+        <div class="font-extrabold text-teal-950 flex items-center justify-between">
+          <span>Live Proportional Schedule Preview:</span>
+          <span id="modalPreviewPaceBadge" class="px-2 py-0.5 rounded bg-teal-200 text-teal-900 font-bold">Awaiting Dates &amp; Hours</span>
+        </div>
+        <div id="modalPreviewDetailsText">
+          Select your Core Reading Start &amp; Finish Dates and enter your Weekday &amp; Weekend study hours above to preview your custom schedule.
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
+        <button id="resetDefaultPlanBtn" type="button" onclick="resetPlanToDefaultMay2027()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-300">
+          Clear Fields
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="cancelPlanSettingsBtn" type="button" onclick="closePlanSettingsModal()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Skip / Keep Current</button>
+          <button id="savePlanSettingsBtn" type="button" onclick="saveAndApplyPlanSettings()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs">Save &amp; Build My Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: ADMIN ACTIVE USERS & PLATFORM TRACKER (OWNER ONLY) ==================== -->
+  <div id="adminCodeModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-5xl w-full p-6 shadow-2xl border border-slate-200 space-y-5 my-8">
+      <div class="modal-sticky-topbar flex flex-col gap-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-back" title="Return to Study Dashboard">
+              <span>&larr;</span> Back to Dashboard
+            </button>
+            <span class="text-xs font-extrabold px-2.5 py-1 rounded bg-amber-100 text-amber-900">ADMIN ACTIVE USERS &amp; PLATFORM TELEMETRY</span>
+          </div>
+          <button id="closeAdminCodeModalBtn" type="button" onclick="closeAdminCodeModal()" class="btn-modal-close" title="Close Admin Tracker (Esc)">
+            <span style="font-size: 1rem; line-height: 1;">&times;</span> Close
+          </button>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Active Platform Users &amp; Study Progress Tracker (Instant-Open &amp; Email Users)</h3>
+          <p class="text-xs text-slate-500">Automatically tracks every user who logs on and uses the platform — including anonymous <strong>Instant-Open (No Email)</strong> visitors, username-only visitors, and email-linked candidates.</p>
+        </div>
+      </div>
+
+      <!-- Active Users Summary KPI Strip (5 Cards including Instant-Open No-Email Users) -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 block">Total Tracked Users</span>
+          <strong id="adminMetricTotalUsers" class="text-xl font-extrabold text-slate-900">1</strong>
+          <span id="adminMetricTotalSub" class="text-[11px] text-slate-500 block">All link openers &amp; profiles</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">&#9889; Instant-Open (No Email)</span>
+          <strong id="adminMetricAnonymousUsers" class="text-xl font-extrabold text-amber-900">0</strong>
+          <span id="adminMetricNoEmailSub" class="text-[11px] text-amber-800 block">Guests &amp; username-only users</span>
+        </div>
+        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 block">&#9993; Email / Registered</span>
+          <strong id="adminMetricEmailUsers" class="text-xl font-extrabold text-indigo-900">1</strong>
+          <span class="text-[11px] text-indigo-700 block">Provided email address</span>
+        </div>
+        <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Active (Last 7 Days)</span>
+          <strong id="adminMetricActive7d" class="text-xl font-extrabold text-emerald-900">1</strong>
+          <span id="adminMetricOnlineSub" class="text-[11px] text-emerald-700 block">Recent study sessions</span>
+        </div>
+        <div class="p-3 rounded-xl bg-teal-50/90 border border-teal-200 col-span-2 sm:col-span-1">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider text-teal-800 block">Total Study Activity</span>
+          <strong id="adminMetricTotalLessons" class="text-xl font-extrabold text-teal-900">0</strong>
+          <span id="adminMetricCloudStatus" class="text-[11px] text-teal-700 block">Lessons &amp; sessions tracked</span>
+        </div>
+      </div>
+
+      <!-- Active Users Directory Filter Bar & Actions -->
+      <div class="space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-slate-700 mr-1">Filter Users:</span>
+            <button id="adminFilterBtn-ALL" type="button" onclick="setAdminUserFilter('ALL')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-extrabold transition">
+              All Users (<span id="adminCountAll">0</span>)
+            </button>
+            <button id="adminFilterBtn-NO_EMAIL" type="button" onclick="setAdminUserFilter('NO_EMAIL')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-extrabold transition">
+              &#9889; Instant-Open / No Email (<span id="adminCountNoEmail">0</span>)
+            </button>
+            <button id="adminFilterBtn-WITH_USERNAME" type="button" onclick="setAdminUserFilter('WITH_USERNAME')" class="px-2.5 py-1 rounded-lg bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs font-extrabold transition">
+              &#128100; Provided Username (<span id="adminCountWithUsername">0</span>)
+            </button>
+            <button id="adminFilterBtn-WITH_EMAIL" type="button" onclick="setAdminUserFilter('WITH_EMAIL')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              &#9993; With Email (<span id="adminCountWithEmail">0</span>)
+            </button>
+            <button id="adminFilterBtn-ACTIVE_TODAY" type="button" onclick="setAdminUserFilter('ACTIVE_TODAY')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              &#128994; Active Today (<span id="adminCountToday">0</span>)
+            </button>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" onclick="createAndSwitchToAnonymousVisitor()" class="px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-extrabold transition" title="Open a fresh Instant-Open (No Email) visitor session to see how anonymous users are tracked">
+              + Test New Instant-Open Visitor
+            </button>
+            <button type="button" onclick="fetchCloudActiveUsersForAdmin(true)" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition">
+              &#8635; Refresh Live Users
+            </button>
+            <button type="button" onclick="exportActiveUsersCsv()" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              &#128229; Export CSV
+            </button>
+            <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-close-dark" title="Close Admin Tracker and return to Dashboard">
+              &larr; Back / Close
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-200 max-h-80 overflow-y-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="bg-slate-100 text-slate-600 uppercase text-[10px] font-extrabold sticky top-0 z-10">
+              <tr>
+                <th class="py-2.5 px-3">Candidate / Username &amp; Access Type</th>
+                <th class="py-2.5 px-3">Device &amp; Timezone</th>
+                <th class="py-2.5 px-3">Study Window &amp; Pace</th>
+                <th class="py-2.5 px-3">Live Progress &amp; Last Action</th>
+                <th class="py-2.5 px-3">Visits &amp; Last Active</th>
+              </tr>
+            </thead>
+            <tbody id="adminActiveUsersTableBody" class="divide-y divide-slate-100 bg-white"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- How Automatic Anonymous + Cross-Device Tracking Works -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3 text-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="font-extrabold text-slate-900 block">&#128225; Automatic Instant-Open &amp; Cross-Device Visitor Telemetry (Active)</span>
+            <span class="text-[11px] text-slate-600">Every visitor who opens the platform—even if they click <em>"Skip / Keep Current"</em> and never enter an email or username—is automatically assigned a persistent <strong>Guest ID (USR-XXXX-XXXX)</strong>, fingerprinted by device/browser/timezone, and synced on every lesson check, timer session, tab view, and 60-second heartbeat.</span>
+          </div>
+          <button type="button" onclick="copyGoogleAppsScriptSnippet()" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-2xs shrink-0">
+            &#128203; Copy 12-Line Google Sheet Tracker Script
+          </button>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 pt-1">
+          <input id="gasWebhookUrlInput" type="url" placeholder="Optional: Paste Google Apps Script Web App URL (https://script.google.com/macros/s/.../exec) to also mirror all visitors to Google Sheets" class="flex-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs bg-white" />
+          <button type="button" onclick="saveAdminEmailJsConfig()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0">
+            Save Sheet Mirror URL
+          </button>
+        </div>
+      </div>
+
+      <!-- Optional Legacy Invite / Welcome Email Sender (Collapsible) -->
+      <details class="group rounded-xl border border-slate-200 bg-white p-3.5 text-xs">
+        <summary class="cursor-pointer font-extrabold text-slate-700 flex items-center justify-between">
+          <span>&#9993; Optional: Send Study Guide Invite Link to a Candidate</span>
+          <span class="text-slate-400 group-open:rotate-180 transition-transform">&#9660;</span>
+        </summary>
+        <div class="pt-3 space-y-3 border-t border-slate-100 mt-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input id="adminRequesterEmailInput" type="email" oninput="generateAdminCodeLive()" placeholder="Candidate's Email (e.g. sarah@example.com)" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+            <input id="adminRequesterNameInput" type="text" oninput="generateAdminCodeLive()" placeholder="Candidate's Name (Optional)" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs bg-white" />
+          </div>
+          <div class="hidden"><span id="adminGeneratedCodeDisplay">CFAL2-OPEN</span><div id="adminEmailJsConfigBox"></div><div id="adminIssuedCodesList"></div></div>
+          <div class="flex flex-wrap gap-2">
+            <button id="adminSendGmailWebBtn" type="button" onclick="sendAdminCodeViaGmailWeb()" class="py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition">
+              &#9993; Send Invite via Gmail Web
+            </button>
+            <button id="adminCopyWelcomeMsgBtn" type="button" onclick="copyAdminWelcomeMessage()" class="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+              &#128203; Copy Invite Text
+            </button>
+          </div>
+          <div id="adminSendStatusBanner" class="hidden p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 font-semibold"></div>
+        </div>
+      </details>
+
+      <!-- Bottom Navigation & Close Bar -->
+      <div class="pt-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-back">
+          <span>&larr;</span> Back to Study Dashboard
+        </button>
+        <button type="button" onclick="closeAdminCodeModal()" class="btn-modal-close-dark">
+          <span>&times;</span> Close Admin Tracker
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 4: 1-CLICK EMAIL APPROVAL & AUTO-DISPATCH MODAL ==================== -->
+  <div id="oneClickApproveModal" class="fixed inset-0 z-50 bg-slate-900/85 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
+      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-900">1-CLICK ACCESS APPROVAL</span>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Approve &amp; Send Candidate Access Code</h3>
+          <p class="text-xs text-slate-500">Triggered directly from your access-request email approval link.</p>
+        </div>
+        <button id="closeOneClickApproveModalBtn" type="button" onclick="closeOneClickApproveModal()" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <!-- Candidate Details & Generated Code Card -->
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-slate-500 font-semibold">Candidate Name:</span>
+          <span id="approveModalCandidateName" class="font-extrabold text-slate-900">—</span>
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-slate-500 font-semibold">Candidate Email:</span>
+          <span id="approveModalCandidateEmail" class="font-extrabold text-indigo-700">—</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900 text-white flex items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-amber-400 font-bold block">Approved Personal Access Code</span>
+            <span id="approveModalCodeDisplay" class="font-mono text-xl font-extrabold text-teal-300 tracking-wider">CFAL2-XXXX-XXXX</span>
+          </div>
+          <button id="copyApprovedCandidateCodeBtn" type="button" onclick="copyApprovedCandidateCode()" class="px-3 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition shrink-0">
+            &#128203; Copy Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Auto-Dispatch Status Banner -->
+      <div id="approveModalStatusBanner" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1">
+        <div id="approveModalStatusTitle" class="font-extrabold text-emerald-900">Preparing candidate welcome email...</div>
+        <p id="approveModalStatusDesc" class="text-[11px] text-emerald-800 leading-relaxed"></p>
+      </div>
+
+      <!-- Action Buttons (1-Click Send via Gmail Web or Default Mail App) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <button id="approveModalGmailBtn" type="button" onclick="sendApprovedCodeViaGmailWeb()" class="py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>&#9993; Send via Gmail Web (1-Click)</span>
+        </button>
+        <button id="approveModalMailtoBtn" type="button" onclick="sendApprovedCodeViaMailApp()" class="py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-xs">
+          <span>&#128640; Send via Mail App</span>
+        </button>
+      </div>
+
+      <!-- 100% Zero-Touch Automation Setup Toggle -->
+      <div class="pt-1 border-t border-slate-100 flex items-center justify-between">
+        <button type="button" onclick="document.getElementById('approveModalAutoSetupBox').classList.toggle('hidden')" class="text-[11px] font-extrabold text-indigo-600 hover:underline bg-transparent p-0">
+          &#9889; Enable 100% Zero-Touch Background Auto-Send (60-Sec Setup)
+        </button>
+        <button type="button" onclick="closeOneClickApproveModal()" class="text-xs font-bold text-slate-500 hover:text-slate-800 bg-transparent p-0">
+          Done / Close
+        </button>
+      </div>
+
+      <div id="approveModalAutoSetupBox" class="hidden p-3.5 rounded-xl bg-slate-50 border border-indigo-200 space-y-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-extrabold text-slate-900">Zero-Touch Google Apps Script Mailer</span>
+          <button type="button" onclick="copyGoogleAppsScriptSnippet()" class="px-2.5 py-1 rounded bg-indigo-600 text-white hover:bg-indigo-500 font-bold text-[11px]">&#128203; Copy 8-Line Script</button>
+        </div>
+        <ol class="list-decimal list-inside text-[11px] text-slate-600 space-y-1 leading-relaxed">
+          <li>Open <a href="https://script.google.com/home/start" target="_blank" rel="noopener noreferrer" class="text-indigo-600 underline font-bold">script.google.com</a> &rarr; click <strong>New project</strong>.</li>
+          <li>Paste the 8-line script and click <strong>Deploy &rarr; New deployment &rarr; Web app</strong> (Execute as: <em>Me</em>, Who has access: <em>Anyone</em>).</li>
+          <li>Paste your Web App URL below. Every time you click <strong>"Approve"</strong> in your email, it will email the code to the candidate automatically without opening Gmail!</li>
+        </ol>
+        <div class="flex gap-2">
+          <input id="approveModalGasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs bg-white" />
+          <button id="saveGasUrlFromApproveModalBtn" type="button" onclick="saveGasUrlFromApproveModal()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold shrink-0">Save &amp; Auto-Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 5: MARK AS DAY OFF & 3-WAY INTELLIGENT RESCHEDULING ==================== -->
+  <div id="dayOffRescheduleModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
+      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-amber-100 text-amber-900">MARK AS DAY OFF &amp; RESCHEDULE</span>
+          <h3 id="dayOffModalHeading" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Mark Date as a Scheduled Day Off</h3>
+          <p id="dayOffModalSub" class="text-xs text-slate-500">Sets planned hours to 0h without penalizing streaks or completion stats. Choose how to handle unfinished activities on this date:</p>
+        </div>
+        <button type="button" onclick="closeDayOffRescheduleModal()" class="btn-modal-close">&times; Close</button>
+      </div>
+
+      <!-- Unfinished Items on Selected Date -->
+      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 text-xs">
+        <div class="font-extrabold text-slate-800 flex items-center justify-between">
+          <span>Unfinished Scheduled Activities on <span id="dayOffModalDateLabel">Date</span>:</span>
+          <span id="dayOffModalItemCountBadge" class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">0 items</span>
+        </div>
+        <div id="dayOffModalItemsList" class="text-[11px] text-slate-600 max-h-28 overflow-y-auto custom-scrollbar space-y-1"></div>
+      </div>
+
+      <!-- 3 Rescheduling Options -->
+      <div class="space-y-2.5">
+        <label class="flex items-start gap-3 p-3.5 rounded-xl border-2 border-indigo-500 bg-indigo-50/60 cursor-pointer transition" id="dayOffOptCard-1">
+          <input type="radio" name="dayOffRescheduleOpt" value="redistribute" checked onchange="updateDayOffReschedulePreview(this.value)" class="mt-1" />
+          <div class="flex-1 text-xs">
+            <div class="font-extrabold text-slate-900 flex items-center justify-between">
+              <span>Option 1: Redistribute Across Future Study Days</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">Recommended</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-0.5">Spreads unfinished lessons proportionally across eligible future study days while respecting your topic sequence, daily hour targets, and other Days Off.</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition" id="dayOffOptCard-2">
+          <input type="radio" name="dayOffRescheduleOpt" value="next_day" onchange="updateDayOffReschedulePreview(this.value)" class="mt-1" />
+          <div class="flex-1 text-xs">
+            <div class="font-extrabold text-slate-900">Option 2: Move to Next Available Study Day</div>
+            <p class="text-[11px] text-slate-600 mt-0.5">Shifts unfinished work directly into the next active study day (<span id="dayOffNextEligibleDateLabel">Next Day</span>).</p>
+          </div>
+        </label>
+
+        <label class="flex items-start gap-3 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition" id="dayOffOptCard-3">
+          <input type="radio" name="dayOffRescheduleOpt" value="backlog" onchange="updateDayOffReschedulePreview(this.value)" class="mt-1" />
+          <div class="flex-1 text-xs">
+            <div class="font-extrabold text-slate-900">Option 3: Leave Unscheduled (Send to Unscheduled Backlog)</div>
+            <p class="text-[11px] text-slate-600 mt-0.5">Places unfinished activities into your Unscheduled Backlog queue so you can reassign them manually later without deleting them.</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Impact Preview Box -->
+      <div id="dayOffImpactPreviewBox" class="p-3.5 rounded-xl bg-teal-50/90 border border-teal-200 text-xs text-slate-800 space-y-1"></div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeDayOffRescheduleModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+        <button type="button" onclick="confirmAndApplyDayOffReschedule()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-xs">Confirm Day Off &amp; Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 6: MANUAL STUDY-TIME ENTRY & RECONCILIATION MODAL ==================== -->
+  <div id="manualTimeEntryModal" class="fixed inset-0 z-50 bg-slate-900/75 backdrop-blur-xs hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4 my-8">
+      <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-xs font-extrabold px-2.5 py-0.5 rounded bg-teal-100 text-teal-900">ACTUAL STUDY-TIME TRACKER</span>
+          <h3 id="manualTimeModalHeading" class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">Record or Edit Study Session</h3>
+          <p class="text-xs text-slate-500">Logs verified focus study time (excluding breaks) and reconciles against timer sessions to prevent double-counting.</p>
+        </div>
+        <button type="button" onclick="closeManualTimeModal()" class="btn-modal-close">&times; Close</button>
+      </div>
+
+      <input id="manualTimeEditSessionId" type="hidden" value="" />
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label for="manualTimeDateInput" class="block text-xs font-bold text-slate-700 mb-1">Study Date</label>
+          <input id="manualTimeDateInput" type="date" onchange="checkManualTimeOverlapWarning()" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="manualTimeSubjectSelect" class="block text-xs font-bold text-slate-700 mb-1">CFA Topic</label>
+          <select id="manualTimeSubjectSelect" onchange="checkManualTimeOverlapWarning()" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+            <option value="CI">CI — Corporate Issuers</option>
+            <option value="AI">AI — Alternative Investments</option>
+            <option value="EC">EC — Economics</option>
+            <option value="EQ">EQ — Equity Investments</option>
+            <option value="FA">FA — Financial Statement Analysis</option>
+            <option value="QM">QM — Quantitative Methods</option>
+            <option value="PM">PM — Portfolio Management</option>
+            <option value="FI">FI — Fixed Income</option>
+            <option value="DV">DV — Derivatives</option>
+            <option value="ET">ET — Ethical &amp; Professional Standards</option>
+          </select>
+        </div>
+        <div>
+          <label for="manualTimeMinutesInput" class="block text-xs font-bold text-slate-700 mb-1">Focus Duration (Minutes)</label>
+          <input id="manualTimeMinutesInput" type="number" min="1" max="720" value="60" oninput="checkManualTimeOverlapWarning()" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white" />
+        </div>
+        <div>
+          <label for="manualTimeActivitySelect" class="block text-xs font-bold text-slate-700 mb-1">Activity Type</label>
+          <select id="manualTimeActivitySelect" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm font-bold bg-white">
+            <option value="reading">Curriculum Reading &amp; Notes</option>
+            <option value="practice">LES Practice Questions</option>
+            <option value="revision">Cumulative / Formula Revision</option>
+            <option value="mock">Timed Mock Exam</option>
+            <option value="ethics">Ethics Reading / Vignettes</option>
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="manualTimeNotesInput" class="block text-xs font-bold text-slate-700 mb-1">Session Notes (Optional)</label>
+          <input id="manualTimeNotesInput" type="text" placeholder="e.g. Completed EQ M2 DDM examples &amp; 15 LES practice questions" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs sm:text-sm bg-white" />
+        </div>
+      </div>
+
+      <!-- Overlap / Double-Counting Reconciliation Warning Box -->
+      <div id="manualTimeOverlapWarningBox" class="hidden p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950 space-y-2">
+        <div class="font-extrabold flex items-center justify-between">
+          <span>&#9888;&#65039; Existing Timer Session Detected on This Date:</span>
+          <span id="manualTimeOverlapMinsBadge" class="px-2 py-0.5 rounded bg-amber-200 text-amber-950 font-bold">25m Timer</span>
+        </div>
+        <p id="manualTimeOverlapDesc" class="text-[11px] leading-relaxed"></p>
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+          <label class="flex items-center gap-1.5 font-bold cursor-pointer">
+            <input type="radio" name="manualOverlapMode" value="add" checked />
+            <span>Add as separate session (distinct study block)</span>
+          </label>
+          <label class="flex items-center gap-1.5 font-bold cursor-pointer">
+            <input type="radio" name="manualOverlapMode" value="replace_timer" />
+            <span>Reconcile / Replace existing sessions on this date &amp; topic</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeManualTimeModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">Cancel</button>
+        <button type="button" onclick="saveManualStudyTimeEntry()" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold shadow-xs">Save Study Session</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/app.min.js" defer></script>
+  <!-- Vercel Web Analytics Hook (Automatically active when Vercel Analytics is enabled in project dashboard) -->
+  
+</body>
+</html>

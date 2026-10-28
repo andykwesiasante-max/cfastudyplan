@@ -1,0 +1,12 @@
+{
+  "name": "cfa-level2-study-dashboard",
+  "version": "3.1.0",
+  "private": true,
+  "description": "Production build pipeline for CFA Level II Study Planner",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "terser": "^5.31.0"
+  }
+}
